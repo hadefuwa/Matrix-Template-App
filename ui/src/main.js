@@ -1,4 +1,35 @@
 import './style.css';
+import {
+  Chart,
+  LineController,
+  BarController,
+  DoughnutController,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler
+} from 'chart.js';
+
+// Register Chart.js components
+Chart.register(
+  LineController,
+  BarController,
+  DoughnutController,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 // ================================================================
 // SIMPLE TEMPLATE SYSTEM (PHASE 1)
@@ -222,6 +253,257 @@ function renderHomeTemplate3() {
         )
         .join('')}
     </section>
+  `;
+}
+
+// ================================================================
+// HMI (HUMAN-MACHINE INTERFACE) TEMPLATES
+// ================================================================
+// Rich, data-dense industrial control interfaces with:
+// - Real-time charts and graphs
+// - Gauges and meters
+// - Sliders and interactive controls
+// - Product imagery and branding
+// - High information density
+
+function renderHMIDashboard() {
+  return `
+    <!-- HMI Dashboard – Industrial Control Interface -->
+
+    <!-- Top Status Bar with Key Metrics -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div class="stat bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-lg rounded-lg">
+        <div class="stat-title text-primary-content opacity-80">System Status</div>
+        <div class="stat-value text-2xl flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+          </span>
+          RUNNING
+        </div>
+        <div class="stat-desc text-primary-content opacity-70">All systems nominal</div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Temperature</div>
+        <div class="stat-value text-3xl text-warning">23.5°C</div>
+        <div class="stat-desc flex items-center gap-1">
+          <span class="text-success">↗︎ 0.3°C</span> from setpoint
+        </div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Pressure</div>
+        <div class="stat-value text-3xl text-info">101.3 kPa</div>
+        <div class="stat-desc">Normal range</div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Flow Rate</div>
+        <div class="stat-value text-3xl text-accent">45.2 L/min</div>
+        <div class="stat-desc flex items-center gap-1">
+          <span class="text-error">↘︎ 2.1%</span> vs target
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Control Area -->
+    <div class="grid gap-4 lg:grid-cols-3">
+
+      <!-- Left: Charts Section -->
+      <div class="lg:col-span-2 space-y-4">
+
+        <!-- Real-time Temperature Chart -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title flex items-center gap-2">
+              <svg class="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+              Temperature Trends (Real-time)
+              <span class="badge badge-sm badge-success ml-auto">LIVE</span>
+            </h2>
+            <div class="h-64">
+              <canvas id="tempChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Performance Chart -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">System Performance Overview</h2>
+            <div class="h-48">
+              <canvas id="performanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Controls & Gauges -->
+      <div class="space-y-4">
+
+        <!-- Main Control Panel -->
+        <div class="card bg-gradient-to-br from-base-200 to-base-300 shadow-xl border-2 border-primary">
+          <div class="card-body">
+            <h2 class="card-title text-primary">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+              </svg>
+              Main Controls
+            </h2>
+
+            <!-- Big Start/Stop Buttons -->
+            <div class="flex gap-2">
+              <button class="btn btn-success flex-1 btn-lg">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                </svg>
+                START
+              </button>
+              <button class="btn btn-error flex-1 btn-lg">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"/>
+                </svg>
+                STOP
+              </button>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="form-control mt-3">
+              <label class="label">
+                <span class="label-text font-bold">Operation Mode</span>
+              </label>
+              <div class="join w-full">
+                <button class="btn join-item flex-1 btn-sm btn-active btn-primary">AUTO</button>
+                <button class="btn join-item flex-1 btn-sm">MANUAL</button>
+                <button class="btn join-item flex-1 btn-sm">TEST</button>
+              </div>
+            </div>
+
+            <!-- Temperature Setpoint Slider -->
+            <div class="form-control mt-4">
+              <label class="label">
+                <span class="label-text font-bold">Temperature Setpoint</span>
+                <span class="label-text-alt badge badge-lg badge-primary">23.0°C</span>
+              </label>
+              <input type="range" min="15" max="35" value="23" class="range range-primary range-lg" step="0.5" />
+              <div class="flex w-full justify-between text-xs px-2 mt-1">
+                <span>15°C</span>
+                <span>|</span>
+                <span>25°C</span>
+                <span>|</span>
+                <span>35°C</span>
+              </div>
+            </div>
+
+            <!-- Speed Control -->
+            <div class="form-control mt-4">
+              <label class="label">
+                <span class="label-text font-bold">Fan Speed</span>
+                <span class="label-text-alt badge badge-lg badge-accent">75%</span>
+              </label>
+              <input type="range" min="0" max="100" value="75" class="range range-accent range-lg" step="5" />
+            </div>
+
+            <!-- Emergency Stop -->
+            <button class="btn btn-outline btn-error w-full mt-4 btn-lg">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              EMERGENCY STOP
+            </button>
+          </div>
+        </div>
+
+        <!-- System Gauges -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">System Load</h2>
+            <div class="flex justify-around items-center">
+              <div class="radial-progress text-primary" style="--value:70; --size:5rem;" role="progressbar">70%</div>
+              <div class="radial-progress text-secondary" style="--value:85; --size:5rem;" role="progressbar">85%</div>
+              <div class="radial-progress text-accent" style="--value:42; --size:5rem;" role="progressbar">42%</div>
+            </div>
+            <div class="flex justify-around text-xs mt-2">
+              <span>CPU</span>
+              <span>Memory</span>
+              <span>I/O</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Alarms -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Active Alarms</h2>
+            <div class="space-y-2">
+              <div class="alert alert-warning py-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
+                </svg>
+                <span class="text-xs">Temp approaching limit</span>
+              </div>
+              <div class="alert alert-info py-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
+                </svg>
+                <span class="text-xs">Maintenance due: 48h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom: Process Flow Visualization -->
+    <div class="card bg-base-200 shadow-xl mt-4">
+      <div class="card-body">
+        <h2 class="card-title">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
+          </svg>
+          Process Flow Diagram
+        </h2>
+
+        <!-- Simplified Process Flow -->
+        <div class="flex items-center justify-around p-6">
+          <div class="flex flex-col items-center">
+            <div class="w-20 h-20 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold shadow-lg">
+              INLET
+            </div>
+            <div class="badge badge-success mt-2">ACTIVE</div>
+            <div class="text-xs mt-1">45.2 L/min</div>
+          </div>
+
+          <svg class="w-16 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+
+          <div class="flex flex-col items-center">
+            <div class="w-20 h-20 bg-accent rounded-lg flex items-center justify-center text-accent-content font-bold shadow-lg animate-pulse">
+              PROCESS
+            </div>
+            <div class="badge badge-warning mt-2">HEATING</div>
+            <div class="text-xs mt-1">23.5°C</div>
+          </div>
+
+          <svg class="w-16 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+
+          <div class="flex flex-col items-center">
+            <div class="w-20 h-20 bg-secondary rounded-lg flex items-center justify-center text-secondary-content font-bold shadow-lg">
+              OUTLET
+            </div>
+            <div class="badge badge-success mt-2">ACTIVE</div>
+            <div class="text-xs mt-1">44.8 L/min</div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 }
 
@@ -902,6 +1184,7 @@ function renderPlaceholder(title) {
 // by a proper router if we need deep links or browser history.
 
 const PAGES = {
+  'hmi-dashboard': renderHMIDashboard,
   'home-1': renderHomeTemplate1,
   'home-2': renderHomeTemplate2,
   'home-3': renderHomeTemplate3,
@@ -949,8 +1232,18 @@ app.innerHTML = `
       <!-- Sidebar -->
       <aside class="w-72 border-r border-base-300 bg-base-200 hidden md:block">
         <ul class="menu p-4 gap-1" id="sidebar-menu">
-          <li class="menu-title">Home Templates</li>
-          <li><a href="#" data-page="home-1" class="active">Home Template 1</a></li>
+          <li class="menu-title">
+            <span class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+              </svg>
+              HMI Dashboards
+            </span>
+          </li>
+          <li><a href="#" data-page="hmi-dashboard" class="active bg-primary text-primary-content font-bold">Matrix HMI Dashboard ⭐</a></li>
+
+          <li class="menu-title mt-4">Home Templates</li>
+          <li><a href="#" data-page="home-1">Home Template 1</a></li>
           <li><a href="#" data-page="home-2">Home Template 2</a></li>
           <li><a href="#" data-page="home-3">Home Template 3</a></li>
 
@@ -1007,8 +1300,15 @@ app.innerHTML = `
 // RENDERING & NAVIGATION
 // ================================================================
 
+// Store chart instances to clean them up when switching pages
+let activeCharts = [];
+
 // Simple function to render the requested page into the main content area.
 function renderPage(pageKey) {
+  // Clean up existing charts
+  activeCharts.forEach(chart => chart.destroy());
+  activeCharts = [];
+
   const mainContent = document.getElementById('main-content');
   const templateFn = PAGES[pageKey];
   if (!templateFn) {
@@ -1016,6 +1316,135 @@ function renderPage(pageKey) {
     return;
   }
   mainContent.innerHTML = templateFn();
+
+  // Initialize charts if this is the HMI dashboard
+  if (pageKey === 'hmi-dashboard') {
+    initializeHMICharts();
+  }
+}
+
+// ================================================================
+// HMI CHART INITIALIZATION
+// ================================================================
+function initializeHMICharts() {
+  // Wait for next tick to ensure canvas elements are in DOM
+  setTimeout(() => {
+    // Temperature Chart
+    const tempCanvas = document.getElementById('tempChart');
+    if (tempCanvas) {
+      const tempCtx = tempCanvas.getContext('2d');
+      const tempChart = new Chart(tempCtx, {
+        type: 'line',
+        data: {
+          labels: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30'],
+          datasets: [
+            {
+              label: 'Temperature (°C)',
+              data: [22.1, 22.5, 23.0, 23.5, 23.2, 23.5, 23.5],
+              borderColor: 'rgb(251, 146, 60)',
+              backgroundColor: 'rgba(251, 146, 60, 0.1)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            },
+            {
+              label: 'Setpoint (°C)',
+              data: [23, 23, 23, 23, 23, 23, 23],
+              borderColor: 'rgb(59, 130, 246)',
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              borderDash: [5, 5],
+              fill: false,
+              tension: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top'
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 20,
+              max: 26,
+              title: {
+                display: true,
+                text: 'Temperature (°C)'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Time'
+              }
+            }
+          }
+        }
+      });
+      activeCharts.push(tempChart);
+    }
+
+    // Performance Chart
+    const perfCanvas = document.getElementById('performanceChart');
+    if (perfCanvas) {
+      const perfCtx = perfCanvas.getContext('2d');
+      const perfChart = new Chart(perfCtx, {
+        type: 'bar',
+        data: {
+          labels: ['CPU Usage', 'Memory', 'I/O Load', 'Network', 'Disk'],
+          datasets: [{
+            label: 'System Load (%)',
+            data: [70, 85, 42, 35, 58],
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(139, 92, 246, 0.8)',
+              'rgba(236, 72, 153, 0.8)',
+              'rgba(34, 197, 94, 0.8)',
+              'rgba(251, 146, 60, 0.8)'
+            ],
+            borderColor: [
+              'rgb(59, 130, 246)',
+              'rgb(139, 92, 246)',
+              'rgb(236, 72, 153)',
+              'rgb(34, 197, 94)',
+              'rgb(251, 146, 60)'
+            ],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: {
+                display: true,
+                text: 'Load (%)'
+              }
+            }
+          }
+        }
+      });
+      activeCharts.push(perfChart);
+    }
+  }, 10);
 }
 
 // Sidebar navigation click handling.
@@ -1057,5 +1486,5 @@ themeSelect.addEventListener('change', () => {
   localStorage.setItem('matrix-theme', newTheme);
 });
 
-// Initial page: Home Template 1
-renderPage('home-1');
+// Initial page: HMI Dashboard (the star of the show!)
+renderPage('hmi-dashboard');
