@@ -1,6 +1,39 @@
 ## Matrix Template UI – Pages & Features Todo
 
-This document is a high-level todo list for all the pages and major UI pieces we want in the Matrix UI template. It focuses on **vanilla JS + Vite + Tailwind + DaisyUI**, with minimal custom code and a library-first approach.
+This document is a high-level todo list for all the pages and major UI pieces we want in the Matrix UI template. It focuses on **vanilla JS + Vite + Tailwind + DaisyUI + Chart.js**, with minimal custom code and a library-first approach.
+
+---
+
+### 0. HMI (Human-Machine Interface) Templates ⭐ **NEW**
+
+**Professional industrial control interfaces** for Matrix TSL products (wind tunnels, process control, smart factories, heat exchangers, etc.)
+
+- [x] **HMI Dashboard – Comprehensive Control Interface** ✅
+  - [x] Real-time temperature trend chart with setpoint overlay
+  - [x] System performance monitoring (CPU, Memory, I/O, Network, Disk)
+  - [x] Large Start/Stop/Emergency Stop controls
+  - [x] Operation mode selector (Auto/Manual/Test)
+  - [x] Temperature setpoint slider with live feedback
+  - [x] Fan speed/motor control slider
+  - [x] Radial progress gauges for system load
+  - [x] Active alarms display with severity indicators
+  - [x] Process flow visualization diagram
+  - [x] Animated status indicators (pulsing, glowing effects)
+  - [x] High information density layout
+
+**Technical Stack Added:**
+- [x] Chart.js 4.5.1 installed for data visualization
+- [x] Line charts, bar charts support
+- [x] Chart cleanup on page navigation
+- [x] Responsive chart sizing
+
+**Future HMI Enhancements:**
+- [ ] Real-time data updates (WebSocket simulation)
+- [ ] Additional chart types (gauge charts, 3D visualizations)
+- [ ] Multi-zone control panels
+- [ ] Video feed placeholders
+- [ ] Custom Matrix TSL branding layer
+- [ ] Touchscreen-optimized controls
 
 ---
 
