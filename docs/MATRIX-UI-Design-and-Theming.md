@@ -24,9 +24,12 @@ This document defines the visual language, layout patterns, and theming system f
   - Spacing
   - Border radius
   - Shadows and borders
-- Implement tokens using **CSS variables** so that:
-  - Themes can be switched by changing a class on the `<body>`.
-  - All components update automatically when the theme changes.
+- Implement tokens in a **Tailwind + DaisyUI friendly way**:
+  - **Phase 1 (current)**:
+    - Use **Tailwind config** and **DaisyUI theme objects** as the main source of truth.
+    - Avoid complex manual CSS variable wiring until needed.
+  - **Phase 2 (optional)**:
+    - Add a thin layer of **CSS variables** that map to the Tailwind/DaisyUI tokens when a project needs more advanced theming or interop with non-Tailwind code.
 
 ### 2.2 Example Token Categories
 
@@ -94,6 +97,24 @@ These tokens live in one place so all products stay visually consistent.
   - `body.theme-dark { ... dark token values ... }`
 
 When the class changes, the token values change, and the whole UI updates.
+
+---
+
+## 4. Practical Token Implementation Choice
+
+- **Standard approach for this template (recommended)**:
+  - Use **DaisyUI themes** defined in the Tailwind configuration as our “design tokens”.
+  - Each theme entry (e.g. `light`, `dark`, `matrix-default`) holds the colors, radii, etc.
+  - Components use DaisyUI classes (e.g. `btn-primary`, `bg-base-200`, `text-primary`) which read from those tokens.
+- **Optional CSS variable layer (when needed)**:
+  - For apps that need to share tokens with non-Tailwind parts (e.g. embedded iframes, legacy CSS):
+    - Define CSS custom properties (variables) that are set based on the active DaisyUI theme.
+    - Keep this as an **extension**, not a requirement, so beginners are not forced to manage variables manually.
+- **Decision**:
+  - For the **template itself**, we standardise on:
+    - **Tailwind config + DaisyUI themes** as the main token system.
+  - For **product-specific apps**, teams may optionally add:
+    - A CSS variables layer if their use case demands it.
 
 ---
 
@@ -272,3 +293,27 @@ The basic **app shell** is the same for all Matrix apps:
   - **One visual language** for all Matrix TSL tools.
   - **Minimal changes per product** (mostly branding tokens and content).
   - Clear separation between **UI/UX template** and **product-specific logic**.
+
+---
+
+## 9. Library-First Design Methodology
+
+- **Principle**: Prefer **libraries over custom code** so the template stays small, simple, and easy to understand.
+- **CSS approach**:
+  - Use **Tailwind CSS** utilities and **DaisyUI** components for almost all styling.
+  - Keep custom CSS to a minimum, ideally just the Tailwind directives in `style.css`:
+    - `@tailwind base;`
+    - `@tailwind components;`
+    - `@tailwind utilities;`
+  - Define design tokens and themes through Tailwind/DaisyUI configuration instead of long custom CSS files.
+- **JavaScript approach**:
+  - Use **plain JavaScript** (or Svelte later) with simple, readable code.
+  - Focus on:
+    - Building the page layout (header, sidebar, main, footer) as HTML.
+    - Wiring up **theme selection** and a few basic interactions.
+  - Avoid complex patterns, heavy state management, or large custom frameworks in the template.
+- **Example**:
+  - The `matrix-tiny-ui` demo shows this methodology in practice:
+    - Very short `style.css` that only imports Tailwind layers.
+    - A small `main.js` that renders the UI and toggles between light/dark themes.
+    - All visual styling and components provided by Tailwind + DaisyUI.
