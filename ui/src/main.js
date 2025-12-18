@@ -5012,8 +5012,13 @@ app.innerHTML = `
   <div class="min-h-screen flex flex-col">
     <!-- Header -->
     <header class="navbar bg-base-200 px-4">
-      <!-- Left: Matrix Logo -->
-      <div class="flex-none">
+      <!-- Left: Menu Toggle + Matrix Logo -->
+      <div class="flex-none flex items-center gap-2">
+        <button id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
         <img src="/matrix.png" alt="Matrix Logo" class="h-8 w-auto" />
       </div>
       <!-- Center: Title -->
@@ -5035,10 +5040,23 @@ app.innerHTML = `
       </div>
     </header>
 
+    <!-- Connection Status Bar -->
+    <div id="connection-status-bar" class="bg-base-300 border-b-2 border-base-content/10 px-4 py-2 min-h-[40px] flex items-center justify-center shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-medium">Connection Status:</span>
+        <div id="connection-status" class="flex items-center gap-2">
+          <span id="connection-indicator" class="flex h-3 w-3 rounded-full bg-success animate-pulse"></span>
+          <span id="connection-text" class="text-sm font-semibold text-success">Connected</span>
+        </div>
+        <span class="text-xs text-base-content/60 ml-2">•</span>
+        <span id="connection-time" class="text-xs text-base-content/60">Last connected: Just now</span>
+      </div>
+    </div>
+
     <!-- Body with sidebar + main content -->
     <div class="flex flex-1 bg-base-100">
       <!-- Sidebar -->
-      <aside class="w-72 border-r border-base-300 bg-base-200 hidden md:block">
+      <aside id="sidebar" class="w-72 border-r border-base-300 bg-base-200 transition-all duration-300 ease-in-out hidden md:block">
         <ul class="menu p-4 gap-1" id="sidebar-menu">
           <li class="menu-title">
             <span class="flex items-center gap-2">
@@ -5084,7 +5102,7 @@ app.innerHTML = `
     <!-- Footer -->
     <footer class="footer footer-center p-4 bg-base-200 text-base-content">
       <aside>
-        <p>Matrix TSL UI Template • DaisyUI Component Gallery</p>
+        <p>Matrix TSL ${new Date().getFullYear()}</p>
       </aside>
     </footer>
 
@@ -5610,6 +5628,96 @@ themeSelect.addEventListener('change', () => {
   html.setAttribute('data-theme', newTheme);
   localStorage.setItem('matrix-theme', newTheme);
 });
+
+// ================================================================
+// SIDEBAR COLLAPSE/EXPAND FUNCTIONALITY
+// ================================================================
+
+setTimeout(() => {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+
+  if (!sidebar || !sidebarToggle) return;
+
+  // Load saved sidebar state
+  const savedSidebarState = localStorage.getItem('matrix-sidebar-collapsed');
+  const isCollapsed = savedSidebarState === 'true';
+
+  // Apply saved state on page load
+  if (isCollapsed) {
+    sidebar.classList.add('w-0', 'overflow-hidden');
+    sidebar.classList.remove('w-72');
+  }
+
+  // Toggle sidebar function
+  function toggleSidebar() {
+    const currentlyCollapsed = sidebar.classList.contains('w-0');
+    
+    if (currentlyCollapsed) {
+      // Expand
+      sidebar.classList.remove('w-0', 'overflow-hidden');
+      sidebar.classList.add('w-72');
+      localStorage.setItem('matrix-sidebar-collapsed', 'false');
+    } else {
+      // Collapse
+      sidebar.classList.remove('w-72');
+      sidebar.classList.add('w-0', 'overflow-hidden');
+      localStorage.setItem('matrix-sidebar-collapsed', 'true');
+    }
+  }
+
+  // Add event listener to toggle button
+  sidebarToggle.addEventListener('click', toggleSidebar);
+}, 0);
+
+// ================================================================
+// CONNECTION STATUS MANAGEMENT (TEMPLATE STUB)
+// ================================================================
+// TODO: Implement actual device connection detection logic here
+// This is a placeholder template for future Matrix TSL projects
+
+setTimeout(() => {
+  const connectionIndicator = document.getElementById('connection-indicator');
+  const connectionText = document.getElementById('connection-text');
+  const connectionTime = document.getElementById('connection-time');
+
+  if (!connectionIndicator || !connectionText || !connectionTime) return;
+
+  // Template function to update connection status UI
+  // TODO: Replace with actual connection status from device communication
+  function updateConnectionStatusUI(isConnected) {
+    if (isConnected) {
+      connectionIndicator.classList.remove('bg-error');
+      connectionIndicator.classList.add('bg-success');
+      connectionText.textContent = 'Connected';
+      connectionText.classList.remove('text-error');
+      connectionText.classList.add('text-success');
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      connectionTime.textContent = `Last connected: ${timeStr}`;
+    } else {
+      connectionIndicator.classList.remove('bg-success');
+      connectionIndicator.classList.add('bg-error');
+      connectionText.textContent = 'Disconnected';
+      connectionText.classList.remove('text-success');
+      connectionText.classList.add('text-error');
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      connectionTime.textContent = `Last disconnected: ${timeStr}`;
+    }
+  }
+
+  // TEMPLATE STUB: Initialize connection status
+  // TODO: Replace with actual device connection check
+  // Example: checkDeviceConnection().then(status => updateConnectionStatusUI(status))
+  const isConnected = true; // Placeholder: default to connected for template
+  updateConnectionStatusUI(isConnected);
+
+  // TEMPLATE STUB: Expose function for device communication integration
+  // TODO: Call this function when device connection status changes
+  // Example: window.updateConnectionStatus = (status) => updateConnectionStatusUI(status);
+  window.updateConnectionStatus = updateConnectionStatusUI;
+}, 0);
 
 // Initial page: HMI Dashboard 1 (the star of the show!)
 renderPage('hmi-dashboard-1');
