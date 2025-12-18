@@ -5054,10 +5054,23 @@ app.innerHTML = `
     </div>
 
     <!-- Body with sidebar + main content -->
-    <div class="flex flex-1 bg-base-100">
+    <div class="flex flex-1 bg-base-100 relative">
+      <!-- Mobile backdrop overlay -->
+      <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300 md:hidden"></div>
+      
       <!-- Sidebar -->
-      <aside id="sidebar" class="w-72 border-r border-base-300 bg-base-200 transition-all duration-300 ease-in-out hidden md:block">
-        <ul class="menu p-4 gap-1" id="sidebar-menu">
+      <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 border-r border-base-300 bg-base-200 transition-all duration-300 ease-in-out transform -translate-x-full md:translate-x-0 md:block flex flex-col overflow-hidden">
+        <!-- Close button for mobile -->
+        <div class="flex justify-end p-4 md:hidden border-b border-base-300 flex-shrink-0">
+          <button id="sidebar-close" class="btn btn-ghost btn-sm btn-square">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <!-- Scrollable menu container -->
+        <div class="flex-1 overflow-y-auto overscroll-contain">
+          <ul class="menu p-4 gap-1" id="sidebar-menu">
           <li class="menu-title">
             <span class="flex items-center gap-2">
               <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
@@ -5090,7 +5103,8 @@ app.innerHTML = `
           <li><a href="#" data-page="components">Component Gallery</a></li>
           <li><a href="#" data-page="settings">Settings</a></li>
           <li><a href="#" data-page="about">About / Help</a></li>
-        </ul>
+          </ul>
+        </div>
       </aside>
 
       <!-- Main content -->
@@ -5636,38 +5650,149 @@ themeSelect.addEventListener('change', () => {
 setTimeout(() => {
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  const sidebarClose = document.getElementById('sidebar-close');
 
   if (!sidebar || !sidebarToggle) return;
 
-  // Load saved sidebar state
+  // Load saved sidebar state (desktop only)
   const savedSidebarState = localStorage.getItem('matrix-sidebar-collapsed');
   const isCollapsed = savedSidebarState === 'true';
 
-  // Apply saved state on page load
-  if (isCollapsed) {
+  // Apply saved state on page load (desktop only)
+  if (isCollapsed && window.innerWidth >= 768) {
     sidebar.classList.add('w-0', 'overflow-hidden');
     sidebar.classList.remove('w-72');
   }
 
   // Toggle sidebar function
   function toggleSidebar() {
-    const currentlyCollapsed = sidebar.classList.contains('w-0');
+    const isMobile = window.innerWidth < 768;
     
-    if (currentlyCollapsed) {
-      // Expand
-      sidebar.classList.remove('w-0', 'overflow-hidden');
-      sidebar.classList.add('w-72');
-      localStorage.setItem('matrix-sidebar-collapsed', 'false');
+    if (isMobile) {
+      // Mobile: toggle drawer (translate-x)
+      const isOpen = !sidebar.classList.contains('-translate-x-full');
+      
+      if (isOpen) {
+        // Close drawer
+        sidebar.classList.add('-translate-x-full');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('hidden');
+        // Re-enable body scroll
+        document.body.style.overflow = '';
+      } else {
+        // Open drawer
+        sidebar.classList.remove('-translate-x-full');
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('hidden');
+        // Prevent body scroll when sidebar is open
+        document.body.style.overflow = 'hidden';
+      }
     } else {
-      // Collapse
-      sidebar.classList.remove('w-72');
-      sidebar.classList.add('w-0', 'overflow-hidden');
-      localStorage.setItem('matrix-sidebar-collapsed', 'true');
+      // Desktop: toggle width
+      const currentlyCollapsed = sidebar.classList.contains('w-0');
+      
+      if (currentlyCollapsed) {
+        // Expand
+        sidebar.classList.remove('w-0', 'overflow-hidden');
+        sidebar.classList.add('w-72');
+        localStorage.setItem('matrix-sidebar-collapsed', 'false');
+      } else {
+        // Collapse
+        sidebar.classList.remove('w-72');
+        sidebar.classList.add('w-0', 'overflow-hidden');
+        localStorage.setItem('matrix-sidebar-collapsed', 'true');
+      }
     }
   }
 
   // Add event listener to toggle button
   sidebarToggle.addEventListener('click', toggleSidebar);
+  
+  // Add event listener to close button (mobile)
+  if (sidebarClose) {
+    sidebarClose.addEventListener('click', () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        toggleSidebar();
+      }
+    });
+  }
+  
+  // Close mobile sidebar when clicking backdrop
+  if (sidebarBackdrop) {
+    sidebarBackdrop.addEventListener('click', () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile && !sidebar.classList.contains('-translate-x-full')) {
+        toggleSidebar();
+      }
+    });
+  }
+  
+  // Close mobile sidebar when clicking a menu item
+  const sidebarMenu = document.getElementById('sidebar-menu');
+  if (sidebarMenu) {
+    sidebarMenu.addEventListener('click', (e) => {
+      const link = e.target.closest('a[data-page]');
+      if (link && window.innerWidth < 768) {
+        // Close sidebar on mobile after selecting a menu item
+        setTimeout(() => {
+          if (!sidebar.classList.contains('-translate-x-full')) {
+            toggleSidebar();
+          }
+        }, 100);
+      }
+    });
+  }
+  
+  // Prevent scroll events from propagating from sidebar to body
+  if (sidebar) {
+    const sidebarScrollContainer = sidebar.querySelector('.overflow-y-auto');
+    if (sidebarScrollContainer) {
+      // Stop wheel events from propagating to body when scrolling within sidebar
+      sidebarScrollContainer.addEventListener('wheel', (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = sidebarScrollContainer;
+        const isAtTop = scrollTop === 0;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+        
+        // If we can scroll within the sidebar, prevent body scroll
+        if ((!isAtTop && e.deltaY < 0) || (!isAtBottom && e.deltaY > 0)) {
+          e.stopPropagation();
+        }
+      }, { passive: false });
+      
+      // Prevent touchmove events from propagating on mobile
+      sidebarScrollContainer.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+      }, { passive: false });
+    }
+  }
+  
+  // Handle window resize - ensure proper state
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        // On mobile, ensure sidebar is closed by default
+        sidebar.classList.add('-translate-x-full');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('hidden');
+        // Restore body scroll
+        document.body.style.overflow = '';
+      } else {
+        // On desktop, restore saved state
+        sidebar.classList.remove('-translate-x-full');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('hidden');
+        const savedState = localStorage.getItem('matrix-sidebar-collapsed');
+        if (savedState === 'true') {
+          sidebar.classList.add('w-0', 'overflow-hidden');
+          sidebar.classList.remove('w-72');
+        } else {
+          sidebar.classList.remove('w-0', 'overflow-hidden');
+          sidebar.classList.add('w-72');
+        }
+      }
+    }, 250);
+  });
 }, 0);
 
 // ================================================================
