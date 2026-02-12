@@ -1,4 +1,6 @@
 import './style.css';
+import noUiSlider from 'nouislider';
+import 'nouislider/dist/nouislider.css';
 import {
   Chart,
   LineController,
@@ -268,283 +270,482 @@ function renderHomeTemplate3() {
 
 function renderHMIDashboard1() {
   return `
-    <!-- HMI Dashboard – Industrial Control Interface -->
+    <!-- Electrical Machines – Industrial Control Interface -->
 
-    <!-- Top Status Bar with Key Metrics -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div class="stat bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-lg rounded-lg">
-        <div class="stat-title text-primary-content opacity-80">System Status</div>
-        <div class="stat-value text-2xl flex items-center gap-2">
-          <span class="relative flex h-3 w-3">
+    <!-- ── Top Status Bar ──────────────────────────────────── -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+
+      <!-- System state — big, colour-coded per design philosophy -->
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">System State</div>
+        <div class="stat-value text-2xl font-mono font-bold text-success">RUNNING</div>
+        <div class="stat-desc">All systems nominal</div>
+      </div>
+
+      <!-- E-Stop + Comms LEDs -->
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Safety / Comms</div>
+        <div class="flex flex-col gap-2 mt-1">
+          <span class="badge badge-neutral badge-sm font-mono">E-STOP SAFE</span>
+          <div class="flex gap-1 flex-wrap">
+            <span class="badge badge-success badge-xs font-mono">POWER</span>
+            <span class="badge badge-success badge-xs font-mono">COMMS</span>
+            <span class="badge badge-neutral badge-xs font-mono">MOTOR IN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active mode: MANUAL=amber, PRESET=neutral, REMOTE=blue -->
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Active Mode</div>
+        <div class="mt-1">
+          <div class="join">
+            <button class="btn join-item btn-xs btn-warning font-mono">MANUAL</button>
+            <button class="btn join-item btn-xs font-mono">PRESET</button>
+            <button class="btn join-item btn-xs font-mono">REMOTE</button>
+          </div>
+        </div>
+        <div class="stat-desc mt-1">Manual control active</div>
+      </div>
+
+      <!-- Data logging -->
+      <div class="stat bg-base-200 shadow-lg rounded-lg md:col-span-2">
+        <div class="stat-title">Data Logging</div>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
           </span>
-          RUNNING
+          <span class="badge badge-success badge-sm font-mono">ON</span>
+          <span class="font-mono text-xs truncate">run_20260212_143021.csv</span>
         </div>
-        <div class="stat-desc text-primary-content opacity-70">All systems nominal</div>
+        <div class="stat-desc">Elapsed: 00:14:22 · 865 rows</div>
       </div>
 
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Temperature</div>
-        <div class="stat-value text-3xl text-warning">23.5°C</div>
-        <div class="stat-desc flex items-center gap-1">
-          <span class="text-success">↗︎ 0.3°C</span> from setpoint
-        </div>
-      </div>
+    </div>
 
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Pressure</div>
-        <div class="stat-value text-3xl text-info">101.3 kPa</div>
-        <div class="stat-desc">Normal range</div>
+    <!-- ── Control Actions — always first, always visible ───────── -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-4 p-4 bg-base-200 rounded-xl shadow-xl">
+      <div class="flex gap-3 flex-wrap">
+        <button class="btn btn-success btn-lg font-mono">START</button>
+        <button class="btn btn-error btn-lg font-mono">STOP</button>
+        <button class="btn btn-error btn-outline btn-lg font-mono">E-STOP</button>
+        <button class="btn btn-warning btn-lg font-mono">RESET FAULT</button>
       </div>
-
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Flow Rate</div>
-        <div class="stat-value text-3xl text-accent">45.2 L/min</div>
-        <div class="stat-desc flex items-center gap-1">
-          <span class="text-error">↘︎ 2.1%</span> vs target
-        </div>
+      <div class="flex items-center gap-4 flex-wrap">
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" class="toggle toggle-warning toggle-sm mt-0.5" checked />
+          <div>
+            <div class="text-sm font-mono font-bold">Safe changes</div>
+            <div class="text-xs">Slider / input changes stage until APPLY</div>
+          </div>
+        </label>
+        <button class="btn btn-primary btn-lg font-mono">APPLY</button>
       </div>
     </div>
 
-    <!-- Main Control Area -->
-    <div class="grid gap-4 lg:grid-cols-3">
+    <!-- ── Main Body: 3 equal columns ─────────────────────────── -->
+    <div class="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
 
-      <!-- Left: Charts Section -->
-      <div class="lg:col-span-2 space-y-4">
+      <!-- ── Column 1: Load / Dynamometer ──────────────────────── -->
+      <div class="space-y-4 min-w-0">
 
-        <!-- Real-time Temperature Chart -->
+        <!-- RPM and Torque -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title flex items-center gap-2">
-              <svg class="w-5 h-5 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-              </svg>
-              Temperature Trends (Real-time)
-              <span class="badge badge-sm badge-success ml-auto">LIVE</span>
-            </h2>
-            <div class="h-64">
-              <canvas id="tempChart"></canvas>
+            <h2 class="card-title text-sm font-mono">RPM / Torque</h2>
+            <div class="flex items-center justify-around py-2">
+              <div class="flex flex-col items-center gap-1">
+                <div class="radial-progress text-base-content font-bold"
+                  style="--value:51; --size:7rem; --thickness:10px;" role="progressbar">
+                  <div class="text-center leading-tight">
+                    <div class="text-xl font-bold font-mono">1530</div>
+                    <div class="text-xs">rpm</div>
+                  </div>
+                </div>
+                <span class="text-xs">0 – 3000 rpm</span>
+              </div>
+              <div class="flex flex-col items-center gap-1">
+                <div class="radial-progress text-base-content font-bold"
+                  style="--value:34; --size:5rem; --thickness:8px;" role="progressbar">
+                  <div class="text-center leading-tight">
+                    <div class="text-base font-bold font-mono">3.4</div>
+                    <div class="text-xs">N·m</div>
+                  </div>
+                </div>
+                <span class="text-xs">0 – 10 N·m</span>
+              </div>
+            </div>
+            <!-- RPM sparkline -->
+            <div class="h-16 mt-1">
+              <canvas id="rpmSparkline"></canvas>
             </div>
           </div>
         </div>
 
-        <!-- System Performance Chart -->
+        <!-- Load control -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">System Performance Overview</h2>
-            <div class="h-48">
-              <canvas id="performanceChart"></canvas>
+            <h2 class="card-title text-sm font-mono">Load Control</h2>
+            <div class="form-control min-w-0">
+              <label class="label gap-2">
+                <span class="label-text font-bold">Load</span>
+                <span class="label-text-alt font-mono">60%</span>
+              </label>
+              <input type="range" min="0" max="100" value="60" class="range range-sm w-full" step="1" />
+              <div class="grid w-full grid-cols-5 text-[10px] sm:text-xs px-1 mt-1">
+                <span class="text-left">0%</span>
+                <span class="text-center invisible sm:visible">25%</span>
+                <span class="text-center">50%</span>
+                <span class="text-center invisible sm:visible">75%</span>
+                <span class="text-right">100%</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 mt-3 flex-wrap">
+              <span class="text-xs font-mono mr-1">Step:</span>
+              <button class="btn btn-outline btn-xs font-mono">−5%</button>
+              <button class="btn btn-outline btn-xs font-mono">−1%</button>
+              <button class="btn btn-outline btn-xs font-mono">+1%</button>
+              <button class="btn btn-outline btn-xs font-mono">+5%</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">Load limit (%)</span></label>
+                <input type="number" class="input input-bordered input-sm font-mono" min="0" max="100" value="90" />
+              </div>
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">Ramp rate (%/s)</span></label>
+                <input type="number" class="input input-bordered input-sm font-mono" min="0" max="50" value="5" />
+              </div>
             </div>
           </div>
         </div>
 
-      </div>
-
-      <!-- Right: Controls & Gauges -->
-      <div class="space-y-4">
-
-        <!-- Main Control Panel -->
-        <div class="card bg-gradient-to-br from-base-200 to-base-300 shadow-xl border-2 border-primary">
+        <!-- Load electrical -->
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-primary">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-              </svg>
-              Main Controls
-            </h2>
-
-            <!-- Big Start/Stop Buttons -->
-            <div class="flex gap-2">
-              <button class="btn btn-success flex-1 btn-lg">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
-                </svg>
-                START
-              </button>
-              <button class="btn btn-error flex-1 btn-lg">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"/>
-                </svg>
-                STOP
-              </button>
+            <h2 class="card-title text-sm font-mono">Load Electrical</h2>
+            <div class="grid grid-cols-3 gap-2 mt-2">
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-2xl font-mono font-bold">4.2</div>
+                <div class="text-xs">A (jack A)</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-2xl font-mono font-bold">4.1</div>
+                <div class="text-xs">A (jack B)</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-2xl font-mono font-bold">48.5</div>
+                <div class="text-xs">V</div>
+              </div>
             </div>
-
-            <!-- Mode Selector -->
             <div class="form-control mt-3">
-              <label class="label">
-                <span class="label-text font-bold">Operation Mode</span>
-              </label>
-              <div class="join w-full">
-                <button class="btn join-item flex-1 btn-sm btn-active btn-primary">AUTO</button>
-                <button class="btn join-item flex-1 btn-sm">MANUAL</button>
-                <button class="btn join-item flex-1 btn-sm">TEST</button>
-              </div>
-            </div>
-
-            <!-- Temperature Setpoint Slider -->
-            <div class="form-control mt-4">
-              <label class="label">
-                <span class="label-text font-bold">Temperature Setpoint</span>
-                <span class="label-text-alt badge badge-lg badge-primary">23.0°C</span>
-              </label>
-              <input type="range" min="15" max="35" value="23" class="range range-primary range-lg" step="0.5" />
-              <div class="flex w-full justify-between text-xs px-2 mt-1">
-                <span>15°C</span>
-                <span>|</span>
-                <span>25°C</span>
-                <span>|</span>
-                <span>35°C</span>
-              </div>
-            </div>
-
-            <!-- Speed Control -->
-            <div class="form-control mt-4">
-              <label class="label">
-                <span class="label-text font-bold">Fan Speed</span>
-                <span class="label-text-alt badge badge-lg badge-accent">75%</span>
-              </label>
-              <input type="range" min="0" max="100" value="75" class="range range-accent range-lg" step="5" />
-            </div>
-
-            <!-- Emergency Stop -->
-            <button class="btn btn-outline btn-error w-full mt-4 btn-lg">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-              </svg>
-              EMERGENCY STOP
-            </button>
-          </div>
-        </div>
-
-        <!-- System Gauges -->
-        <div class="card bg-base-200 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title text-sm">System Load</h2>
-            <div class="flex justify-around items-center">
-              <div class="radial-progress text-primary" style="--value:70; --size:5rem;" role="progressbar">70%</div>
-              <div class="radial-progress text-secondary" style="--value:85; --size:5rem;" role="progressbar">85%</div>
-              <div class="radial-progress text-accent" style="--value:42; --size:5rem;" role="progressbar">42%</div>
-            </div>
-            <div class="flex justify-around text-xs mt-2">
-              <span>CPU</span>
-              <span>Memory</span>
-              <span>I/O</span>
+              <label class="label py-0"><span class="label-text text-xs">Measurement range</span></label>
+              <select class="select select-bordered select-sm font-mono">
+                <option>0 – 5 A</option>
+                <option>0 – 10 A</option>
+                <option>0 – 20 A</option>
+              </select>
             </div>
           </div>
         </div>
 
-        <!-- Active Alarms -->
+      </div>
+
+      <!-- ── Column 2: DC PSU 1, DC PSU 2, DC Routing ──────────── -->
+      <div class="space-y-4 min-w-0">
+
+        <!-- DC PSU 1 -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Active Alarms</h2>
-            <div class="space-y-2">
-              <div class="alert alert-warning py-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
-                </svg>
-                <span class="text-xs">Temp approaching limit</span>
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="card-title text-sm font-mono">DC PSU 1</h2>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <span class="text-xs font-mono">Output</span>
+                <input type="checkbox" class="toggle toggle-success toggle-sm" checked />
+                <span class="text-xs font-mono text-success font-bold">ON</span>
+              </label>
+            </div>
+            <div class="form-control min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Voltage set (V)</span>
+                <span class="label-text-alt font-mono text-xs">24.0 V</span>
+              </label>
+              <input type="range" min="0" max="60" value="24" class="range range-sm w-full" step="0.5" />
+            </div>
+            <div class="form-control mt-2 min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Current limit (A)</span>
+                <span class="label-text-alt font-mono text-xs">5.0 A</span>
+              </label>
+              <input type="range" min="0" max="10" value="5" class="range range-sm w-full" step="0.1" />
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">23.8</div>
+                <div class="text-xs">V</div>
               </div>
-              <div class="alert alert-info py-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
-                </svg>
-                <span class="text-xs">Maintenance due: 48h</span>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">2.3</div>
+                <div class="text-xs">A</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">54.7</div>
+                <div class="text-xs">W</div>
               </div>
             </div>
+            <!-- Protection indicators: active mode = amber, tripped = red, idle = ghost -->
+            <div class="flex gap-1 mt-3 flex-wrap">
+              <span class="badge badge-ghost badge-sm font-mono">CV</span>
+              <span class="badge badge-warning badge-sm font-mono">CC</span>
+              <span class="badge badge-ghost badge-sm font-mono">OVP</span>
+              <span class="badge badge-ghost badge-sm font-mono">OCP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DC PSU 2 — identical layout to PSU 1 -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="card-title text-sm font-mono">DC PSU 2</h2>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <span class="text-xs font-mono">Output</span>
+                <input type="checkbox" class="toggle toggle-success toggle-sm" />
+                <span class="text-xs font-mono">OFF</span>
+              </label>
+            </div>
+            <div class="form-control min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Voltage set (V)</span>
+                <span class="label-text-alt font-mono text-xs">12.0 V</span>
+              </label>
+              <input type="range" min="0" max="60" value="12" class="range range-sm w-full" step="0.5" />
+            </div>
+            <div class="form-control mt-2 min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Current limit (A)</span>
+                <span class="label-text-alt font-mono text-xs">3.0 A</span>
+              </label>
+              <input type="range" min="0" max="10" value="3" class="range range-sm w-full" step="0.1" />
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">0.0</div>
+                <div class="text-xs">V</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">0.0</div>
+                <div class="text-xs">A</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">0.0</div>
+                <div class="text-xs">W</div>
+              </div>
+            </div>
+            <div class="flex gap-1 mt-3 flex-wrap">
+              <span class="badge badge-ghost badge-sm font-mono">CV</span>
+              <span class="badge badge-ghost badge-sm font-mono">CC</span>
+              <span class="badge badge-ghost badge-sm font-mono">OVP</span>
+              <span class="badge badge-ghost badge-sm font-mono">OCP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DC output routing -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm font-mono">DC Output Routing</h2>
+            <div class="grid grid-cols-2 gap-3 mt-1">
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">DC Output 1</span></label>
+                <select class="select select-bordered select-sm font-mono">
+                  <option>PSU 1</option>
+                  <option>PSU 2</option>
+                  <option>Off</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">DC Output 2</span></label>
+                <select class="select select-bordered select-sm font-mono">
+                  <option>PSU 2</option>
+                  <option>PSU 1</option>
+                  <option>Off</option>
+                </select>
+              </div>
+            </div>
+            <label class="flex items-start gap-2 cursor-pointer mt-3">
+              <input type="checkbox" class="checkbox checkbox-sm mt-0.5" checked />
+              <span class="text-xs">Interlock — prevent both outputs routing from the same PSU</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Column 3: AC PSU + Brushless + Capacitor Bank ──────── -->
+      <div class="space-y-4 min-w-0">
+
+        <!-- AC PSU -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="card-title text-sm font-mono">AC PSU</h2>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <span class="text-xs font-mono">Output</span>
+                <input type="checkbox" class="toggle toggle-success toggle-sm" checked />
+                <span class="text-xs font-mono text-success font-bold">ON</span>
+              </label>
+            </div>
+            <!-- Phase mode -->
+            <div class="join w-full mb-3">
+              <button class="btn join-item btn-sm flex-1 btn-active font-mono">1-Phase</button>
+              <button class="btn join-item btn-sm flex-1 font-mono">3-Phase</button>
+            </div>
+            <div class="form-control min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Frequency (Hz)</span>
+                <span class="label-text-alt font-mono text-xs">50.0 Hz</span>
+              </label>
+              <input type="range" min="0" max="100" value="50" class="range range-sm w-full" step="0.5" />
+              <div class="grid w-full grid-cols-5 text-[10px] sm:text-xs px-1 mt-1">
+                <span class="text-left">0</span>
+                <span class="text-center invisible sm:visible">25</span>
+                <span class="text-center">50</span>
+                <span class="text-center invisible sm:visible">75</span>
+                <span class="text-right">100 Hz</span>
+              </div>
+            </div>
+            <div class="form-control mt-2 min-w-0">
+              <label class="label py-0 gap-2">
+                <span class="label-text text-xs font-bold">Voltage set (V)</span>
+                <span class="label-text-alt font-mono text-xs">230 V</span>
+              </label>
+              <input type="range" min="0" max="240" value="230" class="range range-sm w-full" step="1" />
+            </div>
+            <div class="grid grid-cols-3 gap-2 mt-3">
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">228</div>
+                <div class="text-xs">Vac</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">1.8</div>
+                <div class="text-xs">Iac (A)</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-2">
+                <div class="text-xl font-mono font-bold">50.0</div>
+                <div class="text-xs">Hz</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">Soft-start (s)</span></label>
+                <input type="number" class="input input-bordered input-sm font-mono" min="0" max="30" value="2" />
+              </div>
+              <div class="form-control">
+                <label class="label py-0"><span class="label-text text-xs">Freq ramp (Hz/s)</span></label>
+                <input type="number" class="input input-bordered input-sm font-mono" min="0" max="50" value="5" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brushless feedback -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm font-mono">Brushless Feedback</h2>
+            <div class="grid grid-cols-2 gap-2 mt-1">
+              <div class="text-center bg-base-300 rounded p-3">
+                <div class="text-2xl font-mono font-bold">1528</div>
+                <div class="text-xs mt-1">Speed feedback (rpm)</div>
+              </div>
+              <div class="text-center bg-base-300 rounded p-3">
+                <div class="text-2xl font-mono font-bold">48.2</div>
+                <div class="text-xs mt-1">DC bus (V)</div>
+              </div>
+            </div>
+            <div class="space-y-2 mt-3">
+              <div class="flex items-center justify-between text-xs">
+                <span>Commutation</span>
+                <span class="badge badge-success badge-sm font-mono">LOCK</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span>Hall sensors</span>
+                <span class="badge badge-success badge-sm font-mono">OK</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span>Encoder</span>
+                <span class="badge badge-neutral badge-sm font-mono">N/A</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capacitor bank -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm font-mono">Capacitor Bank</h2>
+            <div class="grid grid-cols-2 gap-2 mt-1">
+              <div class="text-center bg-base-300 rounded p-3">
+                <div class="text-2xl font-mono font-bold">47.8</div>
+                <div class="text-xs mt-1">Bank voltage (V)</div>
+              </div>
+              <div class="flex flex-col items-center justify-center gap-1">
+                <span class="badge badge-neutral font-mono">IDLE</span>
+                <span class="text-xs">Charge state</span>
+              </div>
+            </div>
+            <!-- Discharge = destructive but reversible → outlined red -->
+            <button class="btn btn-error btn-outline btn-sm w-full mt-3 font-mono">DISCHARGE</button>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- Bottom: Process Flow Visualization -->
-    <div class="card bg-base-200 shadow-xl mt-4">
-      <div class="card-body">
-        <h2 class="card-title">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/>
-          </svg>
-          Process Flow Diagram
-        </h2>
-
-        <!-- Simplified Process Flow -->
-        <div class="flex items-center justify-around p-6">
-          <div class="flex flex-col items-center">
-            <div class="w-20 h-20 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold shadow-lg">
-              INLET
-            </div>
-            <div class="badge badge-success mt-2">ACTIVE</div>
-            <div class="text-xs mt-1">45.2 L/min</div>
-          </div>
-
-          <svg class="w-16 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
-
-          <div class="flex flex-col items-center">
-            <div class="w-20 h-20 bg-accent rounded-lg flex items-center justify-center text-accent-content font-bold shadow-lg animate-pulse">
-              PROCESS
-            </div>
-            <div class="badge badge-warning mt-2">HEATING</div>
-            <div class="text-xs mt-1">23.5°C</div>
-          </div>
-
-          <svg class="w-16 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-          </svg>
-
-          <div class="flex flex-col items-center">
-            <div class="w-20 h-20 bg-secondary rounded-lg flex items-center justify-center text-secondary-content font-bold shadow-lg">
-              OUTLET
-            </div>
-            <div class="badge badge-success mt-2">ACTIVE</div>
-            <div class="text-xs mt-1">44.8 L/min</div>
-          </div>
-        </div>
-      </div>
-    </div>
   `;
 }
 
 function renderHMIDashboard2() {
   return `
-    <!-- HMI Dashboard 2 – Wind Tunnel Control System -->
+    <!-- Wind Tunnel – Open Circuit Sub-Sonic, Bench-Top Training System -->
 
-    <!-- Top Status Bar -->
+    <!-- System Title (structural: neutral only) -->
+    <div class="mb-4 p-3 bg-base-200 rounded-lg border-l-4 border-base-300">
+      <h1 class="text-xl font-bold text-base-content">Open Circuit Sub-Sonic Wind Tunnel</h1>
+      <p class="text-sm text-base-content mt-1">125 mm transparent test section · 9.2:1 contraction · Computer controlled fan · LED flow visualisation</p>
+    </div>
+
+    <!-- Top Status Bar: normal data = grey; colour only for state (running = green) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div class="stat bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-lg rounded-lg">
-        <div class="stat-title text-primary-content opacity-80">Tunnel Status</div>
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title text-base-content">Tunnel Status</div>
         <div class="stat-value text-2xl flex items-center gap-2">
           <span class="relative flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
             <span class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
           </span>
-          ACTIVE
+          <span class="text-success font-bold">ACTIVE</span>
         </div>
-        <div class="stat-desc text-primary-content opacity-70">Test Run #1247</div>
+        <div class="stat-desc text-base-content">Bench-top · Teaching mode</div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Air Speed</div>
-        <div class="stat-value text-3xl text-info">45.2 m/s</div>
-        <div class="stat-desc flex items-center gap-1">
-          <span class="text-success">↗︎ 2.1 m/s</span> from setpoint
-        </div>
+        <div class="stat-title text-base-content">Test Section Speed</div>
+        <div class="stat-value text-3xl text-base-content">28.4 m/s</div>
+        <div class="stat-desc text-base-content">from setpoint · max 35 m/s</div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Dynamic Pressure</div>
-        <div class="stat-value text-3xl text-warning">1.23 kPa</div>
-        <div class="stat-desc">Reynolds: 2.4×10⁶</div>
+        <div class="stat-title text-base-content">Contraction Ratio</div>
+        <div class="stat-value text-3xl text-base-content">9.2:1</div>
+        <div class="stat-desc text-base-content">Honeycomb · uniform flow</div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Fan RPM</div>
-        <div class="stat-value text-3xl text-accent">1,245</div>
-        <div class="stat-desc flex items-center gap-1">
-          <span class="text-success">↗︎ 5%</span> power
-        </div>
+        <div class="stat-title text-base-content">Fan Power</div>
+        <div class="stat-value text-3xl text-base-content">81%</div>
+        <div class="stat-desc text-base-content">variable speed</div>
       </div>
     </div>
 
@@ -554,24 +755,21 @@ function renderHMIDashboard2() {
       <!-- Left: Main Charts and Visualization -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Air Speed Chart -->
+        <!-- Air Speed Chart (normal operation: no decorative colour) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
             <div class="flex items-center justify-between mb-2">
-              <h2 class="card-title">
-                <svg class="w-5 h-5 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h2 class="card-title text-base-content">
+                <svg class="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
-                Air Speed Profile
+                Test Section Air Speed
               </h2>
-              <div class="badge badge-success gap-2">
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                </span>
-                RECORDING
+              <div class="badge badge-ghost gap-2 text-base-content">
+                DATA ACQUISITION
               </div>
             </div>
+            <p class="text-xs text-base-content mb-2">125 mm transparent test section · range 0–35+ m/s</p>
             <div class="h-64">
               <canvas id="airSpeedChart"></canvas>
             </div>
@@ -581,44 +779,45 @@ function renderHMIDashboard2() {
         <!-- Pressure Distribution Chart -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">Pressure Distribution</h2>
+            <h2 class="card-title text-base-content">Pressure Distribution</h2>
             <div class="h-48">
               <canvas id="pressureChart2"></canvas>
             </div>
           </div>
         </div>
 
-        <!-- Test Section Visualization -->
+        <!-- Flow Path (structural: neutral; OK = grey; running = green only on active section) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">Test Section Status</h2>
+            <h2 class="card-title text-base-content">Flow Path</h2>
+            <p class="text-xs text-base-content mb-2">Contraction nozzle (9.2:1 honeycomb) → 125 mm test section → variable speed fan</p>
             <div class="grid grid-cols-5 gap-2 mt-4">
               <div class="flex flex-col items-center">
-                <div class="w-16 h-16 bg-primary rounded-lg flex items-center justify-center text-primary-content font-bold text-xs shadow-lg">
+                <div class="w-16 h-16 bg-base-300 rounded-lg flex items-center justify-center text-base-content font-bold text-xs shadow">
                   INLET
                 </div>
-                <div class="badge badge-success badge-sm mt-2">OK</div>
-                <div class="text-xs mt-1">45.2 m/s</div>
+                <div class="badge badge-ghost badge-sm mt-2 text-base-content">OK</div>
+                <div class="text-xs mt-1 text-base-content">9.2:1 honeycomb</div>
               </div>
-              <svg class="w-8 h-16 text-primary self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-8 h-16 text-base-content self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
               </svg>
               <div class="flex flex-col items-center">
-                <div class="w-16 h-16 bg-accent rounded-lg flex items-center justify-center text-accent-content font-bold text-xs shadow-lg animate-pulse">
-                  TEST
+                <div class="w-16 h-16 bg-base-300 rounded-lg flex items-center justify-center text-base-content font-bold text-xs shadow border-2 border-success">
+                  125 mm
                 </div>
-                <div class="badge badge-warning badge-sm mt-2">ACTIVE</div>
-                <div class="text-xs mt-1">Model #12</div>
+                <div class="badge badge-success badge-sm mt-2">ACTIVE</div>
+                <div class="text-xs mt-1 text-base-content">28.4 m/s</div>
               </div>
-              <svg class="w-8 h-16 text-accent self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-8 h-16 text-base-content self-center" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
               </svg>
               <div class="flex flex-col items-center">
-                <div class="w-16 h-16 bg-secondary rounded-lg flex items-center justify-center text-secondary-content font-bold text-xs shadow-lg">
-                  DIFF
+                <div class="w-16 h-16 bg-base-300 rounded-lg flex items-center justify-center text-base-content font-bold text-xs shadow">
+                  FAN
                 </div>
-                <div class="badge badge-success badge-sm mt-2">OK</div>
-                <div class="text-xs mt-1">44.8 m/s</div>
+                <div class="badge badge-ghost badge-sm mt-2 text-base-content">OK</div>
+                <div class="text-xs mt-1 text-base-content">81% · finger guard</div>
               </div>
             </div>
           </div>
@@ -628,17 +827,17 @@ function renderHMIDashboard2() {
       <!-- Right: Controls and Gauges -->
       <div class="space-y-4">
         
-        <!-- Main Control Panel -->
-        <div class="card bg-gradient-to-br from-base-200 to-base-300 shadow-xl border-2 border-primary">
+        <!-- Main Control Panel (structural: neutral; action colours per philosophy) -->
+        <div class="card bg-base-200 shadow-xl border border-base-300">
           <div class="card-body">
-            <h2 class="card-title text-primary">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <h2 class="card-title text-base-content">
+              <svg class="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
               </svg>
               Tunnel Controls
             </h2>
 
-            <!-- Start/Stop Buttons -->
+            <!-- Start/Stop (green = RUN, red = STOP per action colours) -->
             <div class="flex gap-2 mb-4">
               <button class="btn btn-success flex-1 btn-lg">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -654,66 +853,66 @@ function renderHMIDashboard2() {
               </button>
             </div>
 
-            <!-- Test Mode Selector -->
+            <!-- Test Mode Selector (neutral: no colour for structure) -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Test Mode</span>
+                <span class="label-text font-bold text-base-content">Test Mode</span>
               </label>
               <div class="join w-full">
-                <button class="btn join-item flex-1 btn-sm btn-active btn-primary">CONST</button>
+                <button class="btn join-item flex-1 btn-sm btn-active">CONST</button>
                 <button class="btn join-item flex-1 btn-sm">RAMP</button>
                 <button class="btn join-item flex-1 btn-sm">SINE</button>
               </div>
             </div>
 
-            <!-- Air Speed Setpoint -->
+            <!-- Air Speed Setpoint (values = grey) -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Target Air Speed</span>
-                <span class="label-text-alt badge badge-lg badge-info">45.0 m/s</span>
+                <span class="label-text font-bold text-base-content">Target Air Speed</span>
+                <span class="label-text-alt text-base-content">28.0 m/s</span>
               </label>
-              <input type="range" min="0" max="100" value="45" class="range range-info range-lg" step="0.5" />
-              <div class="flex w-full justify-between text-xs px-2 mt-1">
+              <input type="range" min="0" max="35" value="28" class="range range-lg" step="0.5" />
+              <div class="flex w-full justify-between text-xs px-2 mt-1 text-base-content">
                 <span>0 m/s</span>
                 <span>|</span>
-                <span>50 m/s</span>
+                <span>17.5 m/s</span>
                 <span>|</span>
-                <span>100 m/s</span>
+                <span>35+ m/s</span>
               </div>
             </div>
 
-            <!-- Fan Power Control -->
+            <!-- Fan Power (value = grey) -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Fan Power</span>
-                <span class="label-text-alt badge badge-lg badge-accent">75%</span>
+                <span class="label-text font-bold text-base-content">Fan Power</span>
+                <span class="label-text-alt text-base-content">81%</span>
               </label>
-              <input type="range" min="0" max="100" value="75" class="range range-accent range-lg" step="1" />
+              <input type="range" min="0" max="100" value="81" class="range range-lg" step="1" />
             </div>
 
-            <!-- Toggle Switches -->
+            <!-- Toggle Switches (settings: neutral) -->
             <div class="space-y-2">
               <div class="form-control">
                 <label class="label cursor-pointer">
-                  <span class="label-text font-bold">Cooling System</span>
-                  <input type="checkbox" class="toggle toggle-success" checked />
+                  <span class="label-text font-bold text-base-content">LED Flow Visualisation</span>
+                  <input type="checkbox" class="toggle toggle-md" checked />
                 </label>
               </div>
               <div class="form-control">
                 <label class="label cursor-pointer">
-                  <span class="label-text font-bold">Data Logging</span>
-                  <input type="checkbox" class="toggle toggle-primary" checked />
+                  <span class="label-text font-bold text-base-content">Data Acquisition</span>
+                  <input type="checkbox" class="toggle toggle-md" checked />
                 </label>
               </div>
               <div class="form-control">
                 <label class="label cursor-pointer">
-                  <span class="label-text font-bold">Safety Interlock</span>
-                  <input type="checkbox" class="toggle toggle-warning" checked />
+                  <span class="label-text font-bold text-base-content">Safety Interlock</span>
+                  <input type="checkbox" class="toggle toggle-md" checked />
                 </label>
               </div>
             </div>
 
-            <!-- Emergency Stop -->
+            <!-- Emergency Stop (outlined red per philosophy) -->
             <button class="btn btn-outline btn-error w-full mt-4 btn-lg">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -723,63 +922,61 @@ function renderHMIDashboard2() {
           </div>
         </div>
 
-        <!-- Gauges -->
+        <!-- Gauges (normal readings = no colour) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">System Gauges</h2>
+            <h2 class="card-title text-sm text-base-content">System Gauges</h2>
             <div class="grid grid-cols-2 gap-4 mt-2">
               <div class="flex flex-col items-center">
-                <div class="radial-progress text-info" style="--value:75; --size:4rem;" role="progressbar">75%</div>
-                <div class="text-xs mt-2 text-center">Fan Power</div>
+                <div class="radial-progress text-base-content" style="--value:81; --size:4rem;" role="progressbar">81%</div>
+                <div class="text-xs mt-2 text-center text-base-content">Fan Power</div>
               </div>
               <div class="flex flex-col items-center">
-                <div class="radial-progress text-warning" style="--value:90; --size:4rem;" role="progressbar">90%</div>
-                <div class="text-xs mt-2 text-center">Air Flow</div>
+                <div class="radial-progress text-base-content" style="--value:81; --size:4rem;" role="progressbar">81%</div>
+                <div class="text-xs mt-2 text-center text-base-content">Speed vs max 35 m/s</div>
               </div>
               <div class="flex flex-col items-center">
-                <div class="radial-progress text-success" style="--value:65; --size:4rem;" role="progressbar">65%</div>
-                <div class="text-xs mt-2 text-center">Cooling</div>
+                <div class="radial-progress text-base-content" style="--value:100; --size:4rem;" role="progressbar">100%</div>
+                <div class="text-xs mt-2 text-center text-base-content">Flow uniformity</div>
               </div>
               <div class="flex flex-col items-center">
-                <div class="radial-progress text-accent" style="--value:45; --size:4rem;" role="progressbar">45%</div>
-                <div class="text-xs mt-2 text-center">Pressure</div>
+                <div class="radial-progress text-base-content" style="--value:100; --size:4rem;" role="progressbar">100%</div>
+                <div class="text-xs mt-2 text-center text-base-content">LED visualisation</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Active Alarms -->
+        <!-- Alarms (info = blue; nominal = grey, not success) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">System Alarms</h2>
+            <h2 class="card-title text-sm text-base-content">System Alarms</h2>
             <div class="space-y-2 mt-2">
               <div class="alert alert-info py-2">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
                 </svg>
-                <span class="text-xs">Test run in progress</span>
+                <span class="text-xs">Aerodynamics teaching run in progress</span>
               </div>
-              <div class="alert alert-success py-2">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span class="text-xs">All systems nominal</span>
+              <div class="bg-base-300 rounded-lg px-4 py-2">
+                <span class="text-xs text-base-content">125 mm test section · honeycomb uniform flow OK</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Test Progress -->
+        <!-- Experiments & Progress (no opacity; hierarchy by size) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Test Progress</h2>
+            <h2 class="card-title text-sm text-base-content">Experiments & Progress</h2>
+            <div class="text-xs text-base-content mb-2">14+ experiments · 2 force component unit · 3D print (M3) compatible</div>
             <div class="mt-2">
-              <div class="flex justify-between text-xs mb-1">
-                <span>Test Run #1247</span>
+              <div class="flex justify-between text-xs mb-1 text-base-content">
+                <span>Current run</span>
                 <span>65%</span>
               </div>
-              <progress class="progress progress-primary w-full" value="65" max="100"></progress>
-              <div class="text-xs mt-2 opacity-70">Estimated completion: 2:15</div>
+              <progress class="progress w-full" value="65" max="100"></progress>
+              <div class="text-xs mt-2 text-base-content">Teaching mode · Touch screen interface</div>
             </div>
           </div>
         </div>
@@ -790,40 +987,38 @@ function renderHMIDashboard2() {
 
 function renderHMIDashboard3() {
   return `
-    <!-- HMI Dashboard 3 – PID Controller Tuning System -->
+    <!-- Process Control Temperature – PID Controller Tuning System -->
 
-    <!-- Top Status Bar -->
+    <!-- Top Status Bar: normal data = grey; colour only for state (running = green, AUTO = green) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div class="stat bg-gradient-to-br from-primary to-primary-focus text-primary-content shadow-lg rounded-lg">
-        <div class="stat-title text-primary-content opacity-80">Controller Status</div>
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title text-base-content">Controller Status</div>
         <div class="stat-value text-2xl flex items-center gap-2">
           <span class="relative flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
             <span class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
           </span>
-          ACTIVE
+          <span class="text-success font-bold">ACTIVE</span>
         </div>
-        <div class="stat-desc text-primary-content opacity-70">PID Mode: Auto</div>
+        <div class="stat-desc text-base-content">PID Mode: <span class="text-success font-medium">AUTO</span></div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Setpoint</div>
-        <div class="stat-value text-3xl text-primary">50.0°C</div>
-        <div class="stat-desc">Target value</div>
+        <div class="stat-title text-base-content">Setpoint</div>
+        <div class="stat-value text-3xl text-base-content">50.0°C</div>
+        <div class="stat-desc text-base-content">Target value</div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Process Value</div>
-        <div class="stat-value text-3xl text-info">49.8°C</div>
-        <div class="stat-desc flex items-center gap-1">
-          <span class="text-success">↗︎ 0.2°C</span> error
-        </div>
+        <div class="stat-title text-base-content">Process Value</div>
+        <div class="stat-value text-3xl text-base-content">49.8°C</div>
+        <div class="stat-desc text-base-content">0.2°C error</div>
       </div>
 
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Output</div>
-        <div class="stat-value text-3xl text-warning">62%</div>
-        <div class="stat-desc">Control signal</div>
+        <div class="stat-title text-base-content">Output</div>
+        <div class="stat-value text-3xl text-base-content">62%</div>
+        <div class="stat-desc text-base-content">Control signal</div>
       </div>
     </div>
 
@@ -833,20 +1028,20 @@ function renderHMIDashboard3() {
       <!-- Left: Response Charts -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Step Response Chart -->
+        <!-- Step Response Chart (structural: neutral; RUNNING = green) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
             <div class="flex items-center justify-between mb-2">
-              <h2 class="card-title">
-                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h2 class="card-title text-base-content">
+                <svg class="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
                 Step Response Analysis
               </h2>
-              <div class="badge badge-primary gap-2">
+              <div class="badge badge-success gap-2">
                 <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
                 </span>
                 RUNNING
               </div>
@@ -857,32 +1052,61 @@ function renderHMIDashboard3() {
           </div>
         </div>
 
-        <!-- Performance Metrics -->
+        <!-- Performance Metrics (normal readings = no colour) -->
         <div class="grid gap-4 md:grid-cols-3">
           <div class="card bg-base-200 shadow-xl">
             <div class="card-body">
-              <h2 class="card-title text-sm">Rise Time</h2>
-              <div class="stat-value text-2xl text-success">2.4s</div>
-              <div class="stat-desc text-xs">Target: < 3.0s</div>
-              <progress class="progress progress-success w-full mt-2" value="80" max="100"></progress>
+              <h2 class="card-title text-sm text-base-content">Rise Time</h2>
+              <div class="stat-value text-2xl text-base-content">2.4s</div>
+              <div class="stat-desc text-xs text-base-content">Target: &lt; 3.0s</div>
+              <progress class="progress w-full mt-2" value="80" max="100"></progress>
             </div>
           </div>
 
           <div class="card bg-base-200 shadow-xl">
             <div class="card-body">
-              <h2 class="card-title text-sm">Overshoot</h2>
-              <div class="stat-value text-2xl text-warning">4.2%</div>
-              <div class="stat-desc text-xs">Target: < 5.0%</div>
-              <progress class="progress progress-warning w-full mt-2" value="84" max="100"></progress>
+              <h2 class="card-title text-sm text-base-content">Overshoot</h2>
+              <div class="stat-value text-2xl text-base-content">4.2%</div>
+              <div class="stat-desc text-xs text-base-content">Target: &lt; 5.0%</div>
+              <progress class="progress w-full mt-2" value="84" max="100"></progress>
             </div>
           </div>
 
           <div class="card bg-base-200 shadow-xl">
             <div class="card-body">
-              <h2 class="card-title text-sm">Settling Time</h2>
-              <div class="stat-value text-2xl text-info">8.5s</div>
-              <div class="stat-desc text-xs">Target: < 10.0s</div>
-              <progress class="progress progress-info w-full mt-2" value="85" max="100"></progress>
+              <h2 class="card-title text-sm text-base-content">Settling Time</h2>
+              <div class="stat-value text-2xl text-base-content">8.5s</div>
+              <div class="stat-desc text-xs text-base-content">Target: &lt; 10.0s</div>
+              <progress class="progress w-full mt-2" value="85" max="100"></progress>
+            </div>
+          </div>
+        </div>
+
+        <!-- Test Functions centered under response metrics -->
+        <div class="mx-auto w-full max-w-md">
+          <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+              <h2 class="card-title text-sm text-base-content">Test Functions</h2>
+              <div class="space-y-2">
+                <button class="btn btn-primary btn-sm w-full">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                  </svg>
+                  Step Test
+                </button>
+                <button class="btn btn-outline btn-sm w-full">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
+                  </svg>
+                  Ramp Test
+                </button>
+                <button class="btn btn-outline btn-sm w-full">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                  </svg>
+                  Sine Wave Test
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -891,11 +1115,11 @@ function renderHMIDashboard3() {
       <!-- Right: PID Parameters and Controls -->
       <div class="space-y-4">
         
-        <!-- PID Parameters -->
-        <div class="card bg-gradient-to-br from-base-200 to-base-300 shadow-xl border-2 border-primary">
+        <!-- PID Parameters (structural: neutral; values = grey; Apply = primary) -->
+        <div class="card bg-base-200 shadow-xl border border-base-300">
           <div class="card-body">
-            <h2 class="card-title text-primary">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <h2 class="card-title text-base-content">
+              <svg class="w-5 h-5 text-base-content" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
               </svg>
               PID Parameters
@@ -904,11 +1128,11 @@ function renderHMIDashboard3() {
             <!-- Proportional Gain -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Proportional (Kp)</span>
-                <span class="label-text-alt badge badge-lg badge-primary">2.5</span>
+                <span class="label-text font-bold text-base-content">Proportional (Kp)</span>
+                <span class="label-text-alt text-base-content">2.5</span>
               </label>
-              <input type="range" min="0" max="10" value="2.5" class="range range-primary range-lg" step="0.1" />
-              <div class="flex w-full justify-between text-xs px-2 mt-1">
+              <input type="range" min="0" max="10" value="2.5" class="range range-lg" step="0.1" />
+              <div class="flex w-full justify-between text-xs px-2 mt-1 text-base-content">
                 <span>0.0</span>
                 <span>|</span>
                 <span>5.0</span>
@@ -921,11 +1145,11 @@ function renderHMIDashboard3() {
             <!-- Integral Gain -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Integral (Ki)</span>
-                <span class="label-text-alt badge badge-lg badge-secondary">0.8</span>
+                <span class="label-text font-bold text-base-content">Integral (Ki)</span>
+                <span class="label-text-alt text-base-content">0.8</span>
               </label>
-              <input type="range" min="0" max="5" value="0.8" class="range range-secondary range-lg" step="0.1" />
-              <div class="flex w-full justify-between text-xs px-2 mt-1">
+              <input type="range" min="0" max="5" value="0.8" class="range range-lg" step="0.1" />
+              <div class="flex w-full justify-between text-xs px-2 mt-1 text-base-content">
                 <span>0.0</span>
                 <span>|</span>
                 <span>2.5</span>
@@ -938,11 +1162,11 @@ function renderHMIDashboard3() {
             <!-- Derivative Gain -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Derivative (Kd)</span>
-                <span class="label-text-alt badge badge-lg badge-accent">0.3</span>
+                <span class="label-text font-bold text-base-content">Derivative (Kd)</span>
+                <span class="label-text-alt text-base-content">0.3</span>
               </label>
-              <input type="range" min="0" max="2" value="0.3" class="range range-accent range-lg" step="0.05" />
-              <div class="flex w-full justify-between text-xs px-2 mt-1">
+              <input type="range" min="0" max="2" value="0.3" class="range range-lg" step="0.05" />
+              <div class="flex w-full justify-between text-xs px-2 mt-1 text-base-content">
                 <span>0.0</span>
                 <span>|</span>
                 <span>1.0</span>
@@ -957,16 +1181,16 @@ function renderHMIDashboard3() {
             <!-- Setpoint Control -->
             <div class="form-control mb-3">
               <label class="label">
-                <span class="label-text font-bold">Setpoint</span>
-                <span class="label-text-alt badge badge-lg badge-warning">50.0°C</span>
+                <span class="label-text font-bold text-base-content">Setpoint</span>
+                <span class="label-text-alt text-base-content">50.0°C</span>
               </label>
-              <input type="range" min="0" max="100" value="50" class="range range-warning range-lg" step="0.5" />
+              <input type="range" min="0" max="100" value="50" class="range range-lg" step="0.5" />
               <input type="number" class="input input-bordered input-sm mt-2" value="50.0" step="0.5" min="0" max="100" />
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (Apply = primary, Reset = outline) -->
             <div class="flex gap-2">
-              <button class="btn btn-success flex-1 btn-sm">
+              <button class="btn btn-primary flex-1 btn-sm">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
                 </svg>
@@ -977,10 +1201,10 @@ function renderHMIDashboard3() {
           </div>
         </div>
 
-        <!-- Tuning Presets -->
+        <!-- Tuning Presets (neutral: outline only) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Tuning Presets</h2>
+            <h2 class="card-title text-sm text-base-content">Tuning Presets</h2>
             <div class="space-y-2">
               <button class="btn btn-outline btn-sm w-full justify-start">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -1005,67 +1229,40 @@ function renderHMIDashboard3() {
           </div>
         </div>
 
-        <!-- Test Controls -->
+        <!-- Performance (normal readings = no colour) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Test Functions</h2>
-            <div class="space-y-2">
-              <button class="btn btn-primary btn-sm w-full">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
-                </svg>
-                Step Test
-              </button>
-              <button class="btn btn-secondary btn-sm w-full">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/>
-                </svg>
-                Ramp Test
-              </button>
-              <button class="btn btn-accent btn-sm w-full">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                Sine Wave Test
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Performance Indicators -->
-        <div class="card bg-base-200 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title text-sm">Performance</h2>
+            <h2 class="card-title text-sm text-base-content">Performance</h2>
             <div class="space-y-3">
               <div>
-                <div class="flex justify-between text-xs mb-1">
+                <div class="flex justify-between text-xs mb-1 text-base-content">
                   <span>Stability</span>
                   <span>92%</span>
                 </div>
-                <progress class="progress progress-success w-full" value="92" max="100"></progress>
+                <progress class="progress w-full" value="92" max="100"></progress>
               </div>
               <div>
-                <div class="flex justify-between text-xs mb-1">
+                <div class="flex justify-between text-xs mb-1 text-base-content">
                   <span>Response Speed</span>
                   <span>78%</span>
                 </div>
-                <progress class="progress progress-info w-full" value="78" max="100"></progress>
+                <progress class="progress w-full" value="78" max="100"></progress>
               </div>
               <div>
-                <div class="flex justify-between text-xs mb-1">
+                <div class="flex justify-between text-xs mb-1 text-base-content">
                   <span>Steady State Error</span>
                   <span>0.4%</span>
                 </div>
-                <progress class="progress progress-warning w-full" value="96" max="100"></progress>
+                <progress class="progress w-full" value="96" max="100"></progress>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Save/Load Configuration -->
+        <!-- Configuration (Save/Load = ghost/outline, muted) -->
         <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Configuration</h2>
+            <h2 class="card-title text-sm text-base-content">Configuration</h2>
             <div class="flex gap-2">
               <button class="btn btn-outline btn-sm flex-1">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -1082,6 +1279,459 @@ function renderHMIDashboard3() {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHMIDashboard4() {
+  return `
+    <!-- HMI Dashboard 4 – Matrix Fundamental Fluids -->
+
+    <!-- Top Status Bar -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Recording Status</div>
+        <div class="stat-value text-2xl flex items-center gap-2">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-success"></span>
+          </span>
+          RECORDING
+        </div>
+        <div class="stat-desc">142 data points</div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Active Worksheet</div>
+        <div class="stat-value text-xl">WS6</div>
+        <div class="stat-desc">Bernoulli's Principle</div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">USB Sensors</div>
+        <div class="stat-value text-3xl">2 / 2</div>
+        <div class="stat-desc">Connected</div>
+      </div>
+
+      <div class="stat bg-base-200 shadow-lg rounded-lg">
+        <div class="stat-title">Flow Rate</div>
+        <div class="stat-value text-3xl">26.4 L/min</div>
+        <div class="stat-desc">Pressure diff: 41.4 kPa</div>
+      </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="grid gap-4 lg:grid-cols-3">
+
+      <!-- Left: Actuators + Charts + Worksheets (priority order) -->
+      <div class="lg:col-span-2 space-y-4">
+
+        <!-- Pump Speed Control — ACTUATORS FIRST -->
+        <div class="card bg-base-200 shadow-xl border-2 border-primary">
+          <div class="card-body">
+            <h2 class="card-title text-primary text-sm font-mono tracking-widest uppercase">Pump Speed Control</h2>
+            <div class="flex justify-around items-start gap-8 py-4">
+
+              <!-- Pump 1 -->
+              <div class="flex flex-col items-center gap-3">
+                <div class="text-sm font-bold font-mono tracking-wider">PUMP 1</div>
+                <div class="text-3xl font-mono font-bold" id="pump1-val">60%</div>
+                <div id="pump1-slider" style="height:220px;"></div>
+                <div class="flex gap-1 mt-1">
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump1',0)">0</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump1',25)">25</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump1',50)">50</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump1',75)">75</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump1',100)">100</button>
+                </div>
+              </div>
+
+              <div class="divider divider-horizontal"></div>
+
+              <!-- Pump 2 -->
+              <div class="flex flex-col items-center gap-3">
+                <div class="text-sm font-bold font-mono tracking-wider">PUMP 2</div>
+                <div class="text-3xl font-mono font-bold" id="pump2-val">45%</div>
+                <div id="pump2-slider" style="height:220px;"></div>
+                <div class="flex gap-1 mt-1">
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump2',0)">0</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump2',25)">25</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump2',50)">50</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump2',75)">75</button>
+                  <button class="btn btn-outline btn-xs font-mono" onclick="setFluidPump('pump2',100)">100</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Bernoulli Pressure Profile Chart -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="card-title">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Pressure Profile — Venturi Tube (WS6)
+              </h2>
+              <div class="badge badge-primary gap-2">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                LIVE
+              </div>
+            </div>
+            <div class="h-64">
+              <canvas id="bernoulliChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flow Rate Over Time -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+              Flow Rate (Real-time)
+            </h2>
+            <div class="h-44">
+              <canvas id="flowTimeChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flow vs Pressure -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+              </svg>
+              Flow vs Differential Pressure
+            </h2>
+            <div class="h-52">
+              <canvas id="flowPressureChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Worksheet Selector — LOWEST PRIORITY, bottom of left column -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Experiments — Matrix Fundamental Fluids</h2>
+            <div class="grid grid-cols-3 gap-2 mt-1">
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS1</span><span class="badge badge-neutral badge-xs">MANUAL</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Viscosity Matters</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS2</span><span class="badge badge-neutral badge-xs">MANUAL</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Calibrating Pressure Gauge</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS3</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Liquid Manometers</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS4</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Inclined Manometers</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS5</span><span class="badge badge-neutral badge-xs">MANUAL</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Centre of Pressure</div>
+                </div>
+              </div>
+
+              <!-- WS6 ACTIVE -->
+              <div class="card bg-primary/10 cursor-pointer border-2 border-primary transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold text-primary">WS6</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-bold mt-1 leading-tight text-primary">Bernoulli's Principle</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS7</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Minor Losses in Bends</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS8</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Centrifugal Pump</div>
+                </div>
+              </div>
+
+              <div class="card bg-base-300 cursor-pointer hover:bg-base-100 border border-base-content/10 transition-colors">
+                <div class="card-body p-3">
+                  <div class="flex justify-between items-start"><span class="text-xs font-bold">WS9</span><span class="badge badge-ghost badge-xs">USB</span></div>
+                  <div class="text-xs font-semibold mt-1 leading-tight">Pumps in Series / Parallel</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Sensors + Live Data + USB Status + Recording (priority order) -->
+      <div class="space-y-4">
+
+        <!-- Pressure Gauges — SENSORS FIRST -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Pressure Gauges (0 – 1000 psi)</h2>
+            <div class="flex justify-around items-center py-3">
+
+              <div class="flex flex-col items-center gap-2">
+                <div class="radial-progress text-base-content font-bold"
+                  style="--value: 65; --size: 5.5rem; --thickness: 8px;" role="progressbar">
+                  <div class="text-center leading-tight">
+                    <div class="text-sm font-bold">650</div>
+                    <div class="text-xs">psi</div>
+                  </div>
+                </div>
+                <span class="text-xs font-bold">Gauge 1</span>
+              </div>
+
+              <div class="flex flex-col items-center gap-2">
+                <div class="radial-progress text-base-content font-bold"
+                  style="--value: 42; --size: 5.5rem; --thickness: 8px;" role="progressbar">
+                  <div class="text-center leading-tight">
+                    <div class="text-sm font-bold">420</div>
+                    <div class="text-xs">psi</div>
+                  </div>
+                </div>
+                <span class="text-xs font-bold">Gauge 2</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Sensor Readings -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Live Readings — Venturi Tappings</h2>
+            <div class="space-y-2 mt-1">
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-mono">P1 Inlet</span>
+                <span class="font-mono font-bold">118.2 kPa</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-mono">P2 Converge</span>
+                <span class="font-mono font-bold">105.4 kPa</span>
+              </div>
+              <div class="flex justify-between items-center text-sm border-l-2 border-base-content/30 pl-2">
+                <span class="font-mono">P3 Throat ↓ min</span>
+                <span class="font-mono font-bold">76.8 kPa</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-mono">P4 Diverge</span>
+                <span class="font-mono font-bold">93.1 kPa</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-mono">P5 Outlet</span>
+                <span class="font-mono font-bold">108.6 kPa</span>
+              </div>
+              <div class="divider my-1"></div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="font-mono">Flow Rate</span>
+                <span class="font-mono font-bold">26.4 L/min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USB Sensor Connection -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">USB Sensors</h2>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-sm">Pressure Sensor</span>
+                <span class="badge badge-neutral badge-sm">Connected</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">Flow Sensor</span>
+                <span class="badge badge-neutral badge-sm">Connected</span>
+              </div>
+              <div class="flex items-center justify-between text-xs mt-1">
+                <span>Sample rate</span>
+                <span>10 Hz</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Recording — lower priority -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Data Recording</h2>
+
+            <div class="flex gap-2">
+              <button class="btn btn-success flex-1 btn-lg">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                </svg>
+                RECORD
+              </button>
+              <button class="btn btn-error flex-1 btn-lg">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"/>
+                </svg>
+                STOP
+              </button>
+            </div>
+
+            <div class="form-control mt-3">
+              <label class="label pb-1">
+                <span class="label-text font-bold text-xs">Data Entry Mode</span>
+              </label>
+              <div class="join w-full">
+                <button class="btn join-item flex-1 btn-sm btn-active btn-success">USB AUTO</button>
+                <button class="btn join-item flex-1 btn-sm btn-outline">MANUAL</button>
+              </div>
+            </div>
+
+            <div class="mt-3 text-xs flex justify-between">
+              <span>Run duration</span><span>00:02:22</span>
+            </div>
+            <div class="text-xs flex justify-between">
+              <span>Data points</span><span>142</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export / Print — lowest priority -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm">Run Data</h2>
+            <div class="flex gap-2">
+              <button class="btn btn-ghost btn-sm flex-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
+                </svg>
+                Export
+              </button>
+              <button class="btn btn-ghost btn-sm flex-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z"/>
+                </svg>
+                Print
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom: Venturi Tube Schematic -->
+    <div class="card bg-base-200 shadow-xl mt-4">
+      <div class="card-body">
+        <h2 class="card-title text-sm">Venturi Tube — Pressure Tapping Positions (WS6: Bernoulli's Principle)</h2>
+        <div class="flex items-end justify-center gap-1 py-4 px-2">
+
+          <!-- Flow direction label -->
+          <div class="flex flex-col items-center mr-3">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+            <span class="text-xs mt-1">Flow</span>
+          </div>
+
+          <!-- P1 Inlet (tallest - widest section) -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-mono font-bold mb-1">P1</div>
+            <div class="w-14 h-16 bg-base-300 border-2 border-base-content/20 rounded flex items-center justify-center">
+              <span class="text-xs font-mono text-center leading-tight">118.2<br/>kPa</span>
+            </div>
+            <div class="text-xs mt-1">Inlet</div>
+          </div>
+
+          <!-- Converging taper -->
+          <div class="flex items-end mb-1">
+            <div class="w-4 h-12 bg-base-300/50 border-t-2 border-b-2 border-base-content/10" style="clip-path: polygon(0 0, 100% 15%, 100% 85%, 0 100%)"></div>
+          </div>
+
+          <!-- P2 Converging -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-mono font-bold mb-1">P2</div>
+            <div class="w-12 h-12 bg-base-300 border-2 border-base-content/20 rounded flex items-center justify-center">
+              <span class="text-xs font-mono text-center leading-tight">105.4<br/>kPa</span>
+            </div>
+            <div class="text-xs mt-1">Converge</div>
+          </div>
+
+          <!-- Throat taper -->
+          <div class="flex items-end mb-1">
+            <div class="w-3 h-8 bg-base-300/50 border-t-2 border-b-2 border-base-content/10" style="clip-path: polygon(0 0, 100% 20%, 100% 80%, 0 100%)"></div>
+          </div>
+
+          <!-- P3 Throat (shortest - narrowest section) -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-mono font-bold mb-1">P3</div>
+            <div class="w-10 h-8 bg-base-300 border-2 border-base-content/20 rounded flex items-center justify-center">
+              <span class="text-xs font-mono text-center leading-tight">76.8<br/>kPa</span>
+            </div>
+            <div class="text-xs mt-1">Throat</div>
+          </div>
+
+          <!-- Diverging taper -->
+          <div class="flex items-end mb-1">
+            <div class="w-3 h-8 bg-base-300/50 border-t-2 border-b-2 border-base-content/10" style="clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 80%)"></div>
+          </div>
+
+          <!-- P4 Diverging -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-mono font-bold mb-1">P4</div>
+            <div class="w-12 h-12 bg-base-300 border-2 border-base-content/20 rounded flex items-center justify-center">
+              <span class="text-xs font-mono text-center leading-tight">93.1<br/>kPa</span>
+            </div>
+            <div class="text-xs mt-1">Diverge</div>
+          </div>
+
+          <!-- Expanding taper -->
+          <div class="flex items-end mb-1">
+            <div class="w-4 h-12 bg-base-300/50 border-t-2 border-b-2 border-base-content/10" style="clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 85%)"></div>
+          </div>
+
+          <!-- P5 Outlet (tallest again) -->
+          <div class="flex flex-col items-center">
+            <div class="text-xs font-mono font-bold mb-1">P5</div>
+            <div class="w-14 h-16 bg-base-300 border-2 border-base-content/20 rounded flex items-center justify-center">
+              <span class="text-xs font-mono text-center leading-tight">108.6<br/>kPa</span>
+            </div>
+            <div class="text-xs mt-1">Outlet</div>
+          </div>
+
+        </div>
+        <p class="text-xs text-center">Pressure drops at the throat (P3) as velocity increases — Bernoulli's principle. Note partial pressure recovery in diverging section due to friction losses.</p>
       </div>
     </div>
   `;
@@ -4134,89 +4784,482 @@ function renderTasksTemplate1() {
 
 function renderComponentGallery() {
   return `
-    <!-- Component Gallery – show a variety of DaisyUI components -->
+    <!-- Component Gallery - broad DaisyUI component coverage -->
     <section class="space-y-4">
       <div class="card bg-base-200 shadow">
         <div class="card-body">
-          <h2 class="card-title">Buttons & Badges</h2>
-          <div class="flex flex-wrap gap-2 mb-2">
-            <button class="btn btn-primary btn-sm">Primary</button>
-            <button class="btn btn-secondary btn-sm">Secondary</button>
-            <button class="btn btn-accent btn-sm">Accent</button>
-            <button class="btn btn-outline btn-sm">Outline</button>
-            <button class="btn btn-ghost btn-sm">Ghost</button>
-          </div>
+          <h2 class="card-title">DaisyUI Component Index</h2>
+          <p class="text-sm">
+            This gallery includes examples for all component names shown on DaisyUI components docs.
+            Some V5 names are aliases of older V4 classes (for example: Accordion/Collapse, Dock/btm-nav, Pagination/Join).
+          </p>
           <div class="flex flex-wrap gap-2">
-            <span class="badge badge-success">Success</span>
-            <span class="badge badge-warning">Warning</span>
-            <span class="badge badge-error">Error</span>
-            <span class="badge badge-info">Info</span>
-            <span class="badge badge-neutral">Neutral</span>
+            <span class="badge badge-outline">Accordion</span>
+            <span class="badge badge-outline">Alert</span>
+            <span class="badge badge-outline">Artboard</span>
+            <span class="badge badge-outline">Avatar</span>
+            <span class="badge badge-outline">Badge</span>
+            <span class="badge badge-outline">Breadcrumbs</span>
+            <span class="badge badge-outline">Button</span>
+            <span class="badge badge-outline">Button Group</span>
+            <span class="badge badge-outline">Calendar</span>
+            <span class="badge badge-outline">Card</span>
+            <span class="badge badge-outline">Carousel</span>
+            <span class="badge badge-outline">Chat</span>
+            <span class="badge badge-outline">Checkbox</span>
+            <span class="badge badge-outline">Collapse</span>
+            <span class="badge badge-outline">Countdown</span>
+            <span class="badge badge-outline">Diff</span>
+            <span class="badge badge-outline">Divider</span>
+            <span class="badge badge-outline">Dock</span>
+            <span class="badge badge-outline">Drawer</span>
+            <span class="badge badge-outline">Dropdown</span>
+            <span class="badge badge-outline">File Input</span>
+            <span class="badge badge-outline">Filter</span>
+            <span class="badge badge-outline">Footer</span>
+            <span class="badge badge-outline">Hero</span>
+            <span class="badge badge-outline">Indicator</span>
+            <span class="badge badge-outline">Input</span>
+            <span class="badge badge-outline">Join</span>
+            <span class="badge badge-outline">Kbd</span>
+            <span class="badge badge-outline">Label</span>
+            <span class="badge badge-outline">Link</span>
+            <span class="badge badge-outline">List</span>
+            <span class="badge badge-outline">Loading</span>
+            <span class="badge badge-outline">Mask</span>
+            <span class="badge badge-outline">Menu</span>
+            <span class="badge badge-outline">Mockup Browser</span>
+            <span class="badge badge-outline">Mockup Code</span>
+            <span class="badge badge-outline">Mockup Phone</span>
+            <span class="badge badge-outline">Mockup Window</span>
+            <span class="badge badge-outline">Modal</span>
+            <span class="badge badge-outline">Navbar</span>
+            <span class="badge badge-outline">Pagination</span>
+            <span class="badge badge-outline">Progress</span>
+            <span class="badge badge-outline">Radio</span>
+            <span class="badge badge-outline">Radial Progress</span>
+            <span class="badge badge-outline">Range</span>
+            <span class="badge badge-outline">Rating</span>
+            <span class="badge badge-outline">Select</span>
+            <span class="badge badge-outline">Skeleton</span>
+            <span class="badge badge-outline">Stack</span>
+            <span class="badge badge-outline">Stat</span>
+            <span class="badge badge-outline">Status</span>
+            <span class="badge badge-outline">Steps</span>
+            <span class="badge badge-outline">Swap</span>
+            <span class="badge badge-outline">Tab</span>
+            <span class="badge badge-outline">Table</span>
+            <span class="badge badge-outline">Textarea</span>
+            <span class="badge badge-outline">Theme Controller</span>
+            <span class="badge badge-outline">Timeline</span>
+            <span class="badge badge-outline">Toast</span>
+            <span class="badge badge-outline">Toggle</span>
+            <span class="badge badge-outline">Tooltip</span>
+            <span class="badge badge-outline">Validator</span>
           </div>
         </div>
       </div>
 
       <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Forms</h2>
+        <div class="card-body gap-4">
+          <h2 class="card-title">Navigation and Layout</h2>
+
+          <div class="navbar bg-base-100 rounded-box">
+            <div class="flex-1">
+              <a class="btn btn-ghost text-lg">Navbar</a>
+            </div>
+            <div class="flex-none">
+              <ul class="menu menu-horizontal px-1">
+                <li><a>Overview</a></li>
+                <li><a>Reports</a></li>
+                <li><a>Settings</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="breadcrumbs text-sm">
+            <ul>
+              <li><a>Home</a></li>
+              <li><a>Components</a></li>
+              <li>Gallery</li>
+            </ul>
+          </div>
+
+          <div class="tabs tabs-boxed bg-base-100 w-fit">
+            <a class="tab tab-active">Tab</a>
+            <a class="tab">Tab</a>
+            <a class="tab">Tab</a>
+          </div>
+
+          <ul class="steps w-full">
+            <li class="step step-primary">Start</li>
+            <li class="step step-primary">Configure</li>
+            <li class="step">Validate</li>
+            <li class="step">Deploy</li>
+          </ul>
+
+          <div class="drawer lg:drawer-open border border-base-300 rounded-box">
+            <input id="gallery-drawer" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content p-3">
+              <label for="gallery-drawer" class="btn btn-sm drawer-button lg:hidden">Open drawer</label>
+              <p class="text-sm">Drawer content area</p>
+            </div>
+            <div class="drawer-side">
+              <label for="gallery-drawer" class="drawer-overlay"></label>
+              <ul class="menu p-4 w-52 min-h-full bg-base-100">
+                <li><a class="active">Menu</a></li>
+                <li><a>List</a></li>
+                <li><a>Links</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="btm-nav relative rounded-box">
+            <button class="active"><span class="btm-nav-label">Dock</span></button>
+            <button><span class="btm-nav-label">Item</span></button>
+            <button><span class="btm-nav-label">Item</span></button>
+          </div>
+
+          <div class="hero bg-base-100 rounded-box py-8">
+            <div class="hero-content text-center">
+              <div class="max-w-md">
+                <h3 class="text-2xl font-bold">Hero</h3>
+                <p class="py-2 text-sm">Large highlight section for important content.</p>
+                <button class="btn btn-primary btn-sm">Action</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer bg-base-100 p-4 rounded-box text-sm">
+            <aside>
+              <p>Footer component sample</p>
+            </aside>
+            <nav>
+              <a class="link link-hover">Docs</a>
+              <a class="link link-hover">Status</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Actions and Data Entry</h2>
+
+          <div class="flex flex-wrap gap-2">
+            <button class="btn btn-primary">Button</button>
+            <button class="btn btn-secondary">Button</button>
+            <button class="btn btn-outline">Button</button>
+            <button class="btn btn-ghost">Button</button>
+            <div class="join">
+              <button class="btn join-item">Button Group</button>
+              <button class="btn join-item">Button Group</button>
+            </div>
+          </div>
+
+          <div class="form-control">
+            <label class="label"><span class="label-text">Input + Label + Validator</span></label>
+            <input class="input input-bordered validator" required placeholder="Type here" minlength="3" />
+            <label class="label"><span class="label-text-alt">Minimum 3 characters</span></label>
+          </div>
+
+          <div class="grid gap-3 md:grid-cols-2">
+            <select class="select select-bordered w-full">
+              <option disabled selected>Select component</option>
+              <option>Select</option>
+              <option>Option</option>
+            </select>
+            <input type="file" class="file-input file-input-bordered w-full" />
+            <textarea class="textarea textarea-bordered" placeholder="Textarea"></textarea>
+            <input type="date" class="input input-bordered" />
+          </div>
+
+          <div class="grid gap-3 md:grid-cols-2">
+            <label class="label cursor-pointer justify-start gap-3">
+              <input type="checkbox" class="checkbox" checked />
+              <span class="label-text">Checkbox</span>
+            </label>
+            <label class="label cursor-pointer justify-start gap-3">
+              <input type="checkbox" class="toggle toggle-primary" checked />
+              <span class="label-text">Toggle</span>
+            </label>
+            <label class="label cursor-pointer justify-start gap-3">
+              <input type="radio" name="gallery-radio" class="radio radio-primary" checked />
+              <span class="label-text">Radio</span>
+            </label>
+            <div class="rating">
+              <input type="radio" name="gallery-rating" class="mask mask-star-2 bg-orange-400" />
+              <input type="radio" name="gallery-rating" class="mask mask-star-2 bg-orange-400" checked />
+              <input type="radio" name="gallery-rating" class="mask mask-star-2 bg-orange-400" />
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <input type="range" min="0" max="100" value="40" class="range range-primary" />
+            <progress class="progress progress-primary w-full" value="32" max="100"></progress>
+            <div class="radial-progress text-primary" style="--value:70;" role="progressbar">70%</div>
+          </div>
+
+          <div class="join">
+            <button class="btn join-item">Pagination</button>
+            <button class="btn join-item btn-active">2</button>
+            <button class="btn join-item">3</button>
+          </div>
+
+          <div class="w-full max-w-md">
+            <div class="calendar border border-base-300 rounded-box p-2 text-xs">
+              <p class="font-semibold mb-1">Calendar</p>
+              <p>Fallback sample (use date picker/calendar integration as needed).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Feedback and States</h2>
+
+          <div class="alert alert-success"><span>Alert: operation succeeded.</span></div>
+          <div class="alert alert-warning"><span>Alert: review required.</span></div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="badge badge-primary">Badge</span>
+            <span class="badge badge-secondary">Badge</span>
+            <span class="badge badge-outline">Badge</span>
+            <span class="loading loading-spinner loading-md"></span>
+            <span class="status status-success"></span><span class="text-sm">Status</span>
+          </div>
+
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-2/3"></div>
+
+          <div class="tooltip" data-tip="Tooltip text">
+            <button class="btn btn-sm">Tooltip</button>
+          </div>
+
+          <div class="swap">
+            <input type="checkbox" />
+            <div class="swap-on badge badge-success">Swap ON</div>
+            <div class="swap-off badge">Swap OFF</div>
+          </div>
+
+          <div class="toast toast-end static">
+            <div class="alert alert-info"><span>Toast</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Containers and Display</h2>
+
           <div class="grid gap-4 md:grid-cols-2">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Text input</span>
-              </label>
-              <input class="input input-bordered" placeholder="Type here" />
+            <div class="card bg-base-100 shadow">
+              <div class="card-body">
+                <h3 class="card-title">Card</h3>
+                <p class="text-sm">Core content container.</p>
+                <div class="card-actions justify-end">
+                  <button class="btn btn-primary btn-sm">Action</button>
+                </div>
+              </div>
             </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Select</span>
-              </label>
-              <select class="select select-bordered">
-                <option>Option A</option>
-                <option>Option B</option>
-              </select>
+
+            <div class="stats shadow bg-base-100">
+              <div class="stat">
+                <div class="stat-title">Stat</div>
+                <div class="stat-value text-primary">89%</div>
+                <div class="stat-desc">Availability</div>
+              </div>
             </div>
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text">Checkbox</span>
-                <input type="checkbox" class="checkbox" />
-              </label>
+          </div>
+
+          <div class="indicator">
+            <span class="indicator-item badge badge-secondary">New</span>
+            <button class="btn">Indicator</button>
+          </div>
+
+          <div class="stack">
+            <div class="bg-primary text-primary-content grid w-24 h-24 place-content-center rounded-box">1</div>
+            <div class="bg-accent text-accent-content grid w-24 h-24 place-content-center rounded-box">2</div>
+            <div class="bg-secondary text-secondary-content grid w-24 h-24 place-content-center rounded-box">3</div>
+          </div>
+
+          <div class="divider">Divider</div>
+
+          <div class="overflow-x-auto">
+            <table class="table table-zebra">
+              <thead>
+                <tr><th>Table</th><th>Value</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Row A</td><td>42</td></tr>
+                <tr><td>Row B</td><td>17</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="list bg-base-100 rounded-box border border-base-300">
+            <li class="list-row">List item 1</li>
+            <li class="list-row">List item 2</li>
+          </div>
+
+          <div class="overflow-x-auto whitespace-nowrap rounded-box border border-base-300 p-2">
+            <div class="carousel w-80">
+              <div id="c1" class="carousel-item w-full"><div class="w-full h-24 bg-primary/20 flex items-center justify-center">Carousel 1</div></div>
+              <div id="c2" class="carousel-item w-full"><div class="w-full h-24 bg-secondary/20 flex items-center justify-center">Carousel 2</div></div>
+              <div id="c3" class="carousel-item w-full"><div class="w-full h-24 bg-accent/20 flex items-center justify-center">Carousel 3</div></div>
             </div>
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text">Toggle</span>
-                <input type="checkbox" class="toggle toggle-primary" checked />
-              </label>
+          </div>
+
+          <div class="chat chat-start">
+            <div class="chat-bubble">Chat component message</div>
+          </div>
+
+          <div class="timeline timeline-vertical">
+            <li>
+              <div class="timeline-start">Start</div>
+              <div class="timeline-middle">-</div>
+              <div class="timeline-end timeline-box">Timeline event</div>
+            </li>
+          </div>
+
+          <div class="mockup-window border bg-base-300">
+            <div class="bg-base-200 p-4">Mockup Window</div>
+          </div>
+
+          <div class="mockup-browser border border-base-300">
+            <div class="mockup-browser-toolbar"><div class="input">https://matrix.local</div></div>
+            <div class="p-4 bg-base-200">Mockup Browser</div>
+          </div>
+
+          <div class="mockup-code w-full">
+            <pre data-prefix="$"><code>npm run dev</code></pre>
+            <pre data-prefix=">"><code>ready</code></pre>
+          </div>
+
+          <div class="mockup-phone border-primary">
+            <div class="camera"></div>
+            <div class="display">
+              <div class="artboard artboard-demo phone-1">Artboard + Phone</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Feedback & Layout</h2>
-          <div class="alert alert-success">
-            <span>Example success alert message.</span>
+        <div class="card-body gap-4">
+          <h2 class="card-title">Overlays and Interaction</h2>
+
+          <div class="dropdown">
+            <label tabindex="0" class="btn m-1">Dropdown</label>
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a>Item 1</a></li>
+              <li><a>Item 2</a></li>
+            </ul>
           </div>
-          <div class="alert alert-warning mt-2">
-            <span>Example warning alert message.</span>
-          </div>
-          <div class="mt-4">
-            <div class="collapse bg-base-100">
-              <input type="checkbox" />
-              <div class="collapse-title text-md font-medium">
-                Accordion example
-              </div>
-              <div class="collapse-content">
-                <p class="text-sm">This is an accordion/collapse component using DaisyUI.</p>
+
+          <button class="btn btn-sm" onclick="document.getElementById('gallery-modal').showModal()">Open Modal</button>
+          <dialog id="gallery-modal" class="modal">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">Modal</h3>
+              <p class="py-2">DaisyUI modal example.</p>
+              <div class="modal-action">
+                <form method="dialog"><button class="btn">Close</button></form>
               </div>
             </div>
+          </dialog>
+
+          <div class="collapse collapse-arrow bg-base-100">
+            <input type="checkbox" />
+            <div class="collapse-title font-medium">Accordion / Collapse</div>
+            <div class="collapse-content"><p class="text-sm">Expandable content</p></div>
+          </div>
+
+          <div class="diff aspect-[16/9] max-w-sm">
+            <div class="diff-item-1">
+              <div class="bg-primary/30 grid place-content-center h-full">Before</div>
+            </div>
+            <div class="diff-item-2">
+              <div class="bg-success/30 grid place-content-center h-full">After</div>
+            </div>
+            <div class="diff-resizer"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body gap-4">
+          <h2 class="card-title">Typography and Utility Components</h2>
+          <p class="text-sm">
+            Press <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">K</kbd> to open search.
+            <a class="link link-primary ml-2">Link</a>
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <div class="avatar">
+              <div class="w-12 rounded-full">
+                <img alt="Avatar" src="https://picsum.photos/80" />
+              </div>
+            </div>
+            <div class="mask mask-hexagon bg-primary text-primary-content w-12 h-12 grid place-content-center">M</div>
+            <div class="glass rounded-box p-3 text-sm">Glass</div>
+            <div class="countdown font-mono text-2xl">
+              <span style="--value:1;"></span>:
+              <span style="--value:2;"></span>:
+              <span style="--value:3;"></span>
+            </div>
+            <div class="join">
+              <input class="join-item btn" type="radio" name="filter-sample" aria-label="All" checked />
+              <input class="join-item btn" type="radio" name="filter-sample" aria-label="Open" />
+              <input class="join-item btn" type="radio" name="filter-sample" aria-label="Closed" />
+            </div>
+            <label class="label cursor-pointer gap-2">
+              <span class="label-text">Theme Controller</span>
+              <input type="checkbox" value="dark" class="toggle theme-controller" />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- noUiSlider vertical range examples -->
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <h2 class="card-title">Vertical Sliders (noUiSlider)</h2>
+          <p class="text-sm mb-4">Five noUiSlider presets for process setpoint style controls.</p>
+          <div class="flex justify-around items-start gap-8 py-4 overflow-x-auto">
+            <div class="flex flex-col items-center gap-2 shrink-0">
+              <div id="gallery-slider-1" style="height:200px;"></div>
+              <div class="badge badge-neutral font-mono text-sm" id="gal1-val">60%</div>
+              <div class="text-xs font-mono font-bold text-center mt-1">Minimal</div>
+            </div>
+            <div class="flex flex-col items-center gap-2 shrink-0">
+              <div id="gallery-slider-2" style="height:200px;"></div>
+              <div class="badge badge-neutral font-mono text-sm" id="gal2-val">60%</div>
+              <div class="text-xs font-mono font-bold text-center mt-1">Fill bar</div>
+            </div>
+            <div class="flex flex-col items-center gap-2 shrink-0">
+              <div id="gallery-slider-3" style="height:200px;"></div>
+              <div class="badge badge-neutral font-mono text-sm" id="gal3-val">60%</div>
+              <div class="text-xs font-mono font-bold text-center mt-1">Pips + Fill</div>
+            </div>
+            <div class="flex flex-col items-center gap-2 shrink-0">
+              <div id="gallery-slider-4" style="height:200px;"></div>
+              <div class="badge badge-neutral font-mono text-sm" id="gal4-val">50%</div>
+              <div class="text-xs font-mono font-bold text-center mt-1">Stepped</div>
+            </div>
+            <div class="flex flex-col items-center gap-2 shrink-0">
+              <div id="gallery-slider-5" style="height:200px;"></div>
+              <div class="badge badge-neutral font-mono text-sm" id="gal5-val">60%</div>
+              <div class="text-xs font-mono font-bold text-center mt-1">Tooltip</div>
+            </div>
+          </div>
+          <div class="text-xs mt-2 font-mono bg-base-300 p-3 rounded">
+            Usage: create a target div then call <code>noUiSlider.create(el, config)</code>. See <code>initializeComponentGallerySliders()</code>.
           </div>
         </div>
       </div>
     </section>
   `;
 }
-
 function renderSettingsPage() {
   return `
     <!-- Settings Page -->
@@ -4987,6 +6030,7 @@ const PAGES = {
   'hmi-dashboard-1': renderHMIDashboard1,
   'hmi-dashboard-2': renderHMIDashboard2,
   'hmi-dashboard-3': renderHMIDashboard3,
+  'hmi-dashboard-4': renderHMIDashboard4,
   'home-1': renderHomeTemplate1,
   'home-2': renderHomeTemplate2,
   'home-3': renderHomeTemplate3,
@@ -5079,9 +6123,10 @@ app.innerHTML = `
               HMI Dashboards
             </span>
           </li>
-          <li><a href="#" data-page="hmi-dashboard-1" class="active bg-primary text-primary-content font-bold">Matrix HMI Dashboard 1 ⭐</a></li>
-          <li><a href="#" data-page="hmi-dashboard-2">Matrix HMI Dashboard 2</a></li>
-          <li><a href="#" data-page="hmi-dashboard-3">Matrix HMI Dashboard 3</a></li>
+          <li><a href="#" data-page="hmi-dashboard-1">Electrical Machines</a></li>
+          <li><a href="#" data-page="hmi-dashboard-2">Wind Tunnel</a></li>
+          <li><a href="#" data-page="hmi-dashboard-3">Process Control Temperature</a></li>
+          <li><a href="#" data-page="hmi-dashboard-4">Fluid Mechanics</a></li>
 
           <li class="menu-title mt-4">Home Templates</li>
           <li><a href="#" data-page="home-1">Home Template 1</a></li>
@@ -5182,6 +6227,14 @@ function renderPage(pageKey) {
   }
   mainContent.innerHTML = templateFn();
 
+  // Update active class in sidebar
+  const sidebarMenu = document.getElementById('sidebar-menu');
+  if (sidebarMenu) {
+    sidebarMenu.querySelectorAll('a[data-page]').forEach((a) => {
+      a.classList.toggle('active', a.getAttribute('data-page') === pageKey);
+    });
+  }
+
   // Initialize charts if this is an HMI dashboard
   if (pageKey === 'hmi-dashboard-1') {
     initializeHMICharts1();
@@ -5189,6 +6242,10 @@ function renderPage(pageKey) {
     initializeHMICharts2();
   } else if (pageKey === 'hmi-dashboard-3') {
     initializeHMICharts3();
+  } else if (pageKey === 'hmi-dashboard-4') {
+    initializeHMICharts4();
+  } else if (pageKey === 'components') {
+    initializeComponentGallerySliders();
   }
 }
 
@@ -5196,122 +6253,37 @@ function renderPage(pageKey) {
 // HMI CHART INITIALIZATION
 // ================================================================
 function initializeHMICharts1() {
-  // Wait for next tick to ensure canvas elements are in DOM
   setTimeout(() => {
-    // Temperature Chart
-    const tempCanvas = document.getElementById('tempChart');
-    if (tempCanvas) {
-      const tempCtx = tempCanvas.getContext('2d');
-      const tempChart = new Chart(tempCtx, {
+    // RPM sparkline — small trend, no axes, neutral colour
+    const rpmCanvas = document.getElementById('rpmSparkline');
+    if (rpmCanvas) {
+      const ctx = rpmCanvas.getContext('2d');
+      const chart = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: ['00:00', '00:05', '00:10', '00:15', '00:20', '00:25', '00:30'],
-          datasets: [
-            {
-              label: 'Temperature (°C)',
-              data: [22.1, 22.5, 23.0, 23.5, 23.2, 23.5, 23.5],
-              borderColor: 'rgb(251, 146, 60)',
-              backgroundColor: 'rgba(251, 146, 60, 0.1)',
-              fill: true,
-              tension: 0.4,
-              pointRadius: 4,
-              pointHoverRadius: 6
-            },
-            {
-              label: 'Setpoint (°C)',
-              data: [23, 23, 23, 23, 23, 23, 23],
-              borderColor: 'rgb(59, 130, 246)',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              borderDash: [5, 5],
-              fill: false,
-              tension: 0
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top'
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: false,
-              min: 20,
-              max: 26,
-              title: {
-                display: true,
-                text: 'Temperature (°C)'
-              }
-            },
-            x: {
-              title: {
-                display: true,
-                text: 'Time'
-              }
-            }
-          }
-        }
-      });
-      activeCharts.push(tempChart);
-    }
-
-    // Performance Chart
-    const perfCanvas = document.getElementById('performanceChart');
-    if (perfCanvas) {
-      const perfCtx = perfCanvas.getContext('2d');
-      const perfChart = new Chart(perfCtx, {
-        type: 'bar',
-        data: {
-          labels: ['CPU Usage', 'Memory', 'I/O Load', 'Network', 'Disk'],
+          labels: Array.from({ length: 20 }, (_, i) => i),
           datasets: [{
-            label: 'System Load (%)',
-            data: [70, 85, 42, 35, 58],
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(139, 92, 246, 0.8)',
-              'rgba(236, 72, 153, 0.8)',
-              'rgba(34, 197, 94, 0.8)',
-              'rgba(251, 146, 60, 0.8)'
-            ],
-            borderColor: [
-              'rgb(59, 130, 246)',
-              'rgb(139, 92, 246)',
-              'rgb(236, 72, 153)',
-              'rgb(34, 197, 94)',
-              'rgb(251, 146, 60)'
-            ],
+            data: [1200, 1260, 1320, 1370, 1410, 1440, 1465, 1488, 1500, 1510,
+                   1516, 1521, 1525, 1527, 1529, 1530, 1530, 1530, 1530, 1530],
+            borderColor: 'rgb(148, 163, 184)',
+            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0,
             borderWidth: 2
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
           scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              title: {
-                display: true,
-                text: 'Load (%)'
-              }
-            }
+            x: { display: false },
+            y: { display: false, min: 0, max: 3000 }
           }
         }
       });
-      activeCharts.push(perfChart);
+      activeCharts.push(chart);
     }
   }, 10);
 }
@@ -5329,7 +6301,7 @@ function initializeHMICharts2() {
           datasets: [
             {
               label: 'Air Speed (m/s)',
-              data: [43.0, 44.2, 45.0, 45.2, 45.1, 45.2, 45.2],
+              data: [26.5, 27.2, 27.8, 28.2, 28.4, 28.4, 28.4],
               borderColor: 'rgb(59, 130, 246)',
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               fill: true,
@@ -5339,7 +6311,7 @@ function initializeHMICharts2() {
             },
             {
               label: 'Setpoint (m/s)',
-              data: [45, 45, 45, 45, 45, 45, 45],
+              data: [28, 28, 28, 28, 28, 28, 28],
               borderColor: 'rgb(251, 146, 60)',
               backgroundColor: 'rgba(251, 146, 60, 0.1)',
               borderDash: [5, 5],
@@ -5363,12 +6335,12 @@ function initializeHMICharts2() {
           },
           scales: {
             y: {
-              beginAtZero: false,
-              min: 40,
-              max: 50,
+              beginAtZero: true,
+              min: 0,
+              max: 35,
               title: {
                 display: true,
-                text: 'Air Speed (m/s)'
+                text: 'Air Speed (m/s) · 125 mm test section'
               }
             },
             x: {
@@ -5533,6 +6505,231 @@ function initializeHMICharts3() {
         }
       });
       activeCharts.push(stepResponseChart);
+    }
+  }, 10);
+}
+
+function initializeComponentGallerySliders() {
+  const base = {
+    orientation: 'vertical',
+    direction: 'rtl',
+    range: { min: 0, max: 100 },
+    format: { to: v => Math.round(v), from: v => parseInt(v) }
+  };
+  function make(id, config, valId) {
+    const el = document.getElementById(id);
+    if (!el || el.noUiSlider) return;
+    noUiSlider.create(el, config);
+    el.noUiSlider.on('update', (v) => {
+      const d = document.getElementById(valId);
+      if (d) d.textContent = v[0] + '%';
+    });
+  }
+  make('gallery-slider-1', { ...base, start: 60 }, 'gal1-val');
+  make('gallery-slider-2', { ...base, start: 60, connect: 'lower' }, 'gal2-val');
+  make('gallery-slider-3', { ...base, start: 60, connect: 'lower',
+    pips: { mode: 'values', values: [0, 25, 50, 75, 100], density: 5 }
+  }, 'gal3-val');
+  make('gallery-slider-4', { ...base, start: 50, step: 25, connect: 'lower',
+    pips: { mode: 'steps', density: 100 }
+  }, 'gal4-val');
+  make('gallery-slider-5', { ...base, start: 60, connect: 'lower',
+    tooltips: { to: v => Math.round(v) + '%' }
+  }, 'gal5-val');
+}
+
+function initializeHMICharts4() {
+  // Shared noUiSlider config — vertical, 0 at bottom, 100 at top
+  const sliderBase = {
+    orientation: 'vertical',
+    direction: 'rtl',
+    range: { min: 0, max: 100 },
+    format: { to: v => Math.round(v), from: v => parseInt(v) }
+  };
+
+  // Helper — creates a noUiSlider only if not already initialised
+  function createSlider(id, config, onUpdate) {
+    const el = document.getElementById(id);
+    if (!el || el.noUiSlider) return;
+    noUiSlider.create(el, config);
+    if (onUpdate) el.noUiSlider.on('update', onUpdate);
+  }
+
+  // Pump 1 & 2 — using Style 3 (Pips + Fill) until user picks a preference
+  createSlider('pump1-slider', { ...sliderBase, start: 60, connect: 'lower',
+    pips: { mode: 'values', values: [0, 25, 50, 75, 100], density: 5 }
+  }, (v) => { const d = document.getElementById('pump1-val'); if (d) d.textContent = v[0] + '%'; });
+
+  createSlider('pump2-slider', { ...sliderBase, start: 45, connect: 'lower',
+    pips: { mode: 'values', values: [0, 25, 50, 75, 100], density: 5 }
+  }, (v) => { const d = document.getElementById('pump2-val'); if (d) d.textContent = v[0] + '%'; });
+
+  // Preset button handler
+  window.setFluidPump = function(pumpId, value) {
+    const el = document.getElementById(pumpId + '-slider');
+    if (el && el.noUiSlider) el.noUiSlider.set(value);
+  };
+
+
+  setTimeout(() => {
+    // Bernoulli Pressure Profile — measured vs theoretical
+    const bernoulliCanvas = document.getElementById('bernoulliChart');
+    if (bernoulliCanvas) {
+      const ctx = bernoulliCanvas.getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['P1 Inlet', 'P2 Converge', 'P3 Throat', 'P4 Diverge', 'P5 Outlet'],
+          datasets: [
+            {
+              label: 'Measured (kPa)',
+              data: [118.2, 105.4, 76.8, 93.1, 108.6],
+              backgroundColor: 'rgba(148, 163, 184, 0.7)',
+              borderColor: 'rgb(148, 163, 184)',
+              borderWidth: 2
+            },
+            {
+              label: 'Theoretical (kPa)',
+              data: [118.2, 104.8, 75.2, 91.8, 107.4],
+              backgroundColor: 'rgba(251, 146, 60, 0.15)',
+              borderColor: 'rgb(251, 146, 60)',
+              borderWidth: 2,
+              type: 'line',
+              tension: 0.4,
+              pointRadius: 4,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: true, position: 'top' } },
+          scales: {
+            y: {
+              min: 60,
+              max: 130,
+              title: { display: true, text: 'Pressure (kPa)' }
+            },
+            x: {
+              title: { display: true, text: 'Tapping Position' }
+            }
+          }
+        }
+      });
+      activeCharts.push(chart);
+    }
+
+    // Flow Rate over time
+    const flowTimeCanvas = document.getElementById('flowTimeChart');
+    if (flowTimeCanvas) {
+      const ctx2 = flowTimeCanvas.getContext('2d');
+      const chart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+          labels: ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70'],
+          datasets: [
+            {
+              label: 'Flow Rate (L/min)',
+              data: [0, 10.2, 18.6, 22.9, 24.8, 25.8, 26.2, 26.4, 26.3, 26.4, 26.5, 26.4, 26.4, 26.3, 26.4],
+              borderColor: 'rgb(59, 130, 246)',
+              backgroundColor: 'rgba(59, 130, 246, 0.08)',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 2,
+              pointHoverRadius: 4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              min: 0,
+              max: 35,
+              title: { display: true, text: 'L/min' }
+            },
+            x: {
+              title: { display: true, text: 'Time (seconds)' }
+            }
+          }
+        }
+      });
+      activeCharts.push(chart2);
+    }
+
+    // Flow vs Differential Pressure (system curve + measured points)
+    const flowPressureCanvas = document.getElementById('flowPressureChart');
+    if (flowPressureCanvas) {
+      const ctx3 = flowPressureCanvas.getContext('2d');
+      const chart3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Measured (kPa)',
+              data: [
+                {x: 5,    y: 1.8},
+                {x: 10,   y: 5.9},
+                {x: 15,   y: 11.2},
+                {x: 20,   y: 18.8},
+                {x: 25,   y: 28.6},
+                {x: 26.4, y: 31.8},
+                {x: 30,   y: 38.2},
+                {x: 35,   y: 50.4}
+              ],
+              borderColor: 'rgb(148, 163, 184)',
+              backgroundColor: 'rgba(148, 163, 184, 0.8)',
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              showLine: true,
+              tension: 0.3
+            },
+            {
+              label: 'Theoretical — Darcy-Weisbach (kPa)',
+              data: [
+                {x: 0,  y: 0},
+                {x: 5,  y: 1.5},
+                {x: 10, y: 5.9},
+                {x: 15, y: 13.3},
+                {x: 20, y: 23.7},
+                {x: 25, y: 37.1},
+                {x: 30, y: 53.4},
+                {x: 35, y: 72.7}
+              ],
+              borderColor: 'rgb(251, 146, 60)',
+              backgroundColor: 'transparent',
+              borderDash: [5, 5],
+              pointRadius: 0,
+              showLine: true,
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'nearest', intersect: false },
+          plugins: { legend: { display: true, position: 'top' } },
+          scales: {
+            x: {
+              type: 'linear',
+              min: 0,
+              max: 40,
+              title: { display: true, text: 'Flow Rate (L/min)' }
+            },
+            y: {
+              min: 0,
+              max: 80,
+              title: { display: true, text: 'Differential Pressure (kPa)' }
+            }
+          }
+        }
+      });
+      activeCharts.push(chart3);
     }
   }, 10);
 }
