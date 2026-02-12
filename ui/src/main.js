@@ -44,110 +44,203 @@ Chart.register(
 //   - Replace the manual navigation with a tiny router (page.js / navigo).
 
 // ================================================================
-// HOME TEMPLATES (Home Template 1 / 2 / 3)
+// HOME TEMPLATES (Gauges + Graphs / 3)
 // ================================================================
 
 function renderHomeTemplate1() {
   return `
-    <!-- Home Template 1 – Simple dashboard -->
-    <section class="grid gap-4 md:grid-cols-3">
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">System Status</h2>
-          <p>All core services are running normally.</p>
-          <div class="card-actions justify-end">
-            <div class="badge badge-success">OK</div>
-          </div>
-        </div>
-      </div>
+    <!-- Gauges – Various styles and options -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-base-content">Gauges</h1>
+      <p class="text-base-content mt-1">Radial and linear gauges in different sizes, colours, and options.</p>
+    </div>
 
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Active Devices</h2>
-          <p>3 devices connected.</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary btn-sm">View devices</button>
+    <!-- Radial progress – sizes -->
+    <section class="card bg-base-200 shadow-xl mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Radial progress – sizes</h2>
+        <p class="text-sm text-base-content">Small (3rem), default (4rem), large (6rem), XL (8rem). Value 65%.</p>
+        <div class="flex flex-wrap items-end gap-8 mt-4">
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:65; --size:3rem;" role="progressbar">65%</div>
+            <span class="text-xs mt-2 text-base-content">3rem</span>
           </div>
-        </div>
-      </div>
-
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Recent Alerts</h2>
-          <p>No critical alerts in the last 24 hours.</p>
-          <div class="card-actions justify-end">
-            <div class="badge badge-info">0 alerts</div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:65; --size:4rem;" role="progressbar">65%</div>
+            <span class="text-xs mt-2 text-base-content">4rem</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:65; --size:6rem;" role="progressbar">65%</div>
+            <span class="text-xs mt-2 text-base-content">6rem</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:65; --size:8rem;" role="progressbar">65%</div>
+            <span class="text-xs mt-2 text-base-content">8rem</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid gap-4 lg:grid-cols-3">
-      <div class="card bg-base-200 shadow lg:col-span-2">
-        <div class="card-body">
-          <h2 class="card-title">Devices</h2>
-          <div class="overflow-x-auto">
-            <table class="table table-zebra">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Mode</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Device A</td>
-                  <td><span class="badge badge-success">Online</span></td>
-                  <td>Auto</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Device B</td>
-                  <td><span class="badge badge-error">Offline</span></td>
-                  <td>Manual</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Device C</td>
-                  <td><span class="badge badge-warning">Warning</span></td>
-                  <td>Auto</td>
-                </tr>
-              </tbody>
-            </table>
+    <!-- Radial progress – colours -->
+    <section class="card bg-base-200 shadow-xl mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Radial progress – colours</h2>
+        <p class="text-sm text-base-content">DaisyUI semantic colours: primary, secondary, accent, success, warning, error, info, neutral.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 mt-4">
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">primary</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-secondary" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">secondary</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-accent" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">accent</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-success" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">success</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-warning" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">warning</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-error" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">error</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-info" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">info</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-base-content" style="--value:70; --size:4rem;" role="progressbar">70%</div>
+            <span class="text-xs mt-2 text-base-content">neutral</span>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Quick Config</h2>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Device name</span>
-            </label>
-            <input type="text" placeholder="Enter device name" class="input input-bordered" />
+    <!-- Radial progress – thickness (via size vs stroke) -->
+    <section class="card bg-base-200 shadow-xl mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Radial progress – values</h2>
+        <p class="text-sm text-base-content">Different percentage values: 0, 25, 50, 75, 100.</p>
+        <div class="flex flex-wrap gap-8 mt-4">
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:0; --size:4rem;" role="progressbar">0%</div>
           </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Mode</span>
-            </label>
-            <select class="select select-bordered">
-              <option>Auto</option>
-              <option>Manual</option>
-            </select>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:25; --size:4rem;" role="progressbar">25%</div>
           </div>
-          <div class="form-control">
-            <label class="label cursor-pointer">
-              <span class="label-text">Enable logging</span>
-              <input type="checkbox" class="toggle toggle-primary" checked />
-            </label>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:50; --size:4rem;" role="progressbar">50%</div>
           </div>
-          <div class="card-actions justify-end">
-            <button class="btn btn-primary btn-sm">Apply</button>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:75; --size:4rem;" role="progressbar">75%</div>
           </div>
+          <div class="flex flex-col items-center">
+            <div class="radial-progress text-primary" style="--value:100; --size:4rem;" role="progressbar">100%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Linear progress – styles -->
+    <section class="card bg-base-200 shadow-xl mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Linear progress</h2>
+        <p class="text-sm text-base-content">Standard, with colours and sizes. Use <code class="text-xs bg-base-300 px-1 rounded">progress</code> and <code class="text-xs bg-base-300 px-1 rounded">progress-primary</code>, etc.</p>
+        <div class="space-y-4 mt-4">
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>Default</span>
+              <span>60%</span>
+            </div>
+            <progress class="progress w-full" value="60" max="100"></progress>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>progress-primary</span>
+              <span>75%</span>
+            </div>
+            <progress class="progress progress-primary w-full" value="75" max="100"></progress>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>progress-secondary</span>
+              <span>40%</span>
+            </div>
+            <progress class="progress progress-secondary w-full" value="40" max="100"></progress>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>progress-success</span>
+              <span>90%</span>
+            </div>
+            <progress class="progress progress-success w-full" value="90" max="100"></progress>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>progress-warning</span>
+              <span>55%</span>
+            </div>
+            <progress class="progress progress-warning w-full" value="55" max="100"></progress>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs text-base-content mb-1">
+              <span>progress-error</span>
+              <span>20%</span>
+            </div>
+            <progress class="progress progress-error w-full" value="20" max="100"></progress>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gauge layout options -->
+    <section class="card bg-base-200 shadow-xl mb-6">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Gauge layout options</h2>
+        <p class="text-sm text-base-content">With label below, label inside (value only), or in a grid. Useful for HMI dashboards.</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
+          <div class="flex flex-col items-center p-4 bg-base-300 rounded-lg">
+            <div class="radial-progress text-primary" style="--value:82; --size:5rem;" role="progressbar">82%</div>
+            <span class="text-sm font-medium mt-2 text-base-content">Fan speed</span>
+            <span class="text-xs text-base-content">Target 80%</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-base-300 rounded-lg">
+            <div class="radial-progress text-info" style="--value:45; --size:5rem;" role="progressbar">45</div>
+            <span class="text-sm font-medium mt-2 text-base-content">Temperature</span>
+            <span class="text-xs text-base-content">°C</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-base-300 rounded-lg">
+            <div class="radial-progress text-warning" style="--value:100; --size:5rem;" role="progressbar">100</div>
+            <span class="text-sm font-medium mt-2 text-base-content">Pressure</span>
+            <span class="text-xs text-base-content">kPa</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-base-300 rounded-lg">
+            <div class="radial-progress text-success" style="--value:60; --size:5rem;" role="progressbar">60%</div>
+            <span class="text-sm font-medium mt-2 text-base-content">Load</span>
+            <span class="text-xs text-base-content">Normal</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compact row -->
+    <section class="card bg-base-200 shadow-xl">
+      <div class="card-body">
+        <h2 class="card-title text-base-content">Compact row (e.g. status bar)</h2>
+        <p class="text-sm text-base-content">Small radial gauges in a row with minimal labels.</p>
+        <div class="flex flex-wrap gap-6 mt-4 items-center">
+          <div class="radial-progress text-primary" style="--value:70; --size:3rem;" role="progressbar">70</div>
+          <div class="radial-progress text-secondary" style="--value:85; --size:3rem;" role="progressbar">85</div>
+          <div class="radial-progress text-accent" style="--value:40; --size:3rem;" role="progressbar">40</div>
+          <div class="radial-progress text-success" style="--value:100; --size:3rem;" role="progressbar">100</div>
+          <div class="radial-progress text-warning" style="--value:55; --size:3rem;" role="progressbar">55</div>
         </div>
       </div>
     </section>
@@ -156,43 +249,225 @@ function renderHomeTemplate1() {
 
 function renderHomeTemplate2() {
   return `
-    <!-- Home Template 2 – Data-focused -->
-    <section class="grid gap-4 md:grid-cols-3">
-      <div class="card bg-base-200 shadow md:col-span-2">
+    <!-- Graphs - chart showcase -->
+    <section class="space-y-4">
+      <div class="card bg-base-200 shadow">
         <div class="card-body">
-          <h2 class="card-title">Main Data Table</h2>
+          <h2 class="card-title">Graph Showcase</h2>
+          <p class="text-sm">
+            Multiple Chart.js styles in one page: area line, stacked bars, combo (bar+line),
+            horizontal bars, doughnut, and stepped response chart.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Process Trend (Area Line)</h3>
+              <span class="badge badge-success badge-sm">Live-style</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-trend-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Energy Mix (Bar + Line)</h3>
+              <span class="badge badge-info badge-sm">Dual axis</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-combo-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Shift Output (Stacked Bars)</h3>
+              <span class="badge badge-warning badge-sm">Stacked</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-stacked-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Line Utilization (Horizontal Bar)</h3>
+              <span class="badge badge-secondary badge-sm">indexAxis y</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-horizontal-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Alarm Distribution (Doughnut)</h3>
+              <span class="badge badge-error badge-sm">Composition</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-doughnut-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base">Controller Step Response</h3>
+              <span class="badge badge-neutral badge-sm">Stepped</span>
+            </div>
+            <div class="h-64">
+              <canvas id="home2-step-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+}
+function renderHomeTemplate3() {
+  return `
+    <!-- Home Template 3 - engineering tables showcase -->
+    <section class="space-y-4">
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <h2 class="card-title">Tables</h2>
+          <p class="text-sm">Examples of common industrial tables: live sensors, maintenance logs, BOM, and active alarms.</p>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <h3 class="card-title text-base">Live Sensor Readings (Zebra)</h3>
           <div class="overflow-x-auto">
             <table class="table table-zebra">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Name</th>
+                  <th>Tag</th>
+                  <th>Device</th>
+                  <th>Value</th>
+                  <th>Units</th>
                   <th>Status</th>
-                  <th>Mode</th>
-                  <th>Updated</th>
                 </tr>
               </thead>
               <tbody>
+                <tr><td>TT-101</td><td>Heat Exchanger Outlet</td><td>67.4</td><td>C</td><td><span class="badge badge-success badge-sm">Normal</span></td></tr>
+                <tr><td>PT-204</td><td>Main Header</td><td>5.8</td><td>bar</td><td><span class="badge badge-success badge-sm">Normal</span></td></tr>
+                <tr><td>FT-309</td><td>Recirculation Loop</td><td>12.6</td><td>L/min</td><td><span class="badge badge-warning badge-sm">Drift</span></td></tr>
+                <tr><td>LT-412</td><td>Buffer Tank</td><td>78.2</td><td>%</td><td><span class="badge badge-success badge-sm">Normal</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h3 class="card-title text-base">Maintenance Work Orders (Compact)</h3>
+            <div class="overflow-x-auto">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>WO</th>
+                    <th>Asset</th>
+                    <th>Task</th>
+                    <th>Due</th>
+                    <th>Owner</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>WO-8841</td><td>P-201</td><td>Seal inspection</td><td>2026-02-14</td><td>J. Patel</td></tr>
+                  <tr><td>WO-8843</td><td>M-105</td><td>Bearing vibration check</td><td>2026-02-15</td><td>S. Green</td></tr>
+                  <tr><td>WO-8848</td><td>VFD-12</td><td>Fan filter clean</td><td>2026-02-17</td><td>A. Khan</td></tr>
+                  <tr><td>WO-8852</td><td>HX-02</td><td>Plate pack thermal wash</td><td>2026-02-20</td><td>L. Woods</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h3 class="card-title text-base">Bill of Materials (Pinned Header)</h3>
+            <div class="overflow-x-auto max-h-72">
+              <table class="table table-pin-rows">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Part Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>PT100 RTD Sensor, Class A, 3-wire</td><td>8</td><td>RTD-PT100-A3</td></tr>
+                  <tr><td>2</td><td>24VDC Contactor, 2NO/2NC</td><td>6</td><td>CTR-24DC-2X2</td></tr>
+                  <tr><td>3</td><td>Shielded Instrument Cable 2x1.5mm2</td><td>120 m</td><td>CAB-INS-2X15</td></tr>
+                  <tr><td>4</td><td>DIN Rail Terminal Block, Grey</td><td>40</td><td>TB-DIN-GRY</td></tr>
+                  <tr><td>5</td><td>Safety Relay Module, Dual Channel</td><td>2</td><td>SRM-2CH-24V</td></tr>
+                  <tr><td>6</td><td>Pressure Transmitter 0-10 bar, 4-20mA</td><td>4</td><td>PT-10BAR-420</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-200 shadow">
+        <div class="card-body">
+          <h3 class="card-title text-base">Alarm and Event Log (With Row Highlighting)</h3>
+          <div class="overflow-x-auto">
+            <table class="table">
+              <thead>
                 <tr>
-                  <td>1</td>
-                  <td>Device A</td>
-                  <td><span class="badge badge-success">Online</span></td>
-                  <td>Auto</td>
-                  <td>Just now</td>
+                  <th>Time</th>
+                  <th>Area</th>
+                  <th>Event</th>
+                  <th>Severity</th>
+                  <th>Ack</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="bg-error/10">
+                  <td>14:21:08</td>
+                  <td>Compressor Skid</td>
+                  <td>Discharge pressure high-high trip</td>
+                  <td><span class="badge badge-error badge-sm">Critical</span></td>
+                  <td>No</td>
+                </tr>
+                <tr class="bg-warning/10">
+                  <td>14:18:42</td>
+                  <td>Cooling Loop</td>
+                  <td>Flow below warning threshold</td>
+                  <td><span class="badge badge-warning badge-sm">Warning</span></td>
+                  <td>Yes</td>
                 </tr>
                 <tr>
-                  <td>2</td>
-                  <td>Device B</td>
-                  <td><span class="badge badge-error">Offline</span></td>
-                  <td>Manual</td>
-                  <td>5 min ago</td>
+                  <td>14:10:15</td>
+                  <td>Boiler Feed</td>
+                  <td>Operator changed setpoint from 5.5 to 5.8 bar</td>
+                  <td><span class="badge badge-info badge-sm">Info</span></td>
+                  <td>Yes</td>
                 </tr>
                 <tr>
-                  <td>3</td>
-                  <td>Device C</td>
-                  <td><span class="badge badge-warning">Warning</span></td>
-                  <td>Auto</td>
-                  <td>2 min ago</td>
+                  <td>13:58:03</td>
+                  <td>MCC Room</td>
+                  <td>VFD-12 returned to service</td>
+                  <td><span class="badge badge-success badge-sm">Normal</span></td>
+                  <td>Yes</td>
                 </tr>
               </tbody>
             </table>
@@ -200,80 +475,69 @@ function renderHomeTemplate2() {
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Recent Events</h2>
-          <ul class="timeline timeline-vertical timeline-compact">
-            <li>
-              <div class="timeline-middle">
-                <div class="badge badge-success"></div>
-              </div>
-              <div class="timeline-end timeline-box">Device A connected</div>
-              <div class="timeline-start text-xs opacity-60">12:00</div>
-            </li>
-            <li>
-              <hr/>
-              <div class="timeline-middle">
-                <div class="badge badge-warning"></div>
-              </div>
-              <div class="timeline-end timeline-box">Device C warning</div>
-              <div class="timeline-start text-xs opacity-60">12:05</div>
-            </li>
-            <li>
-              <hr/>
-              <div class="timeline-middle">
-                <div class="badge badge-error"></div>
-              </div>
-              <div class="timeline-end timeline-box">Device B offline</div>
-              <div class="timeline-start text-xs opacity-60">12:10</div>
-            </li>
-          </ul>
+      <div class="grid gap-4 xl:grid-cols-2">
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h3 class="card-title text-base">Operator Shift Checklist (Dense + Pinned First Column)</h3>
+            <div class="overflow-x-auto">
+              <table class="table table-xs table-pin-cols">
+                <thead>
+                  <tr>
+                    <th>Check</th>
+                    <th>Line 1</th>
+                    <th>Line 2</th>
+                    <th>Line 3</th>
+                    <th>Line 4</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th>Guarding in place</th><td>OK</td><td>OK</td><td>OK</td><td>OK</td><td>Verified at startup</td></tr>
+                  <tr><th>E-stop functional test</th><td>Pass</td><td>Pass</td><td>Pass</td><td>Pass</td><td>All channels healthy</td></tr>
+                  <tr><th>Air supply (bar)</th><td>6.1</td><td>6.0</td><td>6.2</td><td>6.0</td><td>Within 5.8-6.5 bar</td></tr>
+                  <tr><th>Coolant conductivity</th><td>Normal</td><td>Normal</td><td>Normal</td><td>High</td><td>Line 4 sample to lab</td></tr>
+                  <tr><th>PPE compliance</th><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Supervisor signoff complete</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h3 class="card-title text-base">Calibration Matrix (Hover + Status Badges)</h3>
+            <div class="overflow-x-auto">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Instrument</th>
+                    <th>Range</th>
+                    <th>Last Cal</th>
+                    <th>Next Due</th>
+                    <th>As-Found</th>
+                    <th>State</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>PT-204</td><td>0-10 bar</td><td>2025-11-22</td><td>2026-05-22</td><td>+0.08%</td><td><span class="badge badge-success badge-sm">In Tolerance</span></td></tr>
+                  <tr><td>TT-101</td><td>0-150 C</td><td>2025-08-14</td><td>2026-02-14</td><td>+0.42%</td><td><span class="badge badge-warning badge-sm">Due Soon</span></td></tr>
+                  <tr><td>FT-309</td><td>0-25 L/min</td><td>2025-05-03</td><td>2025-11-03</td><td>+1.21%</td><td><span class="badge badge-error badge-sm">Overdue</span></td></tr>
+                  <tr><td>LT-412</td><td>0-100%</td><td>2025-12-10</td><td>2026-06-10</td><td>-0.13%</td><td><span class="badge badge-success badge-sm">In Tolerance</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   `;
 }
-
-function renderHomeTemplate3() {
-  return `
-    <!-- Home Template 3 – Card-focused -->
-    <section class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      ${['Zone A', 'Zone B', 'Zone C', 'Zone D', 'Zone E', 'Zone F']
-        .map(
-          (zone) => `
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">${zone}</h2>
-            <p>Brief description of this zone or module.</p>
-            <div class="flex justify-between items-center">
-              <div class="badge badge-success">Running</div>
-              <button class="btn btn-sm btn-outline">Open</button>
-            </div>
-          </div>
-        </div>
-      `
-        )
-        .join('')}
-    </section>
-  `;
-}
-
-// ================================================================
-// HMI (HUMAN-MACHINE INTERFACE) TEMPLATES
-// ================================================================
-// Rich, data-dense industrial control interfaces with:
-// - Real-time charts and graphs
-// - Gauges and meters
-// - Sliders and interactive controls
-// - Product imagery and branding
-// - High information density
-
 function renderHMIDashboard1() {
   return `
     <!-- Electrical Machines – Industrial Control Interface -->
 
     <!-- ── Top Status Bar ──────────────────────────────────── -->
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-3 mb-4">
 
       <!-- System state — big, colour-coded per design philosophy -->
       <div class="stat bg-base-200 shadow-lg rounded-lg">
@@ -309,7 +573,7 @@ function renderHMIDashboard1() {
       </div>
 
       <!-- Data logging -->
-      <div class="stat bg-base-200 shadow-lg rounded-lg md:col-span-2">
+      <div class="stat bg-base-200 shadow-lg rounded-lg sm:col-span-2 lg:col-span-3 2xl:col-span-2">
         <div class="stat-title">Data Logging</div>
         <div class="flex items-center gap-2 mt-1">
           <span class="relative flex h-2 w-2">
@@ -344,8 +608,53 @@ function renderHMIDashboard1() {
       </div>
     </div>
 
+    <div class="card bg-base-200 shadow-xl mt-4 mb-4 border border-base-300">
+      <div class="card-body">
+        <h2 class="card-title text-base font-mono">3-Phase Waveform Monitor</h2>
+        <p class="text-xs opacity-80">Full-width monitoring for AC output quality and phase balance.</p>
+        <div class="grid gap-3 mt-2 xl:grid-cols-2">
+          <div class="bg-base-300 rounded-lg p-3 min-w-0">
+            <div class="text-sm font-mono mb-2">3-Phase Voltage (L-N)</div>
+            <div class="h-56 md:h-64">
+              <canvas id="acVoltage3PhaseChart"></canvas>
+            </div>
+          </div>
+          <div class="bg-base-300 rounded-lg p-3 min-w-0">
+            <div class="text-sm font-mono mb-2">3-Phase Current</div>
+            <div class="h-56 md:h-64">
+              <canvas id="acCurrent3PhaseChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-base-200 shadow mb-4 border border-base-300">
+      <div class="card-body py-3">
+        <div class="grid gap-3 xl:grid-cols-2">
+          <div class="bg-base-300 rounded-lg p-3">
+            <h2 class="card-title text-sm font-mono mb-1">Current Objective</h2>
+            <p class="text-sm">Bring motor to <span class="font-mono font-bold">1500 rpm</span> at <span class="font-mono font-bold">50 Hz</span> while keeping torque under <span class="font-mono font-bold">4.0 N-m</span>.</p>
+          </div>
+          <div class="bg-base-300 rounded-lg p-3">
+            <h2 class="card-title text-sm font-mono mb-1">Do This Next</h2>
+            <ul class="text-xs space-y-1">
+              <li>1. Set Load and PSU limits.</li>
+              <li>2. Press APPLY.</li>
+              <li>3. Watch RPM, torque, and 3-phase waveforms below.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ── Main Body: 3 equal columns ─────────────────────────── -->
-    <div class="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+    <div class="grid gap-2 sm:grid-cols-2 2xl:grid-cols-3 mb-2">
+      <div class="badge badge-outline py-3 w-full justify-center font-mono">Machine Load</div>
+      <div class="badge badge-outline py-3 w-full justify-center font-mono">DC Power Setup</div>
+      <div class="badge badge-outline py-3 w-full justify-center font-mono">AC + Feedback</div>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
 
       <!-- ── Column 1: Load / Dynamometer ──────────────────────── -->
       <div class="space-y-4 min-w-0">
@@ -1743,380 +2052,206 @@ function renderHMIDashboard4() {
 
 function renderAdminPanel1() {
   return `
-    <!-- Admin Panel 1 – Enhanced with many components -->
+    <!-- Admin Panel 1 – Sensor & Actuator Calibration (production / pre-ship) -->
     
-    <!-- Top Stats Bar -->
+    <div class="mb-4 p-3 bg-base-200 rounded-lg border-l-4 border-base-300">
+      <h1 class="text-xl font-bold text-base-content">Sensor & Actuator Calibration</h1>
+      <p class="text-sm text-base-content mt-1">Pre-ship setup for production engineers. Calibrate sensors and actuators before shipping to customers.</p>
+    </div>
+
+    <!-- Top stats -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Total Users</div>
-        <div class="stat-value text-3xl text-primary">247</div>
-        <div class="stat-desc">↗︎ 12 new this month</div>
+        <div class="stat-title text-base-content">Product ID</div>
+        <div class="stat-value text-2xl text-base-content font-mono">MTX-7842</div>
+        <div class="stat-desc text-base-content">Current unit</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Active Sessions</div>
-        <div class="stat-value text-3xl text-success">42</div>
-        <div class="stat-desc">↗︎ 5 active now</div>
+        <div class="stat-title text-base-content">Calibration</div>
+        <div class="stat-value text-2xl">
+          <span class="text-warning font-bold">In progress</span>
+        </div>
+        <div class="stat-desc text-base-content">4 of 8 channels done</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Pending Actions</div>
-        <div class="stat-value text-3xl text-warning">8</div>
-        <div class="stat-desc">Requires attention</div>
+        <div class="stat-title text-base-content">Sensors</div>
+        <div class="stat-value text-2xl text-base-content">5</div>
+        <div class="stat-desc text-base-content">3 calibrated, 2 pending</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">System Health</div>
-        <div class="stat-value text-3xl text-info">98%</div>
-        <div class="stat-desc">All systems operational</div>
+        <div class="stat-title text-base-content">Actuators</div>
+        <div class="stat-value text-2xl text-base-content">3</div>
+        <div class="stat-desc text-base-content">1 calibrated, 2 pending</div>
       </div>
     </div>
 
     <section class="grid gap-4 lg:grid-cols-3">
-      <!-- Main Content Area -->
+      <!-- Main: channels list -->
       <div class="lg:col-span-2 space-y-4">
-        
-        <!-- Search and Filters -->
-        <div class="card bg-base-200 shadow">
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">User Management</h2>
+            <h2 class="card-title text-base-content">Calibration channels</h2>
+            <p class="text-sm text-base-content">Select a channel to set zero, span, and limits. Apply to save calibration to the unit.</p>
             <div class="flex flex-wrap gap-2 mb-4">
-              <input class="input input-bordered input-sm flex-1 min-w-[200px]" placeholder="Search users..." />
               <select class="select select-bordered select-sm">
-                <option>All Roles</option>
-                <option>Administrator</option>
-                <option>Operator</option>
-                <option>Viewer</option>
+                <option>All channels</option>
+                <option>Sensors only</option>
+                <option>Actuators only</option>
               </select>
               <select class="select select-bordered select-sm">
-                <option>All Status</option>
-                <option>Active</option>
+                <option>All status</option>
                 <option>Pending</option>
-                <option>Disabled</option>
+                <option>Calibrated</option>
+                <option>Failed</option>
               </select>
-              <button class="btn btn-primary btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"/>
-                </svg>
-                Search
-              </button>
-              <button class="btn btn-outline btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 3a1 1 0 000 2v11a2 2 0 002 2h11a1 1 0 100-2H5V5a1 1 0 00-1-1z"/>
-                </svg>
-                Reset
-              </button>
+              <input class="input input-bordered input-sm w-40" placeholder="Search channel..." />
             </div>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-2 mb-4">
-              <button class="btn btn-success btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-                </svg>
-                Add User
-              </button>
-              <button class="btn btn-info btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
-                </svg>
-                Export
-              </button>
-              <button class="btn btn-warning btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"/>
-                </svg>
-                Import
-              </button>
-              <button class="btn btn-error btn-sm">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"/>
-                </svg>
-                Bulk Delete
-              </button>
-            </div>
-
-            <!-- Enhanced Table -->
             <div class="overflow-x-auto">
-              <table class="table table-zebra table-hover">
+              <table class="table table-zebra">
                 <thead>
                   <tr>
-                    <th>
-                      <label>
-                        <input type="checkbox" class="checkbox checkbox-sm" />
-                      </label>
-                    </th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Last Login</th>
-                    <th>Actions</th>
+                    <th class="text-base-content">Channel</th>
+                    <th class="text-base-content">Type</th>
+                    <th class="text-base-content">Current</th>
+                    <th class="text-base-content">Setpoint / Range</th>
+                    <th class="text-base-content">Status</th>
+                    <th class="text-base-content">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>
-                      <label>
-                        <input type="checkbox" class="checkbox checkbox-sm" />
-                      </label>
-                    </th>
-                    <td>1</td>
-                    <td>
-                      <div class="flex items-center gap-3">
-                        <div class="avatar placeholder">
-                          <div class="bg-primary text-primary-content rounded-full w-8">
-                            <span>JA</span>
-                          </div>
-                        </div>
-                        <div>
-                          <div class="font-bold">John Admin</div>
-                          <div class="text-sm opacity-50">Administrator</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>john.admin@matrix.com</td>
-                    <td><span class="badge badge-primary">Admin</span></td>
-                    <td>
-                      <span class="badge badge-success gap-2">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                        </span>
-                        Active
-                      </span>
-                    </td>
-                    <td>2 hours ago</td>
-                    <td>
-                      <div class="flex gap-1">
-                        <button class="btn btn-xs btn-primary">Edit</button>
-                        <button class="btn btn-xs btn-info">View</button>
-                        <button class="btn btn-xs btn-error">Delete</button>
-                      </div>
-                    </td>
+                    <td class="font-mono text-sm">PT-01</td>
+                    <td><span class="badge badge-ghost">Sensor</span></td>
+                    <td class="text-base-content">101.32 kPa</td>
+                    <td class="text-base-content">0–200 kPa</td>
+                    <td><span class="badge badge-success">Calibrated</span></td>
+                    <td><button class="btn btn-xs btn-outline">Re-cal</button></td>
                   </tr>
                   <tr>
-                    <th>
-                      <label>
-                        <input type="checkbox" class="checkbox checkbox-sm" />
-                      </label>
-                    </th>
-                    <td>2</td>
-                    <td>
-                      <div class="flex items-center gap-3">
-                        <div class="avatar placeholder">
-                          <div class="bg-secondary text-secondary-content rounded-full w-8">
-                            <span>SO</span>
-                          </div>
-                        </div>
-                        <div>
-                          <div class="font-bold">Sarah Operator</div>
-                          <div class="text-sm opacity-50">Operator</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>sarah.op@matrix.com</td>
-                    <td><span class="badge badge-secondary">Operator</span></td>
+                    <td class="font-mono text-sm">PT-02</td>
+                    <td><span class="badge badge-ghost">Sensor</span></td>
+                    <td class="text-base-content">0.02 kPa</td>
+                    <td class="text-base-content">0–50 kPa</td>
+                    <td><span class="badge badge-success">Calibrated</span></td>
+                    <td><button class="btn btn-xs btn-outline">Re-cal</button></td>
+                  </tr>
+                  <tr class="bg-base-300/50">
+                    <td class="font-mono text-sm font-bold">TC-01</td>
+                    <td><span class="badge badge-ghost">Sensor</span></td>
+                    <td class="text-base-content">23.4 °C</td>
+                    <td class="text-base-content">-10–120 °C</td>
                     <td><span class="badge badge-warning">Pending</span></td>
-                    <td>Never</td>
-                    <td>
-                      <div class="flex gap-1">
-                        <button class="btn btn-xs btn-primary">Edit</button>
-                        <button class="btn btn-xs btn-info">View</button>
-                        <button class="btn btn-xs btn-error">Delete</button>
-                      </div>
-                    </td>
+                    <td><button class="btn btn-xs btn-primary">Calibrate</button></td>
                   </tr>
                   <tr>
-                    <th>
-                      <label>
-                        <input type="checkbox" class="checkbox checkbox-sm" />
-                      </label>
-                    </th>
-                    <td>3</td>
-                    <td>
-                      <div class="flex items-center gap-3">
-                        <div class="avatar placeholder">
-                          <div class="bg-accent text-accent-content rounded-full w-8">
-                            <span>MV</span>
-                          </div>
-                        </div>
-                        <div>
-                          <div class="font-bold">Mike Viewer</div>
-                          <div class="text-sm opacity-50">Viewer</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>mike.view@matrix.com</td>
-                    <td><span class="badge badge-accent">Viewer</span></td>
-                    <td><span class="badge badge-success">Active</span></td>
-                    <td>1 day ago</td>
-                    <td>
-                      <div class="flex gap-1">
-                        <button class="btn btn-xs btn-primary">Edit</button>
-                        <button class="btn btn-xs btn-info">View</button>
-                        <button class="btn btn-xs btn-error">Delete</button>
-                      </div>
-                    </td>
+                    <td class="font-mono text-sm">FL-01</td>
+                    <td><span class="badge badge-ghost">Sensor</span></td>
+                    <td class="text-base-content">0.00 L/min</td>
+                    <td class="text-base-content">0–100 L/min</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td><button class="btn btn-xs btn-primary">Calibrate</button></td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono text-sm">LVL-01</td>
+                    <td><span class="badge badge-ghost">Sensor</span></td>
+                    <td class="text-base-content">0 mm</td>
+                    <td class="text-base-content">0–500 mm</td>
+                    <td><span class="badge badge-success">Calibrated</span></td>
+                    <td><button class="btn btn-xs btn-outline">Re-cal</button></td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono text-sm">VLV-01</td>
+                    <td><span class="badge badge-ghost">Actuator</span></td>
+                    <td class="text-base-content">0%</td>
+                    <td class="text-base-content">0–100%</td>
+                    <td><span class="badge badge-success">Calibrated</span></td>
+                    <td><button class="btn btn-xs btn-outline">Re-cal</button></td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono text-sm">VLV-02</td>
+                    <td><span class="badge badge-ghost">Actuator</span></td>
+                    <td class="text-base-content">—</td>
+                    <td class="text-base-content">0–100%</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td><button class="btn btn-xs btn-primary">Calibrate</button></td>
+                  </tr>
+                  <tr>
+                    <td class="font-mono text-sm">MTR-01</td>
+                    <td><span class="badge badge-ghost">Actuator</span></td>
+                    <td class="text-base-content">0 rpm</td>
+                    <td class="text-base-content">0–3000 rpm</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                    <td><button class="btn btn-xs btn-primary">Calibrate</button></td>
                   </tr>
                 </tbody>
               </table>
             </div>
-
-            <!-- Pagination -->
-            <div class="flex justify-center mt-4">
-              <div class="join">
-                <button class="join-item btn btn-sm">«</button>
-                <button class="join-item btn btn-sm btn-active">1</button>
-                <button class="join-item btn btn-sm">2</button>
-                <button class="join-item btn btn-sm">3</button>
-                <button class="join-item btn btn-sm">4</button>
-                <button class="join-item btn btn-sm">»</button>
-              </div>
-            </div>
           </div>
         </div>
 
-        <!-- Alerts Section -->
-        <div class="card bg-base-200 shadow">
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">System Alerts</h2>
-            <div class="space-y-2">
-              <div class="alert alert-success">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span>All systems operational. No issues detected.</span>
-              </div>
-              <div class="alert alert-warning">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
-                </svg>
-                <span>3 users pending approval. Review required.</span>
-              </div>
-              <div class="alert alert-info">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"/>
-                </svg>
-                <span>System maintenance scheduled for next week.</span>
-              </div>
-            </div>
+            <h2 class="card-title text-base-content">Calibration workflow</h2>
+            <ul class="steps steps-vertical text-base-content text-sm">
+              <li class="step step-primary">Select product (MTX-7842)</li>
+              <li class="step step-primary">Calibrate sensors (zero / span)</li>
+              <li class="step step-primary">Calibrate actuators (stroke / range)</li>
+              <li class="step">Verify all channels</li>
+              <li class="step">Sign off &amp; export certificate</li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar -->
+      <!-- Sidebar: selected channel calibration -->
       <div class="space-y-4">
-        <!-- Selected User Details -->
-        <div class="card bg-base-200 shadow">
+        <div class="card bg-base-200 shadow-xl border border-base-300">
           <div class="card-body">
-            <h2 class="card-title">Selected User</h2>
-            <div class="flex flex-col items-center mb-4">
-              <div class="avatar placeholder">
-                <div class="bg-primary text-primary-content rounded-full w-20">
-                  <span class="text-2xl">JA</span>
-                </div>
-              </div>
-              <div class="text-center mt-2">
-                <div class="font-bold text-lg">John Admin</div>
-                <div class="text-sm opacity-70">john.admin@matrix.com</div>
-              </div>
+            <h2 class="card-title text-base-content">Selected channel: TC-01</h2>
+            <p class="text-xs text-base-content">Temperature sensor · -10–120 °C</p>
+            <div class="divider my-2"></div>
+            <div class="form-control">
+              <label class="label"><span class="label-text text-base-content">Zero (current raw)</span></label>
+              <input type="number" class="input input-bordered input-sm" value="0.0" step="0.1" />
             </div>
-            
-            <div class="stats stats-vertical shadow bg-base-100">
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Role</div>
-                <div class="stat-value text-sm">Administrator</div>
-              </div>
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Status</div>
-                <div class="stat-value text-sm">
-                  <span class="badge badge-success">Active</span>
-                </div>
-              </div>
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Last Login</div>
-                <div class="stat-value text-sm">2 hours ago</div>
-              </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Span reference (°C)</span></label>
+              <input type="number" class="input input-bordered input-sm" value="100.0" step="0.1" />
             </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Min limit (°C)</span></label>
+              <input type="number" class="input input-bordered input-sm" value="-10" />
+            </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Max limit (°C)</span></label>
+              <input type="number" class="input input-bordered input-sm" value="120" />
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button class="btn btn-primary btn-sm flex-1">Apply calibration</button>
+              <button class="btn btn-outline btn-sm flex-1">Zero now</button>
+            </div>
+            <button class="btn btn-outline btn-sm w-full mt-2">Span (apply reference)</button>
+          </div>
+        </div>
 
-            <div class="divider"></div>
-
-            <!-- Quick Actions -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-sm text-base-content">Product actions</h2>
             <div class="space-y-2">
-              <button class="btn btn-primary btn-sm w-full">Edit User</button>
-              <button class="btn btn-secondary btn-sm w-full">Reset Password</button>
-              <button class="btn btn-warning btn-sm w-full">Suspend User</button>
-              <button class="btn btn-error btn-sm w-full">Delete User</button>
+              <button class="btn btn-primary btn-sm w-full">Save calibration to unit</button>
+              <button class="btn btn-outline btn-sm w-full">Load from unit</button>
+              <button class="btn btn-ghost btn-sm w-full">Export calibration certificate</button>
             </div>
           </div>
         </div>
 
-        <!-- Progress Indicators -->
-        <div class="card bg-base-200 shadow">
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">System Metrics</h2>
-            <div class="space-y-3">
-              <div>
-                <div class="flex justify-between text-xs mb-1">
-                  <span>User Capacity</span>
-                  <span>82%</span>
-                </div>
-                <progress class="progress progress-primary w-full" value="82" max="100"></progress>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs mb-1">
-                  <span>Active Sessions</span>
-                  <span>65%</span>
-                </div>
-                <progress class="progress progress-success w-full" value="65" max="100"></progress>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs mb-1">
-                  <span>Storage Used</span>
-                  <span>45%</span>
-                </div>
-                <progress class="progress progress-info w-full" value="45" max="100"></progress>
-              </div>
+            <h2 class="card-title text-sm text-base-content">Status</h2>
+            <div class="space-y-2 text-sm text-base-content">
+              <div class="flex justify-between"><span>Last saved</span><span>—</span></div>
+              <div class="flex justify-between"><span>Calibration due</span><span>—</span></div>
             </div>
-          </div>
-        </div>
-
-        <!-- Radial Progress Gauges -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">Performance</h2>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex flex-col items-center">
-                <div class="radial-progress text-primary" style="--value:85; --size:4rem;" role="progressbar">85%</div>
-                <div class="text-xs mt-2">CPU</div>
-              </div>
-              <div class="flex flex-col items-center">
-                <div class="radial-progress text-secondary" style="--value:72; --size:4rem;" role="progressbar">72%</div>
-                <div class="text-xs mt-2">Memory</div>
-              </div>
-              <div class="flex flex-col items-center">
-                <div class="radial-progress text-accent" style="--value:58; --size:4rem;" role="progressbar">58%</div>
-                <div class="text-xs mt-2">Network</div>
-              </div>
-              <div class="flex flex-col items-center">
-                <div class="radial-progress text-warning" style="--value:91; --size:4rem;" role="progressbar">91%</div>
-                <div class="text-xs mt-2">Storage</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rating Component -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">User Rating</h2>
-            <div class="rating rating-lg">
-              <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" />
-              <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" checked />
-              <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" />
-              <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" />
-              <input type="radio" name="rating" class="mask mask-star-2 bg-orange-400" />
-            </div>
-            <p class="text-xs opacity-70 mt-2">4.2 out of 5 stars</p>
           </div>
         </div>
       </div>
@@ -2126,854 +2261,422 @@ function renderAdminPanel1() {
 
 function renderAdminPanel2() {
   return `
-    <!-- Admin Panel 2 – Enhanced Master/detail with many components -->
+    <!-- Debugging – USB, network, datalog, events, console -->
     
-    <!-- Top Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Total Devices</div>
-        <div class="stat-value text-2xl text-primary">24</div>
-        <div class="stat-desc">12 online, 8 offline, 4 maintenance</div>
-      </div>
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Active Alarms</div>
-        <div class="stat-value text-2xl text-error">3</div>
-        <div class="stat-desc">Requires immediate attention</div>
-      </div>
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Data Points</div>
-        <div class="stat-value text-2xl text-info">1,247</div>
-        <div class="stat-desc">↗︎ 23 new today</div>
-      </div>
-      <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Uptime</div>
-        <div class="stat-value text-2xl text-success">99.8%</div>
-        <div class="stat-desc">Last 30 days</div>
-      </div>
+    <div class="mb-4 p-3 bg-base-200 rounded-lg border-l-4 border-base-300">
+      <h1 class="text-xl font-bold text-base-content">Debugging</h1>
+      <p class="text-sm text-base-content mt-1">USB debugging, network config, MAC addresses, CSV datalog, recent events, and browser console output.</p>
     </div>
 
-    <section class="grid gap-4 lg:grid-cols-3">
-      <!-- Master list with enhanced features -->
+    <div class="grid gap-4 lg:grid-cols-2">
+      <!-- Left column -->
       <div class="space-y-4">
-        <div class="card bg-base-200 shadow">
+        <!-- USB Debugging -->
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">Devices</h2>
-            <div class="form-control mb-2">
-              <input class="input input-bordered input-sm" placeholder="Filter devices..." />
+            <h2 class="card-title text-base-content">USB debugging</h2>
+            <p class="text-sm text-base-content">Connect and debug over USB. Enable developer mode on the device first.</p>
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text text-base-content">Enable USB debugging</span>
+                <input type="checkbox" class="toggle toggle-md" />
+              </label>
             </div>
-            <ul class="menu bg-base-100 rounded-box">
-              <li>
-                <a class="active">
-                  <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center gap-2">
-                      <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                      </span>
-                      Device A
-                    </div>
-                    <span class="badge badge-success badge-sm">Online</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center gap-2">
-                      <span class="relative flex h-2 w-2">
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
-                      </span>
-                      Device B
-                    </div>
-                    <span class="badge badge-error badge-sm">Offline</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center gap-2">
-                      <span class="relative flex h-2 w-2">
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-warning"></span>
-                      </span>
-                      Device C
-                    </div>
-                    <span class="badge badge-warning badge-sm">Warning</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <div class="flex items-center justify-between w-full">
-                    <div class="flex items-center gap-2">
-                      <span class="relative flex h-2 w-2">
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-info"></span>
-                      </span>
-                      Device D
-                    </div>
-                    <span class="badge badge-info badge-sm">Maintenance</span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-            <div class="divider"></div>
-            <button class="btn btn-primary btn-sm w-full">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
-              </svg>
-              Add Device
-            </button>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">USB port</span></label>
+              <select class="select select-bordered select-sm">
+                <option>Auto-detect</option>
+                <option>COM3</option>
+                <option>COM4</option>
+                <option>/dev/ttyUSB0</option>
+              </select>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button class="btn btn-primary btn-sm">Connect</button>
+              <button class="btn btn-outline btn-sm">Refresh ports</button>
+            </div>
+            <p class="text-xs text-base-content mt-2">Status: Not connected</p>
           </div>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="card bg-base-200 shadow">
+        <!-- IP address config -->
+        <div class="card bg-base-200 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title text-sm">Quick Stats</h2>
-            <div class="stats stats-vertical shadow bg-base-100">
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Online</div>
-                <div class="stat-value text-lg text-success">12</div>
-              </div>
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Offline</div>
-                <div class="stat-value text-lg text-error">8</div>
-              </div>
-              <div class="stat py-2">
-                <div class="stat-title text-xs">Maintenance</div>
-                <div class="stat-value text-lg text-warning">4</div>
-              </div>
+            <h2 class="card-title text-base-content">IP address config</h2>
+            <p class="text-sm text-base-content">Configure network for the app or connected device.</p>
+            <div class="form-control">
+              <label class="label"><span class="label-text text-base-content">IP address</span></label>
+              <input type="text" class="input input-bordered input-sm font-mono" placeholder="192.168.1.100" value="192.168.1.100" />
+            </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Subnet mask</span></label>
+              <input type="text" class="input input-bordered input-sm font-mono" placeholder="255.255.255.0" value="255.255.255.0" />
+            </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Gateway</span></label>
+              <input type="text" class="input input-bordered input-sm font-mono" placeholder="192.168.1.1" value="192.168.1.1" />
+            </div>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">DNS</span></label>
+              <input type="text" class="input input-bordered input-sm font-mono" placeholder="8.8.8.8" value="8.8.8.8" />
+            </div>
+            <button class="btn btn-primary btn-sm mt-2">Apply network</button>
+          </div>
+        </div>
+
+        <!-- MAC addresses -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">MAC addresses</h2>
+            <p class="text-sm text-base-content">Network interfaces and hardware addresses.</p>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra table-sm">
+                <thead>
+                  <tr>
+                    <th class="text-base-content">Interface</th>
+                    <th class="text-base-content font-mono">MAC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-base-content">Ethernet</td><td class="font-mono text-sm">00:1A:2B:3C:4D:5E</td></tr>
+                  <tr><td class="text-base-content">Wi‑Fi</td><td class="font-mono text-sm">00:1A:2B:3C:4D:5F</td></tr>
+                  <tr><td class="text-base-content">USB Ethernet</td><td class="font-mono text-sm">02:00:00:00:00:01</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Detail with enhanced tabs -->
-      <div class="card bg-base-200 shadow lg:col-span-2">
-        <div class="card-body">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h2 class="card-title">Device A - Production Line 1</h2>
-              <p class="text-sm opacity-70">Serial: MAT-2024-001 | Location: Lab 1</p>
+      <!-- Right column -->
+      <div class="space-y-4">
+        <!-- App CSV datalog -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">App CSV datalog</h2>
+            <p class="text-sm text-base-content">Path, interval, and export for application data logging.</p>
+            <div class="form-control">
+              <label class="label"><span class="label-text text-base-content">Log path</span></label>
+              <input type="text" class="input input-bordered input-sm font-mono" placeholder="C:\\Data\\logs" value="C:\\Data\\logs\\datalog.csv" />
             </div>
-            <div class="flex gap-2">
-              <button class="btn btn-sm btn-primary">Edit</button>
-              <button class="btn btn-sm btn-outline">Export</button>
+            <div class="form-control mt-2">
+              <label class="label"><span class="label-text text-base-content">Sample interval (s)</span></label>
+              <input type="number" class="input input-bordered input-sm w-24" value="1" min="0.1" step="0.1" />
+            </div>
+            <div class="form-control mt-2">
+              <label class="label cursor-pointer">
+                <span class="label-text text-base-content">Logging enabled</span>
+                <input type="checkbox" class="toggle toggle-md" checked />
+              </label>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button class="btn btn-primary btn-sm">Save settings</button>
+              <button class="btn btn-outline btn-sm">Export CSV now</button>
             </div>
           </div>
+        </div>
 
-          <div role="tablist" class="tabs tabs-bordered tabs-lg">
-            <input type="radio" name="admin2-tabs" role="tab" class="tab" aria-label="Overview" defaultChecked />
-            <div role="tabpanel" class="tab-content p-4">
-              <!-- Overview Tab with many components -->
-              <div class="grid gap-4 md:grid-cols-2">
-                <div class="card bg-base-100 shadow">
-                  <div class="card-body">
-                    <h3 class="card-title text-sm">Status</h3>
-                    <div class="space-y-2">
-                      <div class="flex justify-between">
-                        <span class="text-sm">Connection</span>
-                        <span class="badge badge-success">Online</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-sm">Mode</span>
-                        <span class="badge badge-primary">Auto</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-sm">Health</span>
-                        <div class="rating rating-sm">
-                          <input type="radio" name="health" class="mask mask-star-2 bg-green-400" />
-                          <input type="radio" name="health" class="mask mask-star-2 bg-green-400" />
-                          <input type="radio" name="health" class="mask mask-star-2 bg-green-400" />
-                          <input type="radio" name="health" class="mask mask-star-2 bg-green-400" checked />
-                          <input type="radio" name="health" class="mask mask-star-2 bg-green-400" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="card bg-base-100 shadow">
-                  <div class="card-body">
-                    <h3 class="card-title text-sm">Performance</h3>
-                    <div class="space-y-2">
-                      <div>
-                        <div class="flex justify-between text-xs mb-1">
-                          <span>CPU Usage</span>
-                          <span>65%</span>
-                        </div>
-                        <progress class="progress progress-primary w-full" value="65" max="100"></progress>
-                      </div>
-                      <div>
-                        <div class="flex justify-between text-xs mb-1">
-                          <span>Memory</span>
-                          <span>78%</span>
-                        </div>
-                        <progress class="progress progress-secondary w-full" value="78" max="100"></progress>
-                      </div>
-                      <div>
-                        <div class="flex justify-between text-xs mb-1">
-                          <span>Network</span>
-                          <span>42%</span>
-                        </div>
-                        <progress class="progress progress-accent w-full" value="42" max="100"></progress>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Alerts in Overview -->
-              <div class="mt-4 space-y-2">
-                <div class="alert alert-success">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                  </svg>
-                  <span>Device operating normally. All systems nominal.</span>
-                </div>
-              </div>
+        <!-- Recent events in app -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">Recent events in app</h2>
+            <p class="text-sm text-base-content">Last events from the application.</p>
+            <div class="overflow-x-auto max-h-48">
+              <table class="table table-zebra table-sm">
+                <thead>
+                  <tr>
+                    <th class="text-base-content">Time</th>
+                    <th class="text-base-content">Source</th>
+                    <th class="text-base-content">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-xs text-base-content">14:32:01</td><td class="text-base-content">App</td><td class="text-base-content">Page loaded: Debugging</td></tr>
+                  <tr><td class="text-xs text-base-content">14:31:58</td><td class="text-base-content">Router</td><td class="text-base-content">Navigate to admin-2</td></tr>
+                  <tr><td class="text-xs text-base-content">14:31:55</td><td class="text-base-content">Auth</td><td class="text-base-content">Admin access granted</td></tr>
+                  <tr><td class="text-xs text-base-content">14:31:50</td><td class="text-base-content">Connection</td><td class="text-base-content">Status: Connected</td></tr>
+                  <tr><td class="text-xs text-base-content">14:30:12</td><td class="text-base-content">Theme</td><td class="text-base-content">Theme set to light</td></tr>
+                </tbody>
+              </table>
             </div>
+            <button class="btn btn-ghost btn-sm mt-2">Clear events</button>
+          </div>
+        </div>
 
-            <input type="radio" name="admin2-tabs" role="tab" class="tab" aria-label="Settings" />
-            <div role="tabpanel" class="tab-content p-4">
-              <!-- Enhanced Settings Tab -->
-              <div class="space-y-4">
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Device Name</span>
-                  </label>
-                  <input type="text" class="input input-bordered" value="Device A" />
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Target Value</span>
-                  </label>
-                  <input type="number" class="input input-bordered" placeholder="42" value="42" />
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Operation Mode</span>
-                  </label>
-                  <select class="select select-bordered">
-                    <option>Auto</option>
-                    <option>Manual</option>
-                    <option>Test</option>
-                    <option>Maintenance</option>
-                  </select>
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Temperature Setpoint</span>
-                    <span class="label-text-alt badge badge-lg badge-warning">23.0°C</span>
-                  </label>
-                  <input type="range" min="15" max="35" value="23" class="range range-warning" step="0.5" />
-                  <div class="flex w-full justify-between text-xs px-2 mt-1">
-                    <span>15°C</span>
-                    <span>25°C</span>
-                    <span>35°C</span>
-                  </div>
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Enable Features</span>
-                  </label>
-                  <div class="space-y-2">
-                    <label class="label cursor-pointer">
-                      <span class="label-text">Advanced mode</span>
-                      <input type="checkbox" class="toggle toggle-primary" />
-                    </label>
-                    <label class="label cursor-pointer">
-                      <span class="label-text">Data logging</span>
-                      <input type="checkbox" class="toggle toggle-success" checked />
-                    </label>
-                    <label class="label cursor-pointer">
-                      <span class="label-text">Remote access</span>
-                      <input type="checkbox" class="toggle toggle-warning" />
-                    </label>
-                    <label class="label cursor-pointer">
-                      <span class="label-text">Notifications</span>
-                      <input type="checkbox" class="toggle toggle-info" checked />
-                    </label>
-                  </div>
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Priority Level</span>
-                  </label>
-                  <div class="flex gap-2">
-                    <input type="radio" name="priority" class="radio radio-primary" checked />
-                    <span class="label-text">Low</span>
-                    <input type="radio" name="priority" class="radio radio-secondary" />
-                    <span class="label-text">Medium</span>
-                    <input type="radio" name="priority" class="radio radio-accent" />
-                    <span class="label-text">High</span>
-                  </div>
-                </div>
-
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Notes</span>
-                  </label>
-                  <textarea class="textarea textarea-bordered" rows="3" placeholder="Additional notes...">Device operating normally. Scheduled maintenance next month.</textarea>
-                </div>
-
-                <div class="card-actions justify-end mt-4">
-                  <button class="btn btn-outline btn-sm">Cancel</button>
-                  <button class="btn btn-primary btn-sm">Save Settings</button>
-                </div>
-              </div>
-            </div>
-
-            <input type="radio" name="admin2-tabs" role="tab" class="tab" aria-label="Logs" />
-            <div role="tabpanel" class="tab-content p-4">
-              <!-- Enhanced Logs Tab -->
-              <div class="flex gap-2 mb-4">
-                <select class="select select-bordered select-sm">
-                  <option>All Levels</option>
-                  <option>Error</option>
-                  <option>Warning</option>
-                  <option>Info</option>
-                  <option>Debug</option>
-                </select>
-                <input type="date" class="input input-bordered input-sm" />
-                <button class="btn btn-sm btn-outline">Filter</button>
-                <button class="btn btn-sm btn-primary">Export Logs</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="table table-zebra table-hover text-sm">
-                  <thead>
-                    <tr>
-                      <th>Time</th>
-                      <th>Level</th>
-                      <th>Source</th>
-                      <th>Message</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>12:00:15</td>
-                      <td><span class="badge badge-success">Info</span></td>
-                      <td>System</td>
-                      <td>Device started successfully.</td>
-                      <td><button class="btn btn-xs btn-ghost">View</button></td>
-                    </tr>
-                    <tr>
-                      <td>12:05:32</td>
-                      <td><span class="badge badge-warning">Warn</span></td>
-                      <td>Temperature</td>
-                      <td>Temperature approaching upper limit.</td>
-                      <td><button class="btn btn-xs btn-ghost">View</button></td>
-                    </tr>
-                    <tr>
-                      <td>12:10:48</td>
-                      <td><span class="badge badge-error">Error</span></td>
-                      <td>Network</td>
-                      <td>Connection timeout detected.</td>
-                      <td><button class="btn btn-xs btn-ghost">View</button></td>
-                    </tr>
-                    <tr>
-                      <td>12:15:12</td>
-                      <td><span class="badge badge-info">Info</span></td>
-                      <td>System</td>
-                      <td>Configuration updated.</td>
-                      <td><button class="btn btn-xs btn-ghost">View</button></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="flex justify-center mt-4">
-                <div class="join">
-                  <button class="join-item btn btn-sm">«</button>
-                  <button class="join-item btn btn-sm btn-active">1</button>
-                  <button class="join-item btn btn-sm">2</button>
-                  <button class="join-item btn btn-sm">3</button>
-                  <button class="join-item btn btn-sm">»</button>
-                </div>
-              </div>
-            </div>
-
-            <input type="radio" name="admin2-tabs" role="tab" class="tab" aria-label="Charts" />
-            <div role="tabpanel" class="tab-content p-4">
-              <div class="card bg-base-100 shadow">
-                <div class="card-body">
-                  <h3 class="card-title text-sm">Performance Metrics</h3>
-                  <div class="grid grid-cols-2 gap-4">
-                    <div class="flex flex-col items-center">
-                      <div class="radial-progress text-primary" style="--value:65; --size:5rem;" role="progressbar">65%</div>
-                      <div class="text-xs mt-2">CPU Usage</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                      <div class="radial-progress text-secondary" style="--value:78; --size:5rem;" role="progressbar">78%</div>
-                      <div class="text-xs mt-2">Memory</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                      <div class="radial-progress text-accent" style="--value:42; --size:5rem;" role="progressbar">42%</div>
-                      <div class="text-xs mt-2">Network</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                      <div class="radial-progress text-warning" style="--value:88; --size:5rem;" role="progressbar">88%</div>
-                      <div class="text-xs mt-2">Storage</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <!-- Console log from browser -->
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">Console log (browser)</h2>
+            <p class="text-sm text-base-content">Recent console output. Open DevTools (F12) for live logs.</p>
+            <pre class="bg-base-300 rounded-lg p-3 text-xs font-mono overflow-x-auto max-h-48 text-base-content whitespace-pre-wrap">[14:32:01] INFO  Matrix Template UI loaded
+[14:32:01] INFO  Theme: light
+[14:31:58] INFO  Navigation: admin-2
+[14:31:55] INFO  Admin session started
+[14:31:50] INFO  WebSocket connected
+[14:30:00] DEBUG Chart.js registered
+[14:29:58] INFO  Vite dev server connected</pre>
+            <div class="flex gap-2 mt-2">
+              <button class="btn btn-outline btn-sm">Copy to clipboard</button>
+              <button class="btn btn-ghost btn-sm">Clear</button>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   `;
 }
 
 function renderAdminPanel3() {
   return `
-    <!-- Admin Panel 3 – Enhanced Settings-driven with many components -->
+    <!-- Bootloader – PBC hardware firmware management -->
     
+    <div class="mb-4">
+      <h1 class="text-2xl font-bold text-base-content">Bootloader</h1>
+      <p class="text-sm text-base-content">Firmware management for PBC hardware. Flash, verify, and configure boot behaviour.</p>
+    </div>
+
     <!-- Top Stats -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Settings Groups</div>
-        <div class="stat-value text-2xl text-primary">12</div>
-        <div class="stat-desc">8 active, 4 disabled</div>
+        <div class="stat-title text-base-content">Connection</div>
+        <div class="stat-value text-xl text-base-content"><span class="badge badge-ghost badge-lg">Connected</span></div>
+        <div class="stat-desc text-base-content">USB @ 115200 baud</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Pending Changes</div>
-        <div class="stat-value text-2xl text-warning">3</div>
-        <div class="stat-desc">Requires restart</div>
+        <div class="stat-title text-base-content">Bootloader</div>
+        <div class="stat-value text-xl text-base-content">v2.1.0</div>
+        <div class="stat-desc text-base-content">STM32 DFU</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Backups</div>
-        <div class="stat-value text-2xl text-info">24</div>
-        <div class="stat-desc">Last: 2 hours ago</div>
+        <div class="stat-title text-base-content">Firmware</div>
+        <div class="stat-value text-xl text-base-content">v1.4.2</div>
+        <div class="stat-desc text-base-content">Application</div>
       </div>
       <div class="stat bg-base-200 shadow-lg rounded-lg">
-        <div class="stat-title">Config Version</div>
-        <div class="stat-value text-2xl text-success">v2.4.1</div>
-        <div class="stat-desc">Latest stable</div>
+        <div class="stat-title text-base-content">Flash</div>
+        <div class="stat-value text-xl text-base-content">128 KB</div>
+        <div class="stat-desc text-base-content">64 KB used</div>
       </div>
     </div>
 
     <section class="grid gap-4 lg:grid-cols-3">
-      <!-- Left: Settings Categories -->
+      <!-- Left: Firmware & Boot Operations -->
       <div class="lg:col-span-2 space-y-4">
         
-        <!-- Display Settings -->
+        <!-- Firmware Upload -->
         <div class="card bg-base-200 shadow">
           <div class="card-body">
-            <h2 class="card-title">Display Settings</h2>
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" checked />
-              <div class="collapse-title text-md font-medium">
-                Theme & Appearance
-              </div>
-              <div class="collapse-content">
-                <div class="space-y-3">
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-bold">Theme</span>
-                    </label>
-                    <select class="select select-bordered">
-                      <option>Light</option>
-                      <option>Dark</option>
-                      <option>Auto (System)</option>
-                    </select>
-                  </div>
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-bold">Color Scheme</span>
-                    </label>
-                    <div class="flex gap-2">
-                      <button class="btn btn-sm btn-primary">Primary</button>
-                      <button class="btn btn-sm btn-secondary">Secondary</button>
-                      <button class="btn btn-sm btn-accent">Accent</button>
-                    </div>
-                  </div>
-                  <div class="form-control">
-                    <label class="label cursor-pointer">
-                      <span class="label-text font-bold">High contrast mode</span>
-                      <input type="checkbox" class="toggle toggle-primary" />
-                    </label>
-                  </div>
-                  <div class="form-control">
-                    <label class="label cursor-pointer">
-                      <span class="label-text font-bold">Reduce animations</span>
-                      <input type="checkbox" class="toggle toggle-secondary" />
-                    </label>
-                  </div>
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-bold">Font Size</span>
-                      <span class="label-text-alt badge badge-lg">Medium</span>
-                    </label>
-                    <input type="range" min="0" max="2" value="1" class="range range-primary" step="1" />
-                    <div class="flex w-full justify-between text-xs px-2 mt-1">
-                      <span>Small</span>
-                      <span>Medium</span>
-                      <span>Large</span>
-                    </div>
-                  </div>
-                </div>
+            <h2 class="card-title text-base-content">Firmware upload</h2>
+            <p class="text-sm text-base-content">Select a .bin or .hex file to flash to the PBC. Supports DFU and UART bootloaders.</p>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-bold text-base-content">Firmware file</span>
+              </label>
+              <div class="flex gap-2">
+                <input type="text" class="input input-bordered flex-1 text-base-content" placeholder="No file selected" value="" />
+                <button class="btn btn-outline btn-sm">Browse</button>
               </div>
             </div>
-
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" />
-              <div class="collapse-title text-md font-medium">
-                Layout & Navigation
-              </div>
-              <div class="collapse-content">
-                <div class="space-y-3">
-                  <div class="form-control">
-                    <label class="label cursor-pointer">
-                      <span class="label-text font-bold">Compact sidebar</span>
-                      <input type="checkbox" class="toggle toggle-primary" />
-                    </label>
-                  </div>
-                  <div class="form-control">
-                    <label class="label cursor-pointer">
-                      <span class="label-text font-bold">Show breadcrumbs</span>
-                      <input type="checkbox" class="toggle toggle-success" checked />
-                    </label>
-                  </div>
-                  <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-bold">Items per page</span>
-                    </label>
-                    <select class="select select-bordered">
-                      <option>10</option>
-                      <option>25</option>
-                      <option selected>50</option>
-                      <option>100</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-bold text-base-content">Target address</span>
+                <span class="label-text-alt text-base-content">0x08000000 (default)</span>
+              </label>
+              <input type="text" class="input input-bordered font-mono text-base-content" value="0x08000000" />
             </div>
-          </div>
-        </div>
-
-        <!-- Security Settings -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">Security Settings</h2>
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" checked />
-              <div class="collapse-title text-md font-medium">
-                Authentication
-              </div>
-              <div class="collapse-content space-y-3">
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Idle timeout (minutes)</span>
-                  </label>
-                  <input type="number" class="input input-bordered" placeholder="15" value="15" min="5" max="60" />
-                </div>
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">Require PIN on startup</span>
-                    <input type="checkbox" class="toggle toggle-primary" />
-                  </label>
-                </div>
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">Two-factor authentication</span>
-                    <input type="checkbox" class="toggle toggle-success" />
-                  </label>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Password complexity</span>
-                  </label>
-                  <div class="flex gap-2">
-                    <input type="radio" name="pwd-complexity" class="radio radio-primary" />
-                    <span class="label-text">Low</span>
-                    <input type="radio" name="pwd-complexity" class="radio radio-secondary" checked />
-                    <span class="label-text">Medium</span>
-                    <input type="radio" name="pwd-complexity" class="radio radio-accent" />
-                    <span class="label-text">High</span>
-                  </div>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Session timeout</span>
-                    <span class="label-text-alt badge badge-lg badge-warning">30 min</span>
-                  </label>
-                  <input type="range" min="5" max="120" value="30" class="range range-warning" step="5" />
-                  <div class="flex w-full justify-between text-xs px-2 mt-1">
-                    <span>5 min</span>
-                    <span>60 min</span>
-                    <span>120 min</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" />
-              <div class="collapse-title text-md font-medium">
-                Access Control
-              </div>
-              <div class="collapse-content space-y-3">
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">IP whitelist enabled</span>
-                    <input type="checkbox" class="toggle toggle-info" />
-                  </label>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Allowed IPs</span>
-                  </label>
-                  <textarea class="textarea textarea-bordered" rows="3" placeholder="192.168.1.1&#10;10.0.0.0/8"></textarea>
-                </div>
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">Block failed login attempts</span>
-                    <input type="checkbox" class="toggle toggle-warning" checked />
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- System Settings -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">System Settings</h2>
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" />
-              <div class="collapse-title text-md font-medium">
-                Data & Storage
-              </div>
-              <div class="collapse-content space-y-3">
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Data retention (days)</span>
-                  </label>
-                  <input type="number" class="input input-bordered" value="90" min="7" max="365" />
-                </div>
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">Auto backup enabled</span>
-                    <input type="checkbox" class="toggle toggle-success" checked />
-                  </label>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Backup frequency</span>
-                  </label>
-                  <select class="select select-bordered">
-                    <option>Hourly</option>
-                    <option>Daily</option>
-                    <option selected>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Storage location</span>
-                  </label>
-                  <div class="flex gap-2">
-                    <input type="text" class="input input-bordered flex-1" value="/data/backups" />
-                    <button class="btn btn-sm btn-outline">Browse</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="collapse collapse-arrow bg-base-100 mt-2">
-              <input type="checkbox" />
-              <div class="collapse-title text-md font-medium">
-                Notifications
-              </div>
-              <div class="collapse-content space-y-3">
-                <div class="form-control">
-                  <label class="label cursor-pointer">
-                    <span class="label-text font-bold">Email notifications</span>
-                    <input type="checkbox" class="toggle toggle-primary" checked />
-                  </label>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Notification level</span>
-                  </label>
-                  <select class="select select-bordered">
-                    <option>All</option>
-                    <option selected>Errors & Warnings</option>
-                    <option>Errors Only</option>
-                    <option>None</option>
-                  </select>
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-bold">Email recipients</span>
-                  </label>
-                  <input type="email" class="input input-bordered" placeholder="admin@matrix.com" multiple />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <div class="flex gap-2">
-              <button class="btn btn-primary flex-1">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
-                </svg>
-                Save All Settings
-              </button>
-              <button class="btn btn-outline">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
-                </svg>
-                Reset
-              </button>
-              <button class="btn btn-outline">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
-                </svg>
-                Export Config
-              </button>
-              <button class="btn btn-outline">
+            <div class="flex gap-2 mt-2">
+              <button class="btn btn-primary">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
                 </svg>
-                Import Config
+                Flash firmware
               </button>
+              <button class="btn btn-outline btn-sm">Erase flash</button>
+              <button class="btn btn-outline btn-sm">Verify</button>
+            </div>
+            <div class="mt-2">
+              <div class="flex justify-between text-xs text-base-content mb-1">
+                <span>Progress</span>
+                <span>0%</span>
+              </div>
+              <progress class="progress progress-primary w-full" value="0" max="100"></progress>
+            </div>
+          </div>
+        </div>
+
+        <!-- Boot configuration -->
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">Boot configuration</h2>
+            <div class="collapse collapse-arrow bg-base-100 mt-2">
+              <input type="checkbox" checked />
+              <div class="collapse-title text-md font-medium text-base-content">
+                Boot mode & source
+              </div>
+              <div class="collapse-content">
+                <div class="space-y-3">
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text font-bold text-base-content">Boot mode</span>
+                    </label>
+                    <select class="select select-bordered">
+                      <option>Normal (application)</option>
+                      <option>Recovery</option>
+                      <option>Safe mode</option>
+                      <option>DFU / Bootloader</option>
+                    </select>
+                  </div>
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text font-bold text-base-content">Boot source</span>
+                    </label>
+                    <select class="select select-bordered">
+                      <option>Internal flash</option>
+                      <option>External SPI flash</option>
+                      <option>SD card</option>
+                    </select>
+                  </div>
+                  <div class="form-control">
+                    <label class="label">
+                      <span class="label-text font-bold text-base-content">Autoboot timeout (sec)</span>
+                      <span class="label-text-alt text-base-content">0 = immediate</span>
+                    </label>
+                    <input type="number" class="input input-bordered" value="0" min="0" max="30" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connection & programming -->
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">Connection & programming</h2>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-bold text-base-content">Port</span>
+                </label>
+                <select class="select select-bordered">
+                  <option>COM3 (STM32 Virtual COM)</option>
+                  <option>COM4</option>
+                  <option>/dev/ttyUSB0</option>
+                  <option>/dev/ttyACM0</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-bold text-base-content">Baud rate</span>
+                </label>
+                <select class="select select-bordered">
+                  <option>9600</option>
+                  <option>19200</option>
+                  <option>38400</option>
+                  <option selected>115200</option>
+                  <option>230400</option>
+                  <option>460800</option>
+                  <option>921600</option>
+                </select>
+              </div>
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button class="btn btn-outline btn-sm">Scan ports</button>
+              <button class="btn btn-outline btn-sm">Connect</button>
+              <button class="btn btn-outline btn-sm">Enter bootloader</button>
+              <button class="btn btn-outline btn-sm">Reset device</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Memory layout -->
+        <div class="card bg-base-200 shadow">
+          <div class="card-body">
+            <h2 class="card-title text-base-content">Memory layout</h2>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra table-sm">
+                <thead>
+                  <tr>
+                    <th class="text-base-content">Region</th>
+                    <th class="text-base-content">Start</th>
+                    <th class="text-base-content">Size</th>
+                    <th class="text-base-content">Used</th>
+                    <th class="text-base-content">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="text-base-content">Bootloader</td><td class="font-mono text-base-content">0x08000000</td><td class="text-base-content">24 KB</td><td class="text-base-content">—</td><td class="badge badge-ghost">Protected</td></tr>
+                  <tr><td class="text-base-content">Application</td><td class="font-mono text-base-content">0x08006000</td><td class="text-base-content">104 KB</td><td class="text-base-content">64 KB</td><td class="badge badge-ghost">Active</td></tr>
+                  <tr><td class="text-base-content">Config</td><td class="font-mono text-base-content">0x0801F800</td><td class="text-base-content">2 KB</td><td class="text-base-content">512 B</td><td class="badge badge-ghost">—</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right: Preview & Status -->
+      <!-- Right: Device info & boot log -->
       <div class="space-y-4">
-        <!-- Preview Card -->
+        <!-- Device info -->
         <div class="card bg-base-200 shadow">
           <div class="card-body">
-            <h2 class="card-title">Settings Preview</h2>
-            <p class="text-sm opacity-80 mb-4">
-              Summary of current configuration
-            </p>
-            <div class="space-y-3">
-              <div class="stats stats-vertical shadow bg-base-100">
-                <div class="stat py-2">
-                  <div class="stat-title text-xs">Theme</div>
-                  <div class="stat-value text-sm">Light</div>
-                </div>
-                <div class="stat py-2">
-                  <div class="stat-title text-xs">High Contrast</div>
-                  <div class="stat-value text-sm">
-                    <span class="badge badge-error badge-sm">Off</span>
-                  </div>
-                </div>
-                <div class="stat py-2">
-                  <div class="stat-title text-xs">Idle Timeout</div>
-                  <div class="stat-value text-sm">15 min</div>
-                </div>
-                <div class="stat py-2">
-                  <div class="stat-title text-xs">PIN Required</div>
-                  <div class="stat-value text-sm">
-                    <span class="badge badge-error badge-sm">Off</span>
-                  </div>
-                </div>
+            <h2 class="card-title text-base-content">Device info</h2>
+            <div class="stats stats-vertical shadow bg-base-100 text-base-content">
+              <div class="stat py-2">
+                <div class="stat-title text-xs">MCU</div>
+                <div class="stat-value text-sm font-mono">STM32F407VG</div>
+              </div>
+              <div class="stat py-2">
+                <div class="stat-title text-xs">Board rev</div>
+                <div class="stat-value text-sm">PBC-001 Rev 2.1</div>
+              </div>
+              <div class="stat py-2">
+                <div class="stat-title text-xs">Unique ID</div>
+                <div class="stat-value text-xs font-mono break-all">0x12345678</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- System Status -->
+        <!-- Boot log -->
         <div class="card bg-base-200 shadow">
           <div class="card-body">
-            <h2 class="card-title">System Status</h2>
-            <div class="space-y-3">
-              <div class="alert alert-success">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
-                </svg>
-                <span class="text-sm">All settings saved successfully</span>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs mb-1">
-                  <span>Config Health</span>
-                  <span>95%</span>
-                </div>
-                <progress class="progress progress-success w-full" value="95" max="100"></progress>
-              </div>
-              <div>
-                <div class="flex justify-between text-xs mb-1">
-                  <span>Backup Status</span>
-                  <span>Good</span>
-                </div>
-                <progress class="progress progress-info w-full" value="100" max="100"></progress>
-              </div>
+            <h2 class="card-title text-base-content">Boot log</h2>
+            <p class="text-sm text-base-content">Bootloader commands and responses.</p>
+            <pre class="bg-base-300 rounded-lg p-3 text-xs font-mono overflow-x-auto max-h-48 text-base-content whitespace-pre-wrap">[14:45:02] Connected to COM3 @ 115200
+[14:45:02] Bootloader v2.1.0 detected
+[14:45:03] Chip: STM32F407VG, 128 KB flash
+[14:45:05] Application v1.4.2 @ 0x08006000
+[14:45:05] Ready for commands</pre>
+            <div class="flex gap-2 mt-2">
+              <button class="btn btn-outline btn-sm">Clear</button>
+              <button class="btn btn-ghost btn-sm">Copy</button>
             </div>
           </div>
         </div>
 
-        <!-- Recent Changes -->
+        <!-- Factory reset & recovery -->
         <div class="card bg-base-200 shadow">
           <div class="card-body">
-            <h2 class="card-title">Recent Changes</h2>
-            <ul class="timeline timeline-vertical timeline-compact">
-              <li>
-                <div class="timeline-middle">
-                  <div class="badge badge-success"></div>
-                </div>
-                <div class="timeline-end timeline-box">Theme changed to Light</div>
-                <div class="timeline-start text-xs opacity-60">2 hours ago</div>
-              </li>
-              <li>
-                <hr/>
-                <div class="timeline-middle">
-                  <div class="badge badge-info"></div>
-                </div>
-                <div class="timeline-end timeline-box">Idle timeout updated</div>
-                <div class="timeline-start text-xs opacity-60">1 day ago</div>
-              </li>
-              <li>
-                <hr/>
-                <div class="timeline-middle">
-                  <div class="badge badge-warning"></div>
-                </div>
-                <div class="timeline-end timeline-box">Security settings modified</div>
-                <div class="timeline-start text-xs opacity-60">3 days ago</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="card bg-base-200 shadow">
-          <div class="card-body">
-            <h2 class="card-title">Quick Actions</h2>
+            <h2 class="card-title text-base-content">Factory & recovery</h2>
             <div class="space-y-2">
-              <button class="btn btn-sm btn-outline w-full justify-start">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
-                </svg>
-                Create Backup
-              </button>
-              <button class="btn btn-sm btn-outline w-full justify-start">
+              <button class="btn btn-outline btn-sm w-full justify-start">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
                 </svg>
-                Restore Defaults
+                Restore factory firmware
               </button>
-              <button class="btn btn-sm btn-outline w-full justify-start">
+              <button class="btn btn-outline btn-sm w-full justify-start">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                  <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"/>
                 </svg>
-                View Logs
+                Erase config partition
+              </button>
+              <button class="btn btn-outline btn-sm w-full justify-start">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
+                </svg>
+                Read bootloader version
               </button>
             </div>
           </div>
@@ -5262,57 +4965,234 @@ function renderComponentGallery() {
 }
 function renderSettingsPage() {
   return `
-    <!-- Settings Page -->
-    <section class="grid gap-4 lg:grid-cols-2">
+    <!-- Settings Page - engineering control software -->
+    <section class="space-y-4">
       <div class="card bg-base-200 shadow">
         <div class="card-body">
-          <h2 class="card-title">App Settings</h2>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Theme</span>
-            </label>
-            <select class="select select-bordered select-sm">
-              <option>Follow global (header)</option>
-              <option>Light</option>
-              <option>Dark</option>
-            </select>
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="card-title">Engineering Control Software Settings</h2>
+            <div class="join">
+              <button class="btn btn-sm join-item btn-primary">Save all</button>
+              <button class="btn btn-sm join-item btn-outline">Validate</button>
+              <button class="btn btn-sm join-item btn-ghost">Export config</button>
+            </div>
           </div>
-          <div class="form-control mt-2">
-            <label class="label">
-              <span class="label-text">Language</span>
-            </label>
-            <select class="select select-bordered select-sm">
-              <option>English</option>
-              <option>Other (placeholder)</option>
-            </select>
+          <div class="alert alert-info mt-2">
+            <span>Changes are staged locally until applied to PLC runtime.</span>
           </div>
-          <div class="card-actions justify-end mt-3">
-            <button class="btn btn-primary btn-sm">Save</button>
+          <div class="tabs tabs-boxed mt-2">
+            <a class="tab tab-active">Runtime</a>
+            <a class="tab">Safety</a>
+            <a class="tab">Network</a>
+            <a class="tab">I/O</a>
+            <a class="tab">Logging</a>
           </div>
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h2 class="card-title">Connection Settings</h2>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Mode</span>
-            </label>
-            <select class="select select-bordered select-sm">
-              <option>Simulated</option>
-              <option>Local</option>
-              <option>Remote</option>
-            </select>
+      <div class="grid gap-4 xl:grid-cols-3">
+        <div class="space-y-4 xl:col-span-2">
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">Runtime and Loop Configuration</h3>
+              <div class="grid gap-3 md:grid-cols-2">
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Control mode</span></label>
+                  <select class="select select-bordered select-sm">
+                    <option>AUTO</option>
+                    <option>MANUAL</option>
+                    <option>CASCADING</option>
+                  </select>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Scan period (ms)</span></label>
+                  <input type="number" class="input input-bordered input-sm validator" min="10" max="1000" value="100" required />
+                  <label class="label"><span class="label-text-alt">10-1000 ms</span></label>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Primary loop</span></label>
+                  <select class="select select-bordered select-sm">
+                    <option>Temperature PID</option>
+                    <option>Flow PID</option>
+                    <option>Pressure PID</option>
+                  </select>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Controller profile</span></label>
+                  <div class="join">
+                    <input class="join-item btn btn-sm" type="radio" name="profile" aria-label="Balanced" checked />
+                    <input class="join-item btn btn-sm" type="radio" name="profile" aria-label="Fast" />
+                    <input class="join-item btn btn-sm" type="radio" name="profile" aria-label="Robust" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="divider">Output Limits</div>
+              <div class="grid gap-3 md:grid-cols-2">
+                <div>
+                  <div class="flex justify-between text-xs mb-1"><span>Heater clamp (%)</span><span>80%</span></div>
+                  <input type="range" class="range range-primary range-sm" min="0" max="100" value="80" />
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1"><span>Pump speed limit (%)</span><span>65%</span></div>
+                  <input type="range" class="range range-secondary range-sm" min="0" max="100" value="65" />
+                </div>
+              </div>
+
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="badge badge-success">Runtime healthy</span>
+                <span class="badge badge-warning">1 pending change</span>
+                <span class="badge badge-outline">Simulation disabled</span>
+              </div>
+            </div>
           </div>
-          <div class="form-control mt-2">
-            <label class="label">
-              <span class="label-text">API base URL</span>
-            </label>
-            <input class="input input-bordered input-sm" placeholder="http://localhost:8080" />
+
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">Safety Interlocks and Trips</h3>
+              <div class="grid gap-3 md:grid-cols-2">
+                <label class="label cursor-pointer justify-start gap-3">
+                  <input type="checkbox" class="toggle toggle-success" checked />
+                  <span class="label-text">Enable emergency stop chain</span>
+                </label>
+                <label class="label cursor-pointer justify-start gap-3">
+                  <input type="checkbox" class="toggle toggle-warning" checked />
+                  <span class="label-text">Require reset after trip</span>
+                </label>
+                <label class="label cursor-pointer justify-start gap-3">
+                  <input type="checkbox" class="checkbox checkbox-error" checked />
+                  <span class="label-text">Hard stop on over-current</span>
+                </label>
+                <label class="label cursor-pointer justify-start gap-3">
+                  <input type="checkbox" class="checkbox checkbox-info" />
+                  <span class="label-text">Auto-restart after brownout</span>
+                </label>
+              </div>
+
+              <div class="collapse collapse-arrow bg-base-100 mt-2">
+                <input type="checkbox" checked />
+                <div class="collapse-title text-sm font-bold">Trip Thresholds</div>
+                <div class="collapse-content">
+                  <div class="grid gap-3 md:grid-cols-3">
+                    <input class="input input-bordered input-sm" value="8.0 A max current" />
+                    <input class="input input-bordered input-sm" value="260 V max bus" />
+                    <input class="input input-bordered input-sm" value="75 C max coil temp" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert alert-warning mt-3">
+                <span>Changing safety thresholds requires supervisor signoff.</span>
+              </div>
+            </div>
           </div>
-          <div class="card-actions justify-end mt-3">
-            <button class="btn btn-outline btn-sm">Test connection</button>
+
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">I/O Mapping and Calibration</h3>
+              <div class="overflow-x-auto">
+                <table class="table table-sm table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Signal</th>
+                      <th>Source</th>
+                      <th>Scaling</th>
+                      <th>Filter</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>AI1 Temp</td><td>PT100 #1</td><td>0-100 C</td><td>250 ms</td><td><span class="badge badge-success badge-sm">OK</span></td></tr>
+                    <tr><td>AI2 Press</td><td>4-20mA PT</td><td>0-10 bar</td><td>100 ms</td><td><span class="badge badge-success badge-sm">OK</span></td></tr>
+                    <tr><td>DI4 E-Stop</td><td>Safety Relay</td><td>Boolean</td><td>N/A</td><td><span class="badge badge-warning badge-sm">Needs test</span></td></tr>
+                    <tr><td>AO1 Heater</td><td>SCR Driver</td><td>0-100%</td><td>50 ms</td><td><span class="badge badge-success badge-sm">OK</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-2 flex gap-2">
+                <button class="btn btn-sm btn-outline">Auto-detect modules</button>
+                <button class="btn btn-sm btn-ghost">Open calibration wizard</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">Connection and Security</h3>
+              <div class="form-control">
+                <label class="label"><span class="label-text">Runtime endpoint</span></label>
+                <input class="input input-bordered input-sm" value="opc.tcp://10.1.20.44:4840" />
+              </div>
+              <div class="form-control mt-2">
+                <label class="label"><span class="label-text">Protocol</span></label>
+                <select class="select select-bordered select-sm">
+                  <option>OPC UA</option>
+                  <option>Modbus TCP</option>
+                  <option>EtherNet/IP</option>
+                </select>
+              </div>
+              <div class="form-control mt-2">
+                <label class="label"><span class="label-text">Credential profile</span></label>
+                <input type="password" class="input input-bordered input-sm" value="********" />
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-sm btn-outline w-full">Test connection</button>
+              </div>
+              <div class="mt-3">
+                <progress class="progress progress-success w-full" value="87" max="100"></progress>
+                <p class="text-xs mt-1">Heartbeat reliability: 87%</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">Data Logging and Retention</h3>
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" class="toggle toggle-primary" checked />
+                <span class="label-text">Enable historian logging</span>
+              </label>
+              <div class="form-control mt-2">
+                <label class="label"><span class="label-text">Sample interval</span></label>
+                <select class="select select-bordered select-sm">
+                  <option>100 ms</option>
+                  <option>250 ms</option>
+                  <option selected>500 ms</option>
+                  <option>1 s</option>
+                </select>
+              </div>
+              <div class="form-control mt-2">
+                <label class="label"><span class="label-text">Retention policy</span></label>
+                <textarea class="textarea textarea-bordered textarea-sm" rows="3">Keep high-resolution logs for 30 days; roll up to 5-minute averages after that.</textarea>
+              </div>
+              <input type="file" class="file-input file-input-bordered file-input-sm w-full mt-2" />
+            </div>
+          </div>
+
+          <div class="card bg-base-200 shadow">
+            <div class="card-body">
+              <h3 class="card-title text-base">Deployment Readiness</h3>
+              <ul class="steps steps-vertical w-full">
+                <li class="step step-primary">Validate settings</li>
+                <li class="step step-primary">Run simulation</li>
+                <li class="step">Apply to runtime</li>
+                <li class="step">Monitor startup</li>
+              </ul>
+              <div class="timeline timeline-vertical mt-3">
+                <li>
+                  <div class="timeline-start text-xs">10:14</div>
+                  <div class="timeline-middle">-</div>
+                  <div class="timeline-end timeline-box text-xs">Config imported from baseline</div>
+                </li>
+                <li>
+                  <div class="timeline-start text-xs">10:22</div>
+                  <div class="timeline-middle">-</div>
+                  <div class="timeline-end timeline-box text-xs">Safety checks passed</div>
+                </li>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -6128,15 +6008,15 @@ app.innerHTML = `
           <li><a href="#" data-page="hmi-dashboard-3">Process Control Temperature</a></li>
           <li><a href="#" data-page="hmi-dashboard-4">Fluid Mechanics</a></li>
 
-          <li class="menu-title mt-4">Home Templates</li>
-          <li><a href="#" data-page="home-1">Home Template 1</a></li>
-          <li><a href="#" data-page="home-2">Home Template 2</a></li>
-          <li><a href="#" data-page="home-3">Home Template 3</a></li>
+          <li class="menu-title mt-4">Examples</li>
+          <li><a href="#" data-page="home-1">Gauges</a></li>
+          <li><a href="#" data-page="home-2">Graphs</a></li>
+          <li><a href="#" data-page="home-3">Tables</a></li>
 
           <li class="menu-title mt-4">Admin Panels</li>
-          <li><a href="#" data-page="admin-1">Admin Panel 1</a></li>
-          <li><a href="#" data-page="admin-2">Admin Panel 2</a></li>
-          <li><a href="#" data-page="admin-3">Admin Panel 3</a></li>
+          <li><a href="#" data-page="admin-1">Calibration</a></li>
+          <li><a href="#" data-page="admin-2">Debugging</a></li>
+          <li><a href="#" data-page="admin-3">Bootloader</a></li>
 
           <li class="menu-title mt-4">Control & I/O</li>
           <li><a href="#" data-page="control-1">Control</a></li>
@@ -6235,8 +6115,10 @@ function renderPage(pageKey) {
     });
   }
 
-  // Initialize charts if this is an HMI dashboard
-  if (pageKey === 'hmi-dashboard-1') {
+  // Initialize charts for pages that use Chart.js
+  if (pageKey === 'home-2') {
+    initializeHomeTemplate2Charts();
+  } else if (pageKey === 'hmi-dashboard-1') {
     initializeHMICharts1();
   } else if (pageKey === 'hmi-dashboard-2') {
     initializeHMICharts2();
@@ -6247,6 +6129,196 @@ function renderPage(pageKey) {
   } else if (pageKey === 'components') {
     initializeComponentGallerySliders();
   }
+}
+
+// ================================================================
+// HOME TEMPLATE CHART INITIALIZATION
+// ================================================================
+function initializeHomeTemplate2Charts() {
+  setTimeout(() => {
+    function addChart(id, config) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const chart = new Chart(canvas.getContext('2d'), config);
+      activeCharts.push(chart);
+    }
+
+    addChart('home2-trend-chart', {
+      type: 'line',
+      data: {
+        labels: ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+        datasets: [
+          {
+            label: 'Temperature (C)',
+            data: [24.1, 24.6, 25.2, 26.1, 26.8, 26.4, 25.9, 25.3],
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.16)',
+            tension: 0.35,
+            fill: true,
+            pointRadius: 3
+          },
+          {
+            label: 'Setpoint',
+            data: [25, 25, 25, 25, 25, 25, 25, 25],
+            borderColor: 'rgb(251, 191, 36)',
+            borderDash: [6, 4],
+            fill: false,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: false } }
+      }
+    });
+
+    addChart('home2-combo-chart', {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        datasets: [
+          {
+            type: 'bar',
+            label: 'kWh',
+            data: [340, 360, 395, 410, 420, 300],
+            backgroundColor: 'rgba(14, 165, 233, 0.35)',
+            borderColor: 'rgb(14, 165, 233)',
+            borderWidth: 1,
+            yAxisID: 'y'
+          },
+          {
+            type: 'line',
+            label: 'Cost ($)',
+            data: [49, 52, 58, 60, 63, 45],
+            borderColor: 'rgb(244, 63, 94)',
+            backgroundColor: 'rgba(244, 63, 94, 0.2)',
+            tension: 0.3,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: { type: 'linear', position: 'left', title: { display: true, text: 'kWh' } },
+          y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '$' } }
+        }
+      }
+    });
+
+    addChart('home2-stacked-chart', {
+      type: 'bar',
+      data: {
+        labels: ['Line A', 'Line B', 'Line C', 'Line D'],
+        datasets: [
+          { label: 'Good', data: [120, 98, 115, 108], backgroundColor: 'rgba(34, 197, 94, 0.65)' },
+          { label: 'Rework', data: [15, 19, 12, 14], backgroundColor: 'rgba(250, 204, 21, 0.7)' },
+          { label: 'Scrap', data: [5, 8, 6, 7], backgroundColor: 'rgba(239, 68, 68, 0.7)' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true, beginAtZero: true }
+        }
+      }
+    });
+
+    addChart('home2-horizontal-chart', {
+      type: 'bar',
+      data: {
+        labels: ['Pack', 'Mix', 'Heat', 'Dose', 'Inspect'],
+        datasets: [
+          {
+            label: 'Utilization %',
+            data: [91, 77, 84, 69, 88],
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(20, 184, 166, 0.7)',
+              'rgba(168, 85, 247, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(34, 197, 94, 0.7)'
+            ],
+            borderColor: 'rgba(15, 23, 42, 0.25)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { min: 0, max: 100 } }
+      }
+    });
+
+    addChart('home2-doughnut-chart', {
+      type: 'doughnut',
+      data: {
+        labels: ['High', 'Medium', 'Low', 'Info'],
+        datasets: [
+          {
+            data: [6, 14, 21, 38],
+            backgroundColor: [
+              'rgba(239, 68, 68, 0.85)',
+              'rgba(249, 115, 22, 0.8)',
+              'rgba(234, 179, 8, 0.8)',
+              'rgba(59, 130, 246, 0.8)'
+            ],
+            borderColor: 'rgba(15, 23, 42, 0.25)',
+            borderWidth: 1,
+            hoverOffset: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '58%',
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    addChart('home2-step-chart', {
+      type: 'line',
+      data: {
+        labels: ['0s', '1s', '2s', '3s', '4s', '5s', '6s', '7s', '8s', '9s', '10s'],
+        datasets: [
+          {
+            label: 'Setpoint',
+            data: [40, 40, 40, 55, 55, 55, 55, 55, 55, 55, 55],
+            borderColor: 'rgb(99, 102, 241)',
+            stepped: true,
+            pointRadius: 0
+          },
+          {
+            label: 'Process Value',
+            data: [39, 39.5, 40, 44, 49, 54, 57, 56, 55.5, 55.2, 55.0],
+            borderColor: 'rgb(16, 185, 129)',
+            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+            fill: true,
+            tension: 0.25,
+            pointRadius: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top' } },
+        scales: { y: { beginAtZero: false } }
+      }
+    });
+  }, 10);
 }
 
 // ================================================================
@@ -6284,6 +6356,96 @@ function initializeHMICharts1() {
         }
       });
       activeCharts.push(chart);
+    }
+
+    const commonWaveOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10 } } },
+      scales: {
+        x: { display: false },
+        y: { beginAtZero: false }
+      },
+      elements: { point: { radius: 0 } }
+    };
+
+    const phaseLabels = Array.from({ length: 48 }, (_, i) => i);
+
+    const voltageCanvas = document.getElementById('acVoltage3PhaseChart');
+    if (voltageCanvas) {
+      const voltageChart = new Chart(voltageCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: phaseLabels,
+          datasets: [
+            {
+              label: 'L1',
+              data: phaseLabels.map(i => 230 + 8 * Math.sin((i / 48) * 2 * Math.PI)),
+              borderColor: 'rgb(59, 130, 246)',
+              tension: 0.25
+            },
+            {
+              label: 'L2',
+              data: phaseLabels.map(i => 230 + 8 * Math.sin((i / 48) * 2 * Math.PI - (2 * Math.PI / 3))),
+              borderColor: 'rgb(16, 185, 129)',
+              tension: 0.25
+            },
+            {
+              label: 'L3',
+              data: phaseLabels.map(i => 230 + 8 * Math.sin((i / 48) * 2 * Math.PI + (2 * Math.PI / 3))),
+              borderColor: 'rgb(249, 115, 22)',
+              tension: 0.25
+            }
+          ]
+        },
+        options: {
+          ...commonWaveOptions,
+          scales: {
+            ...commonWaveOptions.scales,
+            y: { min: 215, max: 245, title: { display: true, text: 'V' } }
+          }
+        }
+      });
+      activeCharts.push(voltageChart);
+    }
+
+    const currentCanvas = document.getElementById('acCurrent3PhaseChart');
+    if (currentCanvas) {
+      const currentChart = new Chart(currentCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: phaseLabels,
+          datasets: [
+            {
+              label: 'L1',
+              data: phaseLabels.map(i => 1.8 + 0.25 * Math.sin((i / 48) * 2 * Math.PI)),
+              borderColor: 'rgb(59, 130, 246)',
+              tension: 0.25
+            },
+            {
+              label: 'L2',
+              data: phaseLabels.map(i => 1.7 + 0.25 * Math.sin((i / 48) * 2 * Math.PI - (2 * Math.PI / 3))),
+              borderColor: 'rgb(16, 185, 129)',
+              tension: 0.25
+            },
+            {
+              label: 'L3',
+              data: phaseLabels.map(i => 1.9 + 0.25 * Math.sin((i / 48) * 2 * Math.PI + (2 * Math.PI / 3))),
+              borderColor: 'rgb(249, 115, 22)',
+              tension: 0.25
+            }
+          ]
+        },
+        options: {
+          ...commonWaveOptions,
+          scales: {
+            ...commonWaveOptions.scales,
+            y: { min: 1.2, max: 2.4, title: { display: true, text: 'A' } }
+          }
+        }
+      });
+      activeCharts.push(currentChart);
     }
   }, 10);
 }
