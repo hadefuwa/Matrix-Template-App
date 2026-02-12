@@ -4491,82 +4491,31 @@ function renderComponentGallery() {
     <section class="space-y-4">
       <div class="card bg-base-200 shadow">
         <div class="card-body">
-          <h2 class="card-title">DaisyUI Component Index</h2>
+          <h2 class="card-title">Component Library (DaisyUI Index)</h2>
           <p class="text-sm">
             This gallery includes examples for all component names shown on DaisyUI components docs.
             Some V5 names are aliases of older V4 classes (for example: Accordion/Collapse, Dock/btm-nav, Pagination/Join).
           </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge badge-outline">Accordion</span>
-            <span class="badge badge-outline">Alert</span>
-            <span class="badge badge-outline">Artboard</span>
-            <span class="badge badge-outline">Avatar</span>
-            <span class="badge badge-outline">Badge</span>
-            <span class="badge badge-outline">Breadcrumbs</span>
-            <span class="badge badge-outline">Button</span>
-            <span class="badge badge-outline">Button Group</span>
-            <span class="badge badge-outline">Calendar</span>
-            <span class="badge badge-outline">Card</span>
-            <span class="badge badge-outline">Carousel</span>
-            <span class="badge badge-outline">Chat</span>
-            <span class="badge badge-outline">Checkbox</span>
-            <span class="badge badge-outline">Collapse</span>
-            <span class="badge badge-outline">Countdown</span>
-            <span class="badge badge-outline">Diff</span>
-            <span class="badge badge-outline">Divider</span>
-            <span class="badge badge-outline">Dock</span>
-            <span class="badge badge-outline">Drawer</span>
-            <span class="badge badge-outline">Dropdown</span>
-            <span class="badge badge-outline">File Input</span>
-            <span class="badge badge-outline">Filter</span>
-            <span class="badge badge-outline">Footer</span>
-            <span class="badge badge-outline">Hero</span>
-            <span class="badge badge-outline">Indicator</span>
-            <span class="badge badge-outline">Input</span>
-            <span class="badge badge-outline">Join</span>
-            <span class="badge badge-outline">Kbd</span>
-            <span class="badge badge-outline">Label</span>
-            <span class="badge badge-outline">Link</span>
-            <span class="badge badge-outline">List</span>
-            <span class="badge badge-outline">Loading</span>
-            <span class="badge badge-outline">Mask</span>
-            <span class="badge badge-outline">Menu</span>
-            <span class="badge badge-outline">Mockup Browser</span>
-            <span class="badge badge-outline">Mockup Code</span>
-            <span class="badge badge-outline">Mockup Phone</span>
-            <span class="badge badge-outline">Mockup Window</span>
-            <span class="badge badge-outline">Modal</span>
-            <span class="badge badge-outline">Navbar</span>
-            <span class="badge badge-outline">Pagination</span>
-            <span class="badge badge-outline">Progress</span>
-            <span class="badge badge-outline">Radio</span>
-            <span class="badge badge-outline">Radial Progress</span>
-            <span class="badge badge-outline">Range</span>
-            <span class="badge badge-outline">Rating</span>
-            <span class="badge badge-outline">Select</span>
-            <span class="badge badge-outline">Skeleton</span>
-            <span class="badge badge-outline">Stack</span>
-            <span class="badge badge-outline">Stat</span>
-            <span class="badge badge-outline">Status</span>
-            <span class="badge badge-outline">Steps</span>
-            <span class="badge badge-outline">Swap</span>
-            <span class="badge badge-outline">Tab</span>
-            <span class="badge badge-outline">Table</span>
-            <span class="badge badge-outline">Textarea</span>
-            <span class="badge badge-outline">Theme Controller</span>
-            <span class="badge badge-outline">Timeline</span>
-            <span class="badge badge-outline">Toast</span>
-            <span class="badge badge-outline">Toggle</span>
-            <span class="badge badge-outline">Tooltip</span>
-            <span class="badge badge-outline">Validator</span>
+          <p class="text-xs text-base-content/70">
+            Pick a tab to browse a focused category.
+          </p>
+          <div class="tabs tabs-boxed bg-base-100 flex flex-wrap gap-1">
+            <button class="tab tab-active" data-lib-tab="nav-layout">Navigation and Layout</button>
+            <button class="tab" data-lib-tab="actions-entry">Actions and Data Entry</button>
+            <button class="tab" data-lib-tab="feedback-states">Feedback and States</button>
+            <button class="tab" data-lib-tab="containers-display">Containers and Display</button>
+            <button class="tab" data-lib-tab="overlays-interaction">Overlays and Interaction</button>
+            <button class="tab" data-lib-tab="typography-utility">Typography and Utility</button>
+            <button class="tab" data-lib-tab="vertical-sliders">Vertical Sliders</button>
           </div>
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-nav-layout" data-lib-section="nav-layout" class="card bg-base-200 shadow">
         <div class="card-body gap-4">
           <h2 class="card-title">Navigation and Layout</h2>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Navbar</h3>
           <div class="navbar bg-base-100 rounded-box">
             <div class="flex-1">
               <a class="btn btn-ghost text-lg">Navbar</a>
@@ -4580,6 +4529,7 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Breadcrumbs</h3>
           <div class="breadcrumbs text-sm">
             <ul>
               <li><a>Home</a></li>
@@ -4588,12 +4538,14 @@ function renderComponentGallery() {
             </ul>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Tabs</h3>
           <div class="tabs tabs-boxed bg-base-100 w-fit">
             <a class="tab tab-active">Tab</a>
             <a class="tab">Tab</a>
             <a class="tab">Tab</a>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Steps</h3>
           <ul class="steps w-full">
             <li class="step step-primary">Start</li>
             <li class="step step-primary">Configure</li>
@@ -4601,6 +4553,7 @@ function renderComponentGallery() {
             <li class="step">Deploy</li>
           </ul>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Drawer</h3>
           <div class="drawer lg:drawer-open border border-base-300 rounded-box">
             <input id="gallery-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content p-3">
@@ -4617,12 +4570,14 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Dock (Bottom Nav)</h3>
           <div class="btm-nav relative rounded-box">
             <button class="active"><span class="btm-nav-label">Dock</span></button>
             <button><span class="btm-nav-label">Item</span></button>
             <button><span class="btm-nav-label">Item</span></button>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Hero</h3>
           <div class="hero bg-base-100 rounded-box py-8">
             <div class="hero-content text-center">
               <div class="max-w-md">
@@ -4633,6 +4588,7 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Footer</h3>
           <div class="footer bg-base-100 p-4 rounded-box text-sm">
             <aside>
               <p>Footer component sample</p>
@@ -4645,10 +4601,11 @@ function renderComponentGallery() {
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-actions-entry" data-lib-section="actions-entry" class="card bg-base-200 shadow hidden">
         <div class="card-body gap-4">
           <h2 class="card-title">Actions and Data Entry</h2>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Buttons and Button Group</h3>
           <div class="flex flex-wrap gap-2">
             <button class="btn btn-primary">Button</button>
             <button class="btn btn-secondary">Button</button>
@@ -4660,12 +4617,14 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Input + Label + Validator</h3>
           <div class="form-control">
             <label class="label"><span class="label-text">Input + Label + Validator</span></label>
             <input class="input input-bordered validator" required placeholder="Type here" minlength="3" />
             <label class="label"><span class="label-text-alt">Minimum 3 characters</span></label>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Select, File Input, Textarea, Date Input</h3>
           <div class="grid gap-3 md:grid-cols-2">
             <select class="select select-bordered w-full">
               <option disabled selected>Select component</option>
@@ -4677,6 +4636,7 @@ function renderComponentGallery() {
             <input type="date" class="input input-bordered" />
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Checkbox, Toggle, Radio, Rating</h3>
           <div class="grid gap-3 md:grid-cols-2">
             <label class="label cursor-pointer justify-start gap-3">
               <input type="checkbox" class="checkbox" checked />
@@ -4697,18 +4657,21 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Range, Progress, Radial Progress</h3>
           <div class="space-y-3">
             <input type="range" min="0" max="100" value="40" class="range range-primary" />
             <progress class="progress progress-primary w-full" value="32" max="100"></progress>
             <div class="radial-progress text-primary" style="--value:70;" role="progressbar">70%</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Pagination (Join)</h3>
           <div class="join">
             <button class="btn join-item">Pagination</button>
             <button class="btn join-item btn-active">2</button>
             <button class="btn join-item">3</button>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Calendar</h3>
           <div class="w-full max-w-md">
             <div class="calendar border border-base-300 rounded-box p-2 text-xs">
               <p class="font-semibold mb-1">Calendar</p>
@@ -4718,13 +4681,15 @@ function renderComponentGallery() {
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-feedback-states" data-lib-section="feedback-states" class="card bg-base-200 shadow hidden">
         <div class="card-body gap-4">
           <h2 class="card-title">Feedback and States</h2>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Alert</h3>
           <div class="alert alert-success"><span>Alert: operation succeeded.</span></div>
           <div class="alert alert-warning"><span>Alert: review required.</span></div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Badge, Loading, Status</h3>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="badge badge-primary">Badge</span>
             <span class="badge badge-secondary">Badge</span>
@@ -4733,29 +4698,34 @@ function renderComponentGallery() {
             <span class="status status-success"></span><span class="text-sm">Status</span>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Skeleton</h3>
           <div class="skeleton h-4 w-full"></div>
           <div class="skeleton h-4 w-2/3"></div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Tooltip</h3>
           <div class="tooltip" data-tip="Tooltip text">
             <button class="btn btn-sm">Tooltip</button>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Swap</h3>
           <div class="swap">
             <input type="checkbox" />
             <div class="swap-on badge badge-success">Swap ON</div>
             <div class="swap-off badge">Swap OFF</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Toast</h3>
           <div class="toast toast-end static">
             <div class="alert alert-info"><span>Toast</span></div>
           </div>
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-containers-display" data-lib-section="containers-display" class="card bg-base-200 shadow hidden">
         <div class="card-body gap-4">
           <h2 class="card-title">Containers and Display</h2>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Card and Stats</h3>
           <div class="grid gap-4 md:grid-cols-2">
             <div class="card bg-base-100 shadow">
               <div class="card-body">
@@ -4776,19 +4746,23 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Indicator</h3>
           <div class="indicator">
             <span class="indicator-item badge badge-secondary">New</span>
             <button class="btn">Indicator</button>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Stack</h3>
           <div class="stack">
             <div class="bg-primary text-primary-content grid w-24 h-24 place-content-center rounded-box">1</div>
             <div class="bg-accent text-accent-content grid w-24 h-24 place-content-center rounded-box">2</div>
             <div class="bg-secondary text-secondary-content grid w-24 h-24 place-content-center rounded-box">3</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Divider</h3>
           <div class="divider">Divider</div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Table</h3>
           <div class="overflow-x-auto">
             <table class="table table-zebra">
               <thead>
@@ -4801,11 +4775,13 @@ function renderComponentGallery() {
             </table>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">List</h3>
           <div class="list bg-base-100 rounded-box border border-base-300">
             <li class="list-row">List item 1</li>
             <li class="list-row">List item 2</li>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Carousel</h3>
           <div class="overflow-x-auto whitespace-nowrap rounded-box border border-base-300 p-2">
             <div class="carousel w-80">
               <div id="c1" class="carousel-item w-full"><div class="w-full h-24 bg-primary/20 flex items-center justify-center">Carousel 1</div></div>
@@ -4814,10 +4790,12 @@ function renderComponentGallery() {
             </div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Chat</h3>
           <div class="chat chat-start">
             <div class="chat-bubble">Chat component message</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Timeline</h3>
           <div class="timeline timeline-vertical">
             <li>
               <div class="timeline-start">Start</div>
@@ -4826,20 +4804,24 @@ function renderComponentGallery() {
             </li>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Mockup Window</h3>
           <div class="mockup-window border bg-base-300">
             <div class="bg-base-200 p-4">Mockup Window</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Mockup Browser</h3>
           <div class="mockup-browser border border-base-300">
             <div class="mockup-browser-toolbar"><div class="input">https://matrix.local</div></div>
             <div class="p-4 bg-base-200">Mockup Browser</div>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Mockup Code</h3>
           <div class="mockup-code w-full">
             <pre data-prefix="$"><code>npm run dev</code></pre>
             <pre data-prefix=">"><code>ready</code></pre>
           </div>
 
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Mockup Phone + Artboard</h3>
           <div class="mockup-phone border-primary">
             <div class="camera"></div>
             <div class="display">
@@ -4849,85 +4831,116 @@ function renderComponentGallery() {
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-overlays-interaction" data-lib-section="overlays-interaction" class="card bg-base-200 shadow hidden">
         <div class="card-body gap-4">
           <h2 class="card-title">Overlays and Interaction</h2>
 
-          <div class="dropdown">
-            <label tabindex="0" class="btn m-1">Dropdown</label>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a>Item 1</a></li>
-              <li><a>Item 2</a></li>
-            </ul>
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Dropdown</h3>
+            <div class="dropdown">
+              <label tabindex="0" class="btn m-1">Dropdown</label>
+              <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a>Item 1</a></li>
+                <li><a>Item 2</a></li>
+              </ul>
+            </div>
           </div>
 
-          <button class="btn btn-sm" onclick="document.getElementById('gallery-modal').showModal()">Open Modal</button>
-          <dialog id="gallery-modal" class="modal">
-            <div class="modal-box">
-              <h3 class="font-bold text-lg">Modal</h3>
-              <p class="py-2">DaisyUI modal example.</p>
-              <div class="modal-action">
-                <form method="dialog"><button class="btn">Close</button></form>
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Modal</h3>
+            <button class="btn btn-sm" onclick="document.getElementById('gallery-modal').showModal()">Open Modal</button>
+            <dialog id="gallery-modal" class="modal">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">Modal</h3>
+                <p class="py-2">DaisyUI modal example.</p>
+                <div class="modal-action">
+                  <form method="dialog"><button class="btn">Close</button></form>
+                </div>
+              </div>
+            </dialog>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Accordion / Collapse</h3>
+            <div class="collapse collapse-arrow bg-base-100">
+              <input type="checkbox" />
+              <div class="collapse-title font-medium">Accordion / Collapse</div>
+              <div class="collapse-content"><p class="text-sm">Expandable content</p></div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Before / After</h3>
+            <div id="before-after-demo" class="relative aspect-[16/9] max-w-sm rounded-box overflow-hidden border border-base-300 bg-base-100">
+              <div class="absolute inset-0 bg-primary/30 grid place-content-center font-semibold">Before</div>
+              <div id="before-after-after-layer" class="absolute inset-0 bg-success/30 grid place-content-center font-semibold">After</div>
+              <div id="before-after-divider" class="absolute inset-y-0 w-0.5 bg-base-content/70 pointer-events-none"></div>
+              <div class="absolute bottom-2 left-2 right-2 z-10 bg-base-100/80 backdrop-blur rounded px-2 py-1">
+                <input id="before-after-range" type="range" min="0" max="100" value="50" class="range range-xs" />
               </div>
             </div>
-          </dialog>
-
-          <div class="collapse collapse-arrow bg-base-100">
-            <input type="checkbox" />
-            <div class="collapse-title font-medium">Accordion / Collapse</div>
-            <div class="collapse-content"><p class="text-sm">Expandable content</p></div>
-          </div>
-
-          <div class="diff aspect-[16/9] max-w-sm">
-            <div class="diff-item-1">
-              <div class="bg-primary/30 grid place-content-center h-full">Before</div>
-            </div>
-            <div class="diff-item-2">
-              <div class="bg-success/30 grid place-content-center h-full">After</div>
-            </div>
-            <div class="diff-resizer"></div>
           </div>
         </div>
       </div>
 
-      <div class="card bg-base-200 shadow">
+      <div id="lib-typography-utility" data-lib-section="typography-utility" class="card bg-base-200 shadow hidden">
         <div class="card-body gap-4">
           <h2 class="card-title">Typography and Utility Components</h2>
-          <p class="text-sm">
+          <p class="text-sm space-x-2">
+            <span class="text-xs font-semibold uppercase tracking-wide text-base-content/70 mr-1">Kbd + Link</span>
             Press <kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">K</kbd> to open search.
-            <a class="link link-primary ml-2">Link</a>
+            <a class="link link-primary">Link</a>
           </p>
           <div class="flex flex-wrap gap-2">
-            <div class="avatar">
-              <div class="w-12 rounded-full">
-                <img alt="Avatar" src="https://picsum.photos/80" />
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Avatar</h3>
+              <div class="avatar">
+                <div class="w-12 rounded-full">
+                  <img alt="Avatar" src="https://picsum.photos/80" />
+                </div>
               </div>
             </div>
-            <div class="mask mask-hexagon bg-primary text-primary-content w-12 h-12 grid place-content-center">M</div>
-            <div class="glass rounded-box p-3 text-sm">Glass</div>
-            <div class="countdown font-mono text-2xl">
-              <span style="--value:1;"></span>:
-              <span style="--value:2;"></span>:
-              <span style="--value:3;"></span>
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Mask</h3>
+              <div class="mask mask-hexagon bg-primary text-primary-content w-12 h-12 grid place-content-center">M</div>
             </div>
-            <div class="join">
-              <input class="join-item btn" type="radio" name="filter-sample" aria-label="All" checked />
-              <input class="join-item btn" type="radio" name="filter-sample" aria-label="Open" />
-              <input class="join-item btn" type="radio" name="filter-sample" aria-label="Closed" />
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Glass</h3>
+              <div class="glass rounded-box p-3 text-sm">Glass</div>
             </div>
-            <label class="label cursor-pointer gap-2">
-              <span class="label-text">Theme Controller</span>
-              <input type="checkbox" value="dark" class="toggle theme-controller" />
-            </label>
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Countdown</h3>
+              <div class="countdown font-mono text-2xl">
+                <span style="--value:1;"></span>:
+                <span style="--value:2;"></span>:
+                <span style="--value:3;"></span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Filter / Join</h3>
+              <div class="join">
+                <input class="join-item btn" type="radio" name="filter-sample" aria-label="All" checked />
+                <input class="join-item btn" type="radio" name="filter-sample" aria-label="Open" />
+                <input class="join-item btn" type="radio" name="filter-sample" aria-label="Closed" />
+              </div>
+            </div>
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Theme Controller</h3>
+              <label class="label cursor-pointer gap-2">
+                <span class="label-text">Toggle dark theme</span>
+                <input type="checkbox" value="dark" class="toggle theme-controller" />
+              </label>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- noUiSlider vertical range examples -->
-      <div class="card bg-base-200 shadow">
+      <div id="lib-vertical-sliders" data-lib-section="vertical-sliders" class="card bg-base-200 shadow hidden">
         <div class="card-body">
           <h2 class="card-title">Vertical Sliders (noUiSlider)</h2>
           <p class="text-sm mb-4">Five noUiSlider presets for process setpoint style controls.</p>
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-base-content/70">Slider Presets</h3>
           <div class="flex justify-around items-start gap-8 py-4 overflow-x-auto">
             <div class="flex flex-col items-center gap-2 shrink-0">
               <div id="gallery-slider-1" style="height:200px;"></div>
@@ -6025,7 +6038,7 @@ app.innerHTML = `
           <li><a href="#" data-page="tasks-1">Tasks / Worksheets</a></li>
 
           <li class="menu-title mt-4">Other</li>
-          <li><a href="#" data-page="components">Component Gallery</a></li>
+          <li><a href="#" data-page="components">Component Library</a></li>
           <li><a href="#" data-page="settings">Settings</a></li>
           <li><a href="#" data-page="about">About / Help</a></li>
           </ul>
@@ -6127,7 +6140,7 @@ function renderPage(pageKey) {
   } else if (pageKey === 'hmi-dashboard-4') {
     initializeHMICharts4();
   } else if (pageKey === 'components') {
-    initializeComponentGallerySliders();
+    initializeComponentLibraryTabs();
   }
 }
 
@@ -6698,6 +6711,54 @@ function initializeComponentGallerySliders() {
   make('gallery-slider-5', { ...base, start: 60, connect: 'lower',
     tooltips: { to: v => Math.round(v) + '%' }
   }, 'gal5-val');
+}
+
+function initializeComponentLibraryTabs() {
+  const tabButtons = Array.from(document.querySelectorAll('[data-lib-tab]'));
+  const sections = Array.from(document.querySelectorAll('[data-lib-section]'));
+  if (!tabButtons.length || !sections.length) return;
+
+  function activateTab(tabKey) {
+    tabButtons.forEach((btn) => {
+      btn.classList.toggle('tab-active', btn.getAttribute('data-lib-tab') === tabKey);
+    });
+    sections.forEach((section) => {
+      const isActive = section.getAttribute('data-lib-section') === tabKey;
+      section.classList.toggle('hidden', !isActive);
+    });
+    if (tabKey === 'vertical-sliders') {
+      initializeComponentGallerySliders();
+    } else if (tabKey === 'overlays-interaction') {
+      initializeBeforeAfterDemo();
+    }
+  }
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activateTab(btn.getAttribute('data-lib-tab'));
+    });
+  });
+
+  const defaultTab = tabButtons.find((btn) => btn.classList.contains('tab-active')) || tabButtons[0];
+  activateTab(defaultTab.getAttribute('data-lib-tab'));
+}
+
+function initializeBeforeAfterDemo() {
+  const range = document.getElementById('before-after-range');
+  const afterLayer = document.getElementById('before-after-after-layer');
+  const divider = document.getElementById('before-after-divider');
+  if (!range || !afterLayer || !divider) return;
+  if (range.dataset.initialized === 'true') return;
+
+  const update = () => {
+    const position = Math.max(0, Math.min(100, Number(range.value) || 50));
+    afterLayer.style.clipPath = `inset(0 0 0 ${position}%)`;
+    divider.style.left = `${position}%`;
+  };
+
+  range.addEventListener('input', update);
+  range.dataset.initialized = 'true';
+  update();
 }
 
 function initializeHMICharts4() {
